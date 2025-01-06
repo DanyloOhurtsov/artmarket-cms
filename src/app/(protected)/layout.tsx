@@ -1,4 +1,4 @@
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { SignedIn, UserButton } from "@clerk/nextjs";
 import React from "react";
 
 const ProtectedRouteLayout = ({ children }: { children: React.ReactNode }) => {
@@ -7,6 +7,7 @@ const ProtectedRouteLayout = ({ children }: { children: React.ReactNode }) => {
       <SignedIn>
         <UserButton />
       </SignedIn>
+      {children}
     </>
   );
 };
