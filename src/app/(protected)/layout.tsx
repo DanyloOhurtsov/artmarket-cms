@@ -1,7 +1,9 @@
 import { Separator } from "@/components/ui/separator";
-import { SignedIn, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignOutButton, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import React from "react";
+import { LogOutIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const ProtectedRouteLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -25,9 +27,11 @@ const ProtectedRouteLayout = ({ children }: { children: React.ReactNode }) => {
             </ul>
           </nav>
           <Separator className="bg-white/20 rounded-2xl" />
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
+          <SignOutButton redirectUrl="/">
+            <Button variant={"ghost"} className="size-8">
+              <LogOutIcon className="size-6" />
+            </Button>
+          </SignOutButton>
         </aside>
         <div className="w-full min-h-screen">{children}</div>
       </div>
