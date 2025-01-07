@@ -8,18 +8,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 
-import { defaultValues, formSchema } from "./form-schema";
 import UniversalFormField from "./components/universal-form-field";
+import { productSchema, defaultProductValues } from "./product.schema";
 
 const NewProductForm = () => {
-  const memoizedDefaultValues = useMemo(() => defaultValues, []);
+  const memoizedDefaultValues = useMemo(() => defaultProductValues, []);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof productSchema>>({
+    resolver: zodResolver(productSchema),
     defaultValues: memoizedDefaultValues,
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof productSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
@@ -101,6 +101,14 @@ const NewProductForm = () => {
             featuredField={{ resetField: true }}
           />
         </div>
+        <UniversalFormField
+          name="category"
+          label="Категорія"
+          placeholder="Оберіть категорію товару"
+          form={form}
+          type="select"
+          options={[]}
+        />
 
         <Button type="submit">Submit</Button>
       </form>

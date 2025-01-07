@@ -1,5 +1,5 @@
 import { Separator } from "@/components/ui/separator";
-import { SignedIn, SignOutButton, UserButton } from "@clerk/nextjs";
+import { SignOutButton } from "@clerk/nextjs";
 import Link from "next/link";
 import React from "react";
 import { LogOutIcon } from "lucide-react";

@@ -1,5 +1,10 @@
 import { memo } from "react";
-import { CircleAlertIcon } from "lucide-react";
+import {
+  CheckIcon,
+  ChevronsUpDownIcon,
+  CircleAlertIcon,
+  PlusCircleIcon,
+} from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
 
 import HoverTooltip from "@/components/hover-tooltip";
@@ -16,6 +21,19 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { generateRandomSlug } from "@/lib/functions/generate-random-slug";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import { cn } from "@/lib/utils";
 
 interface UniversalFormFieldProps {
   form: UseFormReturn<any>;
@@ -67,6 +85,10 @@ const UniversalFormField = memo(
       }
     };
 
+    const handleCreateCategory = () => {
+      console.log("Create category");
+    };
+
     return (
       <FormField
         control={form.control}
@@ -74,6 +96,7 @@ const UniversalFormField = memo(
         render={({ field, fieldState }) => {
           const hasError = !!fieldState.error;
 
+          console.log(field.value);
           return (
             <FormItem>
               <div className="flex justify-between">
@@ -154,6 +177,69 @@ const UniversalFormField = memo(
                       </div>
                     )}
                     {/* Select */}
+                    {type === "select" && (
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button variant={"outline"} className="w-full">
+                            {field.value && field.value
+                              ? options?.find(
+                                  (option) => option.value === field.value
+                                )?.label
+                              : placeholder}
+
+                            <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent>
+                          <Command>
+                            <div className="flex gap-x-2">
+                              <CommandInput
+                                placeholder="Знайти..."
+                                className="flex-1"
+                              />
+                              <Button
+                                variant={"ghost"}
+                                size={"icon"}
+                                onClick={handleCreateCategory}
+                              >
+                                <HoverTooltip
+                                  content="Додати новий елемент"
+                                  asChild
+                                >
+                                  <PlusCircleIcon size={24} />
+                                </HoverTooltip>
+                              </Button>
+                            </div>
+                            {options?.length ? (
+                              <>
+                                <CommandEmpty>Немає результатів</CommandEmpty>
+                                <CommandGroup>
+                                  {options?.map((option) => (
+                                    <CommandItem
+                                      key={option.value}
+                                      value={option.value}
+                                      onClick={(cur) =>
+                                        field.onChange(option.value)
+                                      }
+                                    >
+                                      <CheckIcon
+                                        className={cn(
+                                          "mr-2 h-4 w-4",
+                                          field.value === option.value
+                                            ? "opacity-100"
+                                            : "opacity-0"
+                                        )}
+                                      />
+                                      {option.label}
+                                    </CommandItem>
+                                  ))}
+                                </CommandGroup>
+                              </>
+                            ) : null}
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                    )}
                   </div>
                 </FormControl>
                 {hasError && (
