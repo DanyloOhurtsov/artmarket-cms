@@ -9,10 +9,8 @@ export default clerkMiddleware(async (auth, req) => {
   const baseUrl = `${url.protocol}//${url.host}`;
   const user = await auth();
 
-  if (user.sessionId !== null && url.pathname === "/") {
-    console.log("User is signed in, redirecting to /dashboard");
+  if (user.sessionId !== null && url.pathname === "/")
     return NextResponse.redirect(`${baseUrl}/dashboard`);
-  }
 
   if (isProtectedRoute(req) || !isPublicRoute(req)) await auth.protect();
 });
