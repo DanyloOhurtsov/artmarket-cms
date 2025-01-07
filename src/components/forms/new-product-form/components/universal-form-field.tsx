@@ -5,7 +5,7 @@ import {
   CircleAlertIcon,
   PlusCircleIcon,
 } from "lucide-react";
-import { UseFormReturn } from "react-hook-form";
+import { useFormContext, UseFormReturn } from "react-hook-form";
 
 import HoverTooltip from "@/components/hover-tooltip";
 import { Button } from "@/components/ui/button";
@@ -34,9 +34,11 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
+import { z } from "zod";
+import { productSchema } from "../product.schema";
 
 interface UniversalFormFieldProps {
-  form: UseFormReturn<any>;
+  form: UseFormReturn<z.infer<typeof productSchema>>;
   label: string;
   name: string;
   placeholder: string;
@@ -67,6 +69,8 @@ const UniversalFormField = memo(
       resetField: false,
     },
   }: UniversalFormFieldProps) => {
+    const { control } = useFormContext();
+
     const handleGenerateSlug = (name: string) => {
       const slug = generateRandomSlug({ stringToGenerate: name });
       form.setValue("slug", slug);
@@ -91,12 +95,10 @@ const UniversalFormField = memo(
 
     return (
       <FormField
-        control={form.control}
+        control={control}
         name={name}
         render={({ field, fieldState }) => {
           const hasError = !!fieldState.error;
-
-          console.log(field.value);
           return (
             <FormItem>
               <div className="flex justify-between">
