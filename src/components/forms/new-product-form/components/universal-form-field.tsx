@@ -1,46 +1,25 @@
+import { z } from "zod";
 import { memo } from "react";
-import {
-  CheckIcon,
-  ChevronsUpDownIcon,
-  CircleAlertIcon,
-  PlusCircleIcon,
-} from "lucide-react";
+import { CircleAlertIcon } from "lucide-react";
 import { useFormContext, UseFormReturn } from "react-hook-form";
 
-import HoverTooltip from "@/components/hover-tooltip";
-import { Button } from "@/components/ui/button";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import HoverTooltip from "@/components/hover-tooltip";
+import * as FormComponent from "@/components/ui/form";
 import { generateRandomSlug } from "@/lib/functions/generate-random-slug";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
-import { cn } from "@/lib/utils";
-import { z } from "zod";
+
 import { productSchema } from "../product.schema";
+import SelectField from "./form-fields/select.field";
+import NumberField from "./form-fields/number.field";
+import SwitchField from "./form-fields/switch.field";
 
 interface UniversalFormFieldProps {
   form: UseFormReturn<z.infer<typeof productSchema>>;
   label: string;
   name: string;
+  description?: string;
   placeholder: string;
   minLength?: number;
   maxLength?: number;
@@ -51,6 +30,7 @@ interface UniversalFormFieldProps {
     generateSlug?: boolean;
     resetField?: boolean;
   };
+  showDescription?: boolean;
 }
 
 const UniversalFormField = memo(
@@ -68,6 +48,8 @@ const UniversalFormField = memo(
       generateSlug: false,
       resetField: false,
     },
+    showDescription = false,
+    description,
   }: UniversalFormFieldProps) => {
     const { control } = useFormContext();
 
@@ -89,25 +71,22 @@ const UniversalFormField = memo(
       }
     };
 
-    const handleCreateCategory = () => {
-      console.log("Create category");
-    };
-
     return (
-      <FormField
+      <FormComponent.FormField
         control={control}
         name={name}
         render={({ field, fieldState }) => {
           const hasError = !!fieldState.error;
           return (
-            <FormItem>
+            <FormComponent.FormItem className="">
               <div className="flex justify-between">
-                <FormLabel>{label}</FormLabel>
+                <FormComponent.FormLabel>{label}</FormComponent.FormLabel>
 
                 {featuredField.generateSlug && (
                   <Button
-                    variant={"link"}
+                    type="button"
                     size="link"
+                    variant={"link"}
                     onClick={handleGenerateClick}
                   >
                     Рандомний Slug
@@ -115,13 +94,13 @@ const UniversalFormField = memo(
                 )}
               </div>
               <div className="flex items-center">
-                <FormControl className="flex-1">
+                <FormComponent.FormControl className="flex-1">
                   <div>
                     {/* Input */}
                     {type === "input" && (
                       <Input
-                        placeholder={placeholder}
                         {...field}
+                        placeholder={placeholder}
                         min={minLength}
                         max={maxLength}
                         onChange={(e) => {
@@ -138,121 +117,45 @@ const UniversalFormField = memo(
                     )}
                     {/* Checkbox */}
                     {type === "checkbox" && (
-                      <div className="flex items-center gap-x-2">
-                        <Switch
-                          {...field}
-                          id={name}
-                          checked={field.value}
-                          onCheckedChange={(e) => {
-                            field.onChange(e);
-                          }}
-                        />
-                        <Label htmlFor={name}>{placeholder}</Label>
-                      </div>
+                      <SwitchField
+                        field={field}
+                        placeholder={placeholder}
+                        name={name}
+                      />
                     )}
                     {/* Number */}
                     {type === "number" && (
-                      <div className="flex">
-                        <Input
-                          type="number"
-                          placeholder={placeholder}
-                          {...field}
-                          onFocus={(e) => e.target.select()}
-                          className="flex-1"
-                          value={field.value || ""} // Значення за замовчуванням
-                          onChange={(e) => {
-                            const value = e.target.value
-                              ? parseFloat(e.target.value)
-                              : null;
-                            field.onChange(value);
-                          }}
-                        />
-                        {featuredField.resetField && (
-                          <Button
-                            type="button"
-                            variant={"ghost"}
-                            onClick={() => field.onChange(null)}
-                          >
-                            Reset
-                          </Button>
-                        )}
-                      </div>
+                      <NumberField
+                        field={field}
+                        placeholder={placeholder}
+                        featuredField={featuredField.resetField}
+                      />
                     )}
                     {/* Select */}
                     {type === "select" && (
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button variant={"outline"} className="w-full">
-                            {field.value && field.value
-                              ? options?.find(
-                                  (option) => option.value === field.value
-                                )?.label
-                              : placeholder}
-
-                            <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent>
-                          <Command>
-                            <div className="flex gap-x-2">
-                              <CommandInput
-                                placeholder="Знайти..."
-                                className="flex-1"
-                              />
-                              <Button
-                                variant={"ghost"}
-                                size={"icon"}
-                                onClick={handleCreateCategory}
-                              >
-                                <HoverTooltip
-                                  content="Додати новий елемент"
-                                  asChild
-                                >
-                                  <PlusCircleIcon size={24} />
-                                </HoverTooltip>
-                              </Button>
-                            </div>
-                            {options?.length ? (
-                              <>
-                                <CommandEmpty>Немає результатів</CommandEmpty>
-                                <CommandGroup>
-                                  {options?.map((option) => (
-                                    <CommandItem
-                                      key={option.value}
-                                      value={option.value}
-                                      onClick={() =>
-                                        field.onChange(option.value)
-                                      }
-                                    >
-                                      <CheckIcon
-                                        className={cn(
-                                          "mr-2 h-4 w-4",
-                                          field.value === option.value
-                                            ? "opacity-100"
-                                            : "opacity-0"
-                                        )}
-                                      />
-                                      {option.label}
-                                    </CommandItem>
-                                  ))}
-                                </CommandGroup>
-                              </>
-                            ) : null}
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
+                      <SelectField
+                        field={field}
+                        options={options}
+                        placeholder={placeholder}
+                      />
                     )}
                   </div>
-                </FormControl>
+                </FormComponent.FormControl>
                 {hasError && (
                   <HoverTooltip content={fieldState.error?.message} side="left">
-                    <FormMessage className="px-2">
+                    <FormComponent.FormMessage className="px-2">
                       <CircleAlertIcon size={24} />
-                    </FormMessage>
+                    </FormComponent.FormMessage>
                   </HoverTooltip>
                 )}
               </div>
-            </FormItem>
+
+              {showDescription && (
+                <FormComponent.FormDescription>
+                  {description}
+                </FormComponent.FormDescription>
+              )}
+            </FormComponent.FormItem>
           );
         }}
       />

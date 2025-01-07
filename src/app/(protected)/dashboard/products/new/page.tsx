@@ -4,7 +4,7 @@ const NewProductPage = () => {
   return (
     <>
       <section className="w-full min-h-screen flex justify-center items-center">
-        <div className="w-1/2">
+        <div className="w-3/4">
           <NewProductForm />
         </div>
       </section>
