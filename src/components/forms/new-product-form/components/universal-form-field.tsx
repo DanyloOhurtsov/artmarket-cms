@@ -218,7 +218,7 @@ const UniversalFormField = memo(
                                     <CommandItem
                                       key={option.value}
                                       value={option.value}
-                                      onClick={(cur) =>
+                                      onClick={() =>
                                         field.onChange(option.value)
                                       }
                                     >
