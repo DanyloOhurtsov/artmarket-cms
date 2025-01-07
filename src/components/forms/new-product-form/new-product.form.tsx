@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import UniversalFormField from "./components/universal-form-field";
 import { productSchema, defaultProductValues } from "./product.schema";
+import { Separator } from "@/components/ui/separator";
 
 const NewProductForm = () => {
   const memoizedDefaultValues = useMemo(() => defaultProductValues, []);
@@ -29,7 +30,7 @@ const NewProductForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex gap-x-3 w-full"
+        className="flex gap-x-6 w-full"
       >
         <div className="flex flex-col space-y-4 w-2/3">
           <UniversalFormField
@@ -79,7 +80,7 @@ const NewProductForm = () => {
         </div>
 
         {/* Aside */}
-        <div className="flex flex-col space-y-4 w-1/3">
+        <div className="flex flex-col space-y-4 w-1/3 border rounded-xl p-5">
           <UniversalFormField
             form={form}
             name="isActive"
