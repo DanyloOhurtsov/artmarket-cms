@@ -10,7 +10,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import UniversalFormField from "./components/universal-form-field";
 import { productSchema, defaultProductValues } from "./product.schema";
-import { Separator } from "@/components/ui/separator";
 
 const NewProductForm = () => {
   const memoizedDefaultValues = useMemo(() => defaultProductValues, []);
