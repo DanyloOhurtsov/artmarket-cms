@@ -36,7 +36,6 @@ import {
 import { cn } from "@/lib/utils";
 
 interface UniversalFormFieldProps {
-  // @ts-ignore
   form: UseFormReturn<any>;
   label: string;
   name: string;
@@ -258,5 +257,7 @@ const UniversalFormField = memo(
     );
   }
 );
+
+UniversalFormField.displayName = "UniversalFormField";
 
 export default UniversalFormField;
