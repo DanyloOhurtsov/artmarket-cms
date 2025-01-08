@@ -1,40 +1,47 @@
+import React, { memo } from "react";
+import {
+  Path,
+  PathValue,
+  useFormContext,
+  UseFormReturn,
+} from "react-hook-form";
 import { z } from "zod";
-import { memo } from "react";
 import { CircleAlertIcon } from "lucide-react";
-import { useFormContext, UseFormReturn } from "react-hook-form";
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import HoverTooltip from "@/components/hover-tooltip";
 import * as FormComponent from "@/components/ui/form";
 import { generateRandomSlug } from "@/lib/functions/generate-random-slug";
 
-import { productSchema } from "../product.schema";
-import SelectField from "./form-fields/select.field";
-import NumberField from "./form-fields/number.field";
-import SwitchField from "./form-fields/switch.field";
+import { Button } from "../ui/button";
+import { Textarea } from "../ui/textarea";
+import HoverTooltip from "../hover-tooltip";
+import InputField from "./components/input.field";
+import SwitchField from "./components/swich.field";
+import NumberField from "./components/number.field";
+import SelectField from "./components/select.field";
+import UploadField from "./components/upload.field";
+import { CategoryType } from "@/lib/schemas/category.schema";
 
-interface UniversalFormFieldProps {
-  form: UseFormReturn<z.infer<typeof productSchema>>;
+interface UniversalFieldProps<T extends z.ZodTypeAny> {
+  form: UseFormReturn<z.infer<T>>;
   label: string;
-  name: string;
+  name: Path<z.infer<T>>;
   description?: string;
   placeholder: string;
   minLength?: number;
   maxLength?: number;
-  type?: "input" | "textarea" | "checkbox" | "number" | "select";
-  options?: { value: string; label: string }[];
+  type?: "input" | "textarea" | "checkbox" | "number" | "select" | "upload";
+  options?: CategoryType[];
 
   featuredField?: {
     generateSlug?: boolean;
     resetField?: boolean;
   };
   showDescription?: boolean;
+  schema: T;
 }
 
-const UniversalFormField = memo(
-  ({
+const UniversalField = memo(
+  <T extends z.ZodTypeAny>({
     form,
     label,
     name,
@@ -43,31 +50,31 @@ const UniversalFormField = memo(
     maxLength = 100,
     type = "input",
     options,
-
     featuredField = {
       generateSlug: false,
       resetField: false,
     },
     showDescription = false,
     description,
-  }: UniversalFormFieldProps) => {
+    schema,
+  }: UniversalFieldProps<T>) => {
     const { control } = useFormContext();
 
-    const handleGenerateSlug = (name: string) => {
-      const slug = generateRandomSlug({ stringToGenerate: name });
-      form.setValue("slug", slug);
-    };
-
     const handleGenerateClick = () => {
-      if (form.getValues().name !== "") {
+      const productName = form.getValues("name" as Path<z.infer<T>>) as string;
+
+      if (productName !== "") {
         const slug = generateRandomSlug({
-          stringToGenerate: form.getValues().name,
+          stringToGenerate: productName,
           isRandowSuffix: true,
         });
 
-        form.setValue("slug", slug);
+        form.setValue(
+          "slug" as Path<z.infer<T>>,
+          slug as PathValue<z.infer<T>, Path<z.infer<T>>>
+        );
       } else {
-        alert("Будь ласка, введіть назву товару");
+        alert("Будь ласка, введіть назву");
       }
     };
 
@@ -78,7 +85,7 @@ const UniversalFormField = memo(
         render={({ field, fieldState }) => {
           const hasError = !!fieldState.error;
           return (
-            <FormComponent.FormItem className="">
+            <FormComponent.FormItem>
               <div className="flex justify-between">
                 <FormComponent.FormLabel>{label}</FormComponent.FormLabel>
 
@@ -98,17 +105,14 @@ const UniversalFormField = memo(
                   <div>
                     {/* Input */}
                     {type === "input" && (
-                      <Input
-                        {...field}
+                      <InputField
+                        form={form}
+                        field={field}
                         placeholder={placeholder}
-                        min={minLength}
-                        max={maxLength}
-                        onChange={(e) => {
-                          field.onChange(e);
-                          if (name === "name") {
-                            handleGenerateSlug(e.target.value);
-                          }
-                        }}
+                        maxLength={maxLength}
+                        minLength={minLength}
+                        name={name}
+                        schema={schema}
                       />
                     )}
                     {/* Textarea */}
@@ -139,6 +143,10 @@ const UniversalFormField = memo(
                         placeholder={placeholder}
                       />
                     )}
+                    {/* Upload */}
+                    {type === "upload" && (
+                      <UploadField form={form} field={field} schema={schema} />
+                    )}
                   </div>
                 </FormComponent.FormControl>
                 {hasError && (
@@ -163,6 +171,4 @@ const UniversalFormField = memo(
   }
 );
 
-UniversalFormField.displayName = "UniversalFormField";
-
-export default UniversalFormField;
+export default UniversalField;

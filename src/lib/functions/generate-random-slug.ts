@@ -14,15 +14,15 @@ export const generateRandomSlug = ({
       .join("");
   };
 
-  let slug = transliterate(stringToGenerate) // Тут передаємо тільки строку
-    .toLowerCase() // Зменшуємо регістр
-    .replace(/[^a-z0-9\s-]/g, "") // Видаляємо неалфавітні символи
-    .replace(/\s+/g, "-") // Замінюємо пробіли на дефіси
-    .replace(/-+/g, "-"); // Забираємо повтори дефісів
+  let slug = transliterate(stringToGenerate)
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
 
-  // Додаємо випадковий суфікс для унікальності (якщо потрібно)
+  // Add random suffix to slug
   if (isRandowSuffix) {
-    const randomSuffix = Math.random().toString(36).substring(2, 6); // Генеруємо випадкові 4 символи
+    const randomSuffix = Math.random().toString(36).substring(2, 6);
     slug = `${slug}-${randomSuffix}`;
 
     return slug;

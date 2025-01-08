@@ -1,41 +1,35 @@
 import { z } from "zod";
+import {
+  categorySchema,
+  CategoryType,
+  defaultCategoryValues,
+} from "./category.schema";
 
-// Схема категорій
-export const categorySchema: z.ZodType = z.object({
-  id: z.string().default(""),
-  name: z
-    .string()
-    .min(3, { message: "Назва категорії повинна містити мінімум 3 символи" })
-    .max(100, {
-      message: "Назва категорії повинна містити максимум 100 символів",
-    })
-    .default(""),
-  slug: z
-    .string()
-    .min(3, { message: "Slug категорії повинен містити мінімум 3 символи" })
-    .max(120, {
-      message: "Slug категорії повинен містити максимум 120 символів",
-    })
-    .default(""),
-  description: z.string().max(1000).optional().default(""),
-  shortDesc: z.string().max(100).optional().default(""),
-  parentId: z.string().nullable().default(null),
-  images: z
-    .array(
-      z.object({
-        url: z.string().default(""),
-        alt: z.string().optional().default(""),
-      })
-    )
-    .max(1, "Категорія може мати лише одне зображення")
-    .default([]),
-  children: z
-    .array(z.lazy(() => categorySchema))
-    .optional()
-    .default([]),
-});
+// Product Type
+export type ProductType = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  shortDesc: string;
+  minOrder: number;
+  maxOrder: number | null;
+  stock: number;
+  price: number;
+  isActive: boolean;
+  category: CategoryType;
+  images: string[];
+  variants: ProductVariantType[];
+};
 
-// Схема продуктів
+export type ProductVariantType = {
+  name: string;
+  slug: string;
+  description: string;
+  shortDesc: string;
+};
+
+// Схема товарів
 export const productSchema = z.object({
   id: z.string().default(""),
   name: z
@@ -104,21 +98,8 @@ export const productSchema = z.object({
     .default([]),
 });
 
-// Дефолтні значення для категорій
-export const defaultCategoryValues = {
-  id: "",
-  name: "",
-  slug: "",
-  description: "",
-  shortDesc: "",
-  parentId: null,
-  images: [],
-  children: [],
-};
-
 // Дефолтні значення для товарів
 export const defaultProductValues = {
-  id: "",
   name: "",
   slug: "",
   description: "",
