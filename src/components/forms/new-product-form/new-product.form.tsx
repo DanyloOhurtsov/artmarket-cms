@@ -3,7 +3,6 @@
 import { z } from "zod";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
-import { PrismaClient } from "@prisma/client";
 
 import {
   defaultProductValues,
