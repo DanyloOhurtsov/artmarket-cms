@@ -16,7 +16,7 @@ const UploadField = <T extends z.ZodTypeAny>({
   field,
   form,
 }: UploadFieldProps<T>) => {
-
+  console.log("remove this", form);
 
   return (
     <>

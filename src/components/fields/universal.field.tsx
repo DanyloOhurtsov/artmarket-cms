@@ -171,4 +171,6 @@ const UniversalField = memo(
   }
 );
 
+UniversalField.displayName = "UniversalField";
+
 export default UniversalField;
