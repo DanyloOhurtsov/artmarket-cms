@@ -22,6 +22,8 @@ const UploadField = ({ setFiles, maxFiles = 1 }: UploadFieldProps) => {
     toast.error("Файл видалено");
   };
 
+  console.log("maxFiles", maxFiles);
+
   return (
     <div className="flex items-center justify-start">
       {preview ? (
