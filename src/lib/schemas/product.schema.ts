@@ -60,12 +60,7 @@ export const productSchema = z.object({
     children: [],
   }),
   images: z
-    .array(
-      z.object({
-        url: z.string().default(""),
-        alt: z.string().optional().default(""),
-      })
-    )
+    .array(z.string())
     .min(1, "Додайте хоча б одне зображення")
     .max(10, "Не більше 10 зображень")
     .default([]),

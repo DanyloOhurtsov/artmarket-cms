@@ -21,16 +21,16 @@ interface SelectFieldProps {
 const SelectField = ({ field, options, placeholder }: SelectFieldProps) => {
   const [open, setOpen] = useState(false);
 
+  const label =
+    field.value.name !== "" && options && options.length > 0
+      ? field.value.name
+      : placeholder;
+
   return (
     <PopoverComponent.Popover>
       <PopoverComponent.PopoverTrigger asChild>
         <Button variant={"outline"} className="w-full flex justify-between">
-          <p className="truncate flex-1 text-start">
-            {field.value && options?.length
-              ? options?.find((option) => option.name === field.value.name)
-                  ?.name
-              : placeholder}
-          </p>
+          <p className="truncate flex-1 text-start">{label}</p>
           <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverComponent.PopoverTrigger>

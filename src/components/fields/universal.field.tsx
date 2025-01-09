@@ -9,6 +9,7 @@ import { z } from "zod";
 import { CircleAlertIcon } from "lucide-react";
 
 import * as FormComponent from "@/components/ui/form";
+import { CategoryType } from "@/lib/schemas/category.schema";
 import { generateRandomSlug } from "@/lib/functions/generate-random-slug";
 
 import { Button } from "../ui/button";
@@ -19,7 +20,7 @@ import SwitchField from "./components/swich.field";
 import NumberField from "./components/number.field";
 import SelectField from "./components/select.field";
 import UploadField from "./components/upload.field";
-import { CategoryType } from "@/lib/schemas/category.schema";
+import toast from "react-hot-toast";
 
 interface UniversalFieldProps<T extends z.ZodTypeAny> {
   form: UseFormReturn<z.infer<T>>;
@@ -38,6 +39,7 @@ interface UniversalFieldProps<T extends z.ZodTypeAny> {
   };
   showDescription?: boolean;
   schema: T;
+  setFiles?: React.Dispatch<React.SetStateAction<File[]>>;
 }
 
 const UniversalField = memo(
@@ -57,6 +59,7 @@ const UniversalField = memo(
     showDescription = false,
     description,
     schema,
+    setFiles,
   }: UniversalFieldProps<T>) => {
     const { control } = useFormContext();
 
@@ -74,7 +77,7 @@ const UniversalField = memo(
           slug as PathValue<z.infer<T>, Path<z.infer<T>>>
         );
       } else {
-        alert("Будь ласка, введіть назву");
+        toast.error("Будь ласка, введіть назву товару");
       }
     };
 
@@ -144,8 +147,8 @@ const UniversalField = memo(
                       />
                     )}
                     {/* Upload */}
-                    {type === "upload" && (
-                      <UploadField form={form} field={field} schema={schema} />
+                    {type === "upload" && setFiles && (
+                      <UploadField setFiles={setFiles} />
                     )}
                   </div>
                 </FormComponent.FormControl>

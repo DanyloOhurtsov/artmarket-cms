@@ -17,7 +17,7 @@ const NewProductForm = () => {
   const memoizedDefaultValues = useMemo(() => defaultProductValues, []);
   const [categoryOptions, setCategoryOptions] = useState([]);
 
-  const form = useForm<z.infer<typeof productSchema>>({
+  const formProduct = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
     defaultValues: memoizedDefaultValues,
   });
@@ -45,21 +45,22 @@ const NewProductForm = () => {
   }
 
   return (
-    <Form {...form}>
+    <Form {...formProduct}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        id="newProductForm"
+        onSubmit={formProduct.handleSubmit(onSubmit)}
         className="flex gap-x-6 w-full"
       >
         <div className="flex flex-col space-y-4 w-2/3">
           <UniversalField
-            form={form}
+            form={formProduct}
             name="name"
             label="Назва товару"
             placeholder="Наприклад: Чорні олівці з коробкою"
             schema={productSchema}
           />
           <UniversalField
-            form={form}
+            form={formProduct}
             name="slug"
             label="Slug"
             placeholder="Наприклад: black-pencils-with-case"
@@ -74,7 +75,7 @@ const NewProductForm = () => {
             name="shortDesc"
             label="Короткий опис товару"
             placeholder="Наприклад: Чорні олівці, які поставляються в компактній коробці."
-            form={form}
+            form={formProduct}
             type="textarea"
             minLength={3}
             maxLength={100}
@@ -84,14 +85,14 @@ const NewProductForm = () => {
             name="description"
             label="Опис товару"
             placeholder="Наприклад: Ці чорні олівці виготовлені з високоякісної деревини. У комплекті йде стильна коробка, яка ідеально підходить для зберігання та транспортування."
-            form={form}
+            form={formProduct}
             type="textarea"
             minLength={3}
             maxLength={1000}
             schema={productSchema}
           />
           <UniversalField
-            form={form}
+            form={formProduct}
             name="price"
             label="Ціна"
             placeholder="Ціна товару"
@@ -99,7 +100,7 @@ const NewProductForm = () => {
             schema={productSchema}
           />
 
-          <Button type="submit" onClick={() => onSubmit(form.getValues())}>
+          <Button type="submit" form="newProductForm">
             Створити продукт
           </Button>
         </div>
@@ -107,7 +108,7 @@ const NewProductForm = () => {
         {/* Aside */}
         <div className="flex flex-col space-y-4 w-1/3 border rounded-xl p-5">
           <UniversalField
-            form={form}
+            form={formProduct}
             name="isActive"
             label="Активний"
             placeholder="Чи активний цей товар?"
@@ -115,7 +116,7 @@ const NewProductForm = () => {
             schema={productSchema}
           />
           <UniversalField
-            form={form}
+            form={formProduct}
             name="stock"
             label="Кількість на складі"
             placeholder="На складі"
@@ -125,7 +126,7 @@ const NewProductForm = () => {
             schema={productSchema}
           />
           <UniversalField
-            form={form}
+            form={formProduct}
             name="minOrder"
             label="Мінімальне замовлення"
             placeholder="1"
@@ -133,7 +134,7 @@ const NewProductForm = () => {
             schema={productSchema}
           />
           <UniversalField
-            form={form}
+            form={formProduct}
             name="maxOrder"
             label="Максимальне замовлення"
             placeholder="10"
@@ -147,7 +148,7 @@ const NewProductForm = () => {
             name="category"
             label="Категорія"
             placeholder="Оберіть категорію товару"
-            form={form}
+            form={formProduct}
             type="select"
             options={categoryOptions}
             schema={productSchema}

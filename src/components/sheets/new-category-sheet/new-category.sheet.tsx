@@ -1,4 +1,5 @@
 import NewCategoryForm from "@/components/forms/new-category-form/new-category.form";
+import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
   SheetContent,
@@ -36,8 +37,9 @@ const NewCategorySheet = ({
             Заповніть форму, щоб створити нову категорію.
           </SheetDescription>
         </SheetHeader>
+        <Separator className="my-4" />
         <>
-          <NewCategoryForm />
+          <NewCategoryForm onOpenChange={onOpenChange} />
         </>
       </SheetContent>
     </Sheet>

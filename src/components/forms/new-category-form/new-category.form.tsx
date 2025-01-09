@@ -1,6 +1,8 @@
 "use client";
 
 import { z } from "zod";
+import { useState } from "react";
+import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 
 import {
@@ -10,24 +12,67 @@ import {
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useUploadThing } from "@/utils/uploadthing";
 import UniversalField from "@/components/fields/universal.field";
 
-const NewCategoryForm = () => {
+const NewCategoryForm = ({ onOpenChange }: { onOpenChange: () => void }) => {
+  const [files, setFiles] = useState<File[]>([]);
+
   const form = useForm<z.infer<typeof categorySchema>>({
     resolver: zodResolver(categorySchema),
     defaultValues: defaultCategoryValues,
   });
 
-  function onSubmit(values: z.infer<typeof categorySchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  const { startUpload } = useUploadThing("imageUploader");
+
+  async function onSubmitCategory(values: z.infer<typeof categorySchema>) {
+    let imageUrl = "";
+
+    if (files.length > 0) {
+      const uploadedImages = await startUpload(files);
+
+      if (!uploadedImages || !uploadedImages.length) {
+        toast.error("Помилка завантаження зображень");
+        return;
+      }
+
+      // Використовуємо URL першого завантаженого зображення
+      imageUrl = uploadedImages[0].url;
+    }
+
+    const category = {
+      ...values,
+      image: imageUrl, // Якщо файлів не було, image буде пустим рядком
+    };
+
+    try {
+      const res = await fetch("/api/categories/new", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(category),
+      });
+      if (res.ok) {
+        toast.success("Категорія створена успішно");
+        onOpenChange();
+      } else {
+        const error = await res.json();
+        console.error("Помилка:", error);
+      }
+    } catch (error) {
+      console.error("Щось пішло не так:", error);
+    }
   }
 
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form
+          id="newCategoryForm"
+          className="space-y-8"
+          onSubmit={form.handleSubmit(onSubmitCategory)}
+        >
           <UniversalField
             form={form}
             name="name"
@@ -76,9 +121,12 @@ const NewCategoryForm = () => {
             description="Зображення категорії, яке буде відображатися на сторінці категорії (max 1)"
             showDescription
             schema={categorySchema}
+            setFiles={setFiles}
           />
 
-          <Button type="submit">Submit</Button>
+          <Button type="submit" form="newCategoryForm">
+            Submit
+          </Button>
         </form>
       </Form>
     </>

@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
+import { Toaster } from "react-hot-toast";
 import { McLaren, Jost } from "next/font/google";
+import { extractRouterConfig } from "uploadthing/server";
 
 import Providers from "@/components/providers/providers";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 
 import "./globals.css";
+import { ourFileRouter } from "./api/uploadthing/core";
 
 const mclaren = McLaren({
   variable: "--font-mclaren",
@@ -42,7 +46,8 @@ export default function RootLayout({
     <Providers>
       <html lang="en">
         <body className={`${jost.className} ${mclaren.className} antialiased`}>
-          <TooltipProvider>{children}</TooltipProvider>
+          <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
+          <Toaster position="bottom-right"/> <TooltipProvider>{children}</TooltipProvider>
         </body>
       </html>
     </Providers>

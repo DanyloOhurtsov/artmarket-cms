@@ -13,7 +13,7 @@ datasource db {
 
 // Models
 model Category {
-  id          String      @id @default(cuid())
+  id          String      @id @default(uuid())
   name        String
   slug        String      @unique
 
@@ -27,7 +27,7 @@ model Category {
   parentId    String?
   parent      Category?   @relation("CategoryHierarchy", fields: [parentId], references: [id])
   children    Category[]  @relation("CategoryHierarchy")
-  products    Product[]
+  products    Product[] 
 }
 
 model Product {
