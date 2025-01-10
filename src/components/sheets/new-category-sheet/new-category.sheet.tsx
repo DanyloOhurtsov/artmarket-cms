@@ -1,7 +1,5 @@
-import NewCategoryForm from "@/components/forms/new-category-form/new-category.form";
-import HoverTooltip from "@/components/hover-tooltip";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { PlusCircleIcon } from "lucide-react";
+
 import {
   Sheet,
   SheetContent,
@@ -10,7 +8,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { PlusCircleIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import HoverTooltip from "@/components/hover-tooltip";
+import { Separator } from "@/components/ui/separator";
 
 interface NewCategorySheetProps {
   isOpen: boolean;
@@ -47,9 +47,7 @@ const NewCategorySheet = ({
           </SheetDescription>
         </SheetHeader>
         <Separator className="my-4" />
-        <>
-        {children}
-        </>
+        <>{children}</>
       </SheetContent>
     </Sheet>
   );

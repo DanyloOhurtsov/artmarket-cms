@@ -23,6 +23,7 @@ interface ImageInputFieldProps<T extends z.ZodTypeAny> {
   description?: string;
   type?: "file" | "text";
   showDescription?: boolean;
+  files: (string | File)[];
   setFiles: React.Dispatch<React.SetStateAction<(string | File)[]>>;
 }
 
@@ -34,20 +35,20 @@ const ImageInputField = <T extends z.ZodTypeAny>({
   description,
   maxLength = 10,
   showDescription = false,
+  files,
   setFiles,
 }: ImageInputFieldProps<T>) => {
   const { control } = useFormContext();
-  const [images, setImages] = useState<(string | File)[]>([]);
   const [beforeUpload, setBeforeUpload] = useState<string>("");
 
   const handleAddImage = (value: string | File) => {
-    if (images.length < maxLength) {
-      setImages((prev) => [...prev, value]);
+    if (files.length < maxLength) {
+      setFiles((prev) => [...prev, value]);
     }
   };
 
   const handleRemoveImage = (index: number) => {
-    setImages((prev) => prev.filter((_, i) => i !== index));
+    setFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
   return (
@@ -71,7 +72,7 @@ const ImageInputField = <T extends z.ZodTypeAny>({
             <div className="flex items-center">
               <FormComponent.FormControl className="flex-1">
                 <div className="flex flex-wrap gap-4">
-                  {images.map((image, index) => (
+                  {files.map((image, index) => (
                     <div className="size-24 relative" key={index}>
                       <div className="size-full relative rounded-md overflow-hidden">
                         <Image
@@ -97,7 +98,7 @@ const ImageInputField = <T extends z.ZodTypeAny>({
                     </div>
                   ))}
 
-                  {images.length < maxLength && (
+                  {files.length < maxLength && (
                     <div className="relative size-24 rounded-md overflow-hidden">
                       <Button
                         className="flex items-center justify-center size-24"

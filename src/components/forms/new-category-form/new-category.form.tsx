@@ -12,7 +12,7 @@ import {
 } from "@/lib/schemas/category.schema";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { useUploadThing } from "@/utils/uploadthing";
+// import { useUploadThing } from "@/utils/uploadthing";
 import { zodResolver } from "@hookform/resolvers/zod";
 import InputField from "@/components/fields/input.field";
 import TextareaField from "@/components/fields/textarea.field";
@@ -25,7 +25,7 @@ const NewCategoryForm = ({
   onOpenChange: () => void;
   onCategoryCreated: (newCategory: CategoryType) => void;
 }) => {
-  const [files, setFiles] = useState<File[]>([]);
+  // const [files, setFiles] = useState<File[]>([]);
   const [images, setImages] = useState<(string | File)[]>([]);
 
   const form = useForm<z.infer<typeof categorySchema>>({
@@ -33,7 +33,7 @@ const NewCategoryForm = ({
     defaultValues: defaultCategoryValues,
   });
 
-  const { startUpload } = useUploadThing("imageUploader");
+  // const { startUpload } = useUploadThing("imageUploader");
 
   async function onSubmitCategory(values: z.infer<typeof categorySchema>) {
     // let imageUrl = values.image;
@@ -130,6 +130,7 @@ const NewCategoryForm = ({
             description="Посилання на зображення категорії, яке буде відображатися на сторінці категорії"
             showDescription
             maxLength={1}
+            files={images}
             setFiles={setImages}
           />
 

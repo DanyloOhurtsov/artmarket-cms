@@ -51,7 +51,6 @@ const UniversalField = memo(
     },
     showDescription = false,
     description,
-    setFiles,
   }: UniversalFieldProps<T>) => {
     const { control } = useFormContext();
 
