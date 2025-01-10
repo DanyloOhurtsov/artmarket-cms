@@ -1,4 +1,6 @@
 import NewCategoryForm from "@/components/forms/new-category-form/new-category.form";
+import HoverTooltip from "@/components/hover-tooltip";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
@@ -8,6 +10,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { PlusCircleIcon } from "lucide-react";
 
 interface NewCategorySheetProps {
   isOpen: boolean;
@@ -26,7 +29,13 @@ const NewCategorySheet = ({
 }: NewCategorySheetProps) => {
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetTrigger asChild={asChild}>{children}</SheetTrigger>
+      <SheetTrigger asChild={asChild}>
+        <Button variant={"ghost"} size={"icon"}>
+          <HoverTooltip content="Додати новий елемент" asChild>
+            <PlusCircleIcon size={24} />
+          </HoverTooltip>
+        </Button>
+      </SheetTrigger>
       <SheetContent
         side={side}
         className="w-[400px] sm:w-[540px] sm:max-w-full"
@@ -39,7 +48,7 @@ const NewCategorySheet = ({
         </SheetHeader>
         <Separator className="my-4" />
         <>
-          <NewCategoryForm onOpenChange={onOpenChange} />
+        {children}
         </>
       </SheetContent>
     </Sheet>

@@ -13,13 +13,8 @@ import { CategoryType } from "@/lib/schemas/category.schema";
 import { generateRandomSlug } from "@/lib/functions/generate-random-slug";
 
 import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
 import HoverTooltip from "../hover-tooltip";
-import InputField from "./components/input.field";
-import SwitchField from "./components/swich.field";
-import NumberField from "./components/number.field";
 import SelectField from "./components/select.field";
-import UploadField from "./components/upload.field";
 import toast from "react-hot-toast";
 
 interface UniversalFieldProps<T extends z.ZodTypeAny> {
@@ -48,8 +43,6 @@ const UniversalField = memo(
     label,
     name,
     placeholder,
-    minLength = 3,
-    maxLength = 100,
     type = "input",
     options,
     featuredField = {
@@ -58,7 +51,6 @@ const UniversalField = memo(
     },
     showDescription = false,
     description,
-    schema,
     setFiles,
   }: UniversalFieldProps<T>) => {
     const { control } = useFormContext();
@@ -106,38 +98,7 @@ const UniversalField = memo(
               <div className="flex items-center">
                 <FormComponent.FormControl className="flex-1">
                   <div>
-                    {/* Input */}
-                    {type === "input" && (
-                      <InputField
-                        form={form}
-                        field={field}
-                        placeholder={placeholder}
-                        maxLength={maxLength}
-                        minLength={minLength}
-                        name={name}
-                        schema={schema}
-                      />
-                    )}
-                    {/* Textarea */}
-                    {type === "textarea" && (
-                      <Textarea placeholder={placeholder} {...field} />
-                    )}
-                    {/* Checkbox */}
-                    {type === "checkbox" && (
-                      <SwitchField
-                        field={field}
-                        placeholder={placeholder}
-                        name={name}
-                      />
-                    )}
-                    {/* Number */}
-                    {type === "number" && (
-                      <NumberField
-                        field={field}
-                        placeholder={placeholder}
-                        featuredField={featuredField.resetField}
-                      />
-                    )}
+
                     {/* Select */}
                     {type === "select" && (
                       <SelectField
@@ -146,10 +107,7 @@ const UniversalField = memo(
                         placeholder={placeholder}
                       />
                     )}
-                    {/* Upload */}
-                    {type === "upload" && setFiles && (
-                      <UploadField setFiles={setFiles} />
-                    )}
+
                   </div>
                 </FormComponent.FormControl>
                 {hasError && (

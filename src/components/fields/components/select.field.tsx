@@ -1,16 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ControllerRenderProps, FieldValues } from "react-hook-form";
-import { CheckIcon, ChevronsUpDownIcon, PlusCircleIcon } from "lucide-react";
+import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import HoverTooltip from "@/components/hover-tooltip";
 import * as PopoverComponent from "@/components/ui/popover";
 import * as CommandComponent from "@/components/ui/command";
 import NewCategorySheet from "@/components/sheets/new-category-sheet/new-category.sheet";
 import { CategoryType } from "@/lib/schemas/category.schema";
+import NewCategoryForm from "@/components/forms/new-category-form/new-category.form";
 
 interface SelectFieldProps {
   field: ControllerRenderProps<FieldValues, string>;
@@ -18,13 +18,29 @@ interface SelectFieldProps {
   options?: CategoryType[];
 }
 
-const SelectField = ({ field, options, placeholder }: SelectFieldProps) => {
+const SelectField = ({
+  field,
+  options: initialOptions,
+  placeholder,
+}: SelectFieldProps) => {
   const [open, setOpen] = useState(false);
+  const [options, setOptions] = useState<CategoryType[]>([]);
+
+  useEffect(() => {
+    if (initialOptions) {
+      setOptions(initialOptions);
+    }
+  }, [initialOptions]);
 
   const label =
     field.value.name !== "" && options && options.length > 0
       ? field.value.name
       : placeholder;
+
+  const handleCategoryCreated = (newCategory: CategoryType) => {
+    setOptions((prevOptions) => [...prevOptions, newCategory]);
+    field.onChange(newCategory); // Вибираємо нову категорію автоматично
+  };
 
   return (
     <PopoverComponent.Popover>
@@ -46,15 +62,14 @@ const SelectField = ({ field, options, placeholder }: SelectFieldProps) => {
               onOpenChange={() => setOpen(!open)}
               asChild
             >
-              <Button variant={"ghost"} size={"icon"}>
-                <HoverTooltip content="Додати новий елемент" asChild>
-                  <PlusCircleIcon size={24} />
-                </HoverTooltip>
-              </Button>
+              <NewCategoryForm
+                onOpenChange={() => setOpen(!open)}
+                onCategoryCreated={handleCategoryCreated}
+              />
             </NewCategorySheet>
           </div>
 
-          {options?.length ? (
+          {initialOptions?.length ? (
             <>
               <CommandComponent.CommandGroup>
                 {options.map((option, index) => (
@@ -62,8 +77,9 @@ const SelectField = ({ field, options, placeholder }: SelectFieldProps) => {
                     key={index}
                     onClick={() => field.onChange(option)}
                     variant={"ghost"}
-                    className="w-full flex justify-start"
+                    className="w-full flex justify-between"
                   >
+                    <p className="flex 1 text-left">{option.name}</p>
                     <CheckIcon
                       className={cn(
                         "mr-2 h-4 w-4",
@@ -72,7 +88,6 @@ const SelectField = ({ field, options, placeholder }: SelectFieldProps) => {
                           : "opacity-0"
                       )}
                     />
-                    <p className="flex 1 text-left bg-red-50">{option.name}</p>
                   </Button>
                 ))}
               </CommandComponent.CommandGroup>

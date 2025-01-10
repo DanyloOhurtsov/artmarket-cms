@@ -42,11 +42,11 @@ export const productSchema = z.object({
     .min(3, { message: "Slug товару повинен містити мінімум 3 символи" })
     .max(120, { message: "Slug товару повинен містити максимум 120 символів" })
     .default(""),
-  description: z.string().max(1000).optional().default(""),
-  shortDesc: z.string().max(100).optional().default(""),
+  description: z.string().max(3000).optional().default(""),
+  shortDesc: z.string().max(250).optional().default(""),
   minOrder: z.number().int().positive().optional().default(1),
   maxOrder: z.number().int().positive().optional().nullable().default(null),
-  stock: z.number().int().positive().optional().default(0),
+  stock: z.number().int().positive().optional().default(1),
   price: z.number().positive().default(0),
   isActive: z.boolean().default(true),
   category: categorySchema.default({

@@ -37,7 +37,7 @@ export const categorySchemaTest = (depth = 0): z.ZodType =>
         })
         .default(""),
       description: z.string().max(1000).optional().default(""),
-      shortDesc: z.string().max(100).optional().default(""),
+      shortDesc: z.string().max(250).optional().default(""),
       parentId: z.string().nullable().default(null),
       image: z.string().optional().default(""),
       products: z.array(productSchema).default([]),
