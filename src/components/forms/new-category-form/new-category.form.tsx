@@ -26,6 +26,7 @@ const NewCategoryForm = ({
   onCategoryCreated: (newCategory: CategoryType) => void;
 }) => {
   const [files, setFiles] = useState<File[]>([]);
+  const [images, setImages] = useState<(string | File)[]>([]);
 
   const form = useForm<z.infer<typeof categorySchema>>({
     resolver: zodResolver(categorySchema),
@@ -35,18 +36,19 @@ const NewCategoryForm = ({
   const { startUpload } = useUploadThing("imageUploader");
 
   async function onSubmitCategory(values: z.infer<typeof categorySchema>) {
-    let imageUrl = values.image;
+    // let imageUrl = values.image;
+    const imageUrl = images[0];
 
-    if (files.length > 0) {
-      const uploadedImages = await startUpload(files);
+    // if (files.length > 0) {
+    //   const uploadedImages = await startUpload(files);
 
-      if (!uploadedImages || !uploadedImages.length) {
-        toast.error("Помилка завантаження зображень");
-        return;
-      }
+    //   if (!uploadedImages || !uploadedImages.length) {
+    //     toast.error("Помилка завантаження зображень");
+    //     return;
+    //   }
 
-      imageUrl = uploadedImages[0].url;
-    }
+    //   imageUrl = uploadedImages[0].url;
+    // }
 
     const category = {
       ...values,
@@ -128,6 +130,7 @@ const NewCategoryForm = ({
             description="Посилання на зображення категорії, яке буде відображатися на сторінці категорії"
             showDescription
             maxLength={1}
+            setFiles={setImages}
           />
 
           <Button type="submit" form="newCategoryForm">

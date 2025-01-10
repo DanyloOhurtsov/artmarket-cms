@@ -23,6 +23,7 @@ interface ImageInputFieldProps<T extends z.ZodTypeAny> {
   description?: string;
   type?: "file" | "text";
   showDescription?: boolean;
+  setFiles: React.Dispatch<React.SetStateAction<(string | File)[]>>;
 }
 
 const ImageInputField = <T extends z.ZodTypeAny>({
@@ -33,6 +34,7 @@ const ImageInputField = <T extends z.ZodTypeAny>({
   description,
   maxLength = 10,
   showDescription = false,
+  setFiles,
 }: ImageInputFieldProps<T>) => {
   const { control } = useFormContext();
   const [images, setImages] = useState<(string | File)[]>([]);

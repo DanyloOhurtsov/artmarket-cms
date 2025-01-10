@@ -1,34 +1,30 @@
 "use client";
 
-import { useFormContext, UseFormReturn } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
+import { ChevronsUpDownIcon } from "lucide-react";
 
 import * as FormComponent from "@/components/ui/form";
 import * as PopoverComponent from "@/components/ui/popover";
 import * as CommandComponent from "@/components/ui/command";
 import { CategoryType } from "@/lib/schemas/category.schema";
-import ErrorToolTip from "./error.tooltip";
+
 import { Button } from "../ui/button";
-import { ChevronsUpDownIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import ErrorToolTip from "./error.tooltip";
 import NewCategorySheet from "../sheets/new-category-sheet/new-category.sheet";
 import NewCategoryForm from "../forms/new-category-form/new-category.form";
-import { z } from "zod";
 
-interface SelectFieldProps<T extends z.ZodTypeAny> {
-  form: UseFormReturn<z.infer<T>>;
+interface SelectFieldProps {
   name: string;
   placeholder: string;
   initialOptions: CategoryType[];
-  schema: T;
 }
 
-const SelectField = <T extends z.ZodTypeAny>({
-  form,
+const SelectField = ({
   name,
   placeholder,
   initialOptions,
-  schema,
-}: SelectFieldProps<T>) => {
+}: SelectFieldProps) => {
   const { control, setValue } = useFormContext();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [options, setOptions] = useState<CategoryType[]>([]);
