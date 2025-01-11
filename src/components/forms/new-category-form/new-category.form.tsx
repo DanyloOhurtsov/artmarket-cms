@@ -26,6 +26,7 @@ const NewCategoryForm = ({
   onOpenChange: () => void;
   onCategoryCreated: (newCategory: CategoryType) => void;
 }) => {
+  const { startUpload } = useUploadThing("imageUploader");
   const [images, setImages] = useState<(string | File)[]>([]);
   const [uploadMethod, setUploadMethod] = useState<"url" | "file">("url");
 
@@ -38,8 +39,6 @@ const NewCategoryForm = ({
     let imageUrl = images[0];
 
     if (uploadMethod === "file") {
-      const { startUpload } = useUploadThing("imageUploader");
-
       const files = images.filter(
         (image): image is File => image instanceof File
       );
