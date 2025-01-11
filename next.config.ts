@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
         hostname: "lh3.google.com",
         pathname: "/**", // Allow all paths under this domain
       },
+      {
+        protocol: "https",
+        hostname: "**",
+      },
     ],
   },
 };
