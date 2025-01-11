@@ -21,14 +21,14 @@ interface ImageInputFieldProps<T extends z.ZodTypeAny> {
   maxLength?: number;
   placeholder: string;
   description?: string;
-  type?: "file" | "text";
+  type?: "file" | "url";
   showDescription?: boolean;
   files: (string | File)[];
   setFiles: React.Dispatch<React.SetStateAction<(string | File)[]>>;
 }
 
 const ImageInputField = <T extends z.ZodTypeAny>({
-  type = "text",
+  type = "url",
   name,
   label,
   placeholder,
@@ -127,7 +127,7 @@ const ImageInputField = <T extends z.ZodTypeAny>({
                           }}
                         />
                       )}
-                      {type === "text" && (
+                      {type === "url" && (
                         <div>
                           <AlertDialogComponent.AlertDialog>
                             <AlertDialogComponent.AlertDialogTrigger className="absolute top-0 left-0 cursor-pointer size-full" />
@@ -144,7 +144,6 @@ const ImageInputField = <T extends z.ZodTypeAny>({
 
                               <Input
                                 {...field}
-                                type="text"
                                 placeholder={placeholder}
                                 className="size-full"
                                 value={beforeUpload}

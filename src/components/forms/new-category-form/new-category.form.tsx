@@ -12,7 +12,8 @@ import {
 } from "@/lib/schemas/category.schema";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-// import { useUploadThing } from "@/utils/uploadthing";
+import { useUploadThing } from "@/utils/uploadthing";
+import { Separator } from "@/components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import InputField from "@/components/fields/input.field";
 import TextareaField from "@/components/fields/textarea.field";
@@ -25,30 +26,35 @@ const NewCategoryForm = ({
   onOpenChange: () => void;
   onCategoryCreated: (newCategory: CategoryType) => void;
 }) => {
-  // const [files, setFiles] = useState<File[]>([]);
   const [images, setImages] = useState<(string | File)[]>([]);
+  const [uploadMethod, setUploadMethod] = useState<"url" | "file">("url");
 
   const form = useForm<z.infer<typeof categorySchema>>({
     resolver: zodResolver(categorySchema),
     defaultValues: defaultCategoryValues,
   });
 
-  // const { startUpload } = useUploadThing("imageUploader");
-
   async function onSubmitCategory(values: z.infer<typeof categorySchema>) {
-    // let imageUrl = values.image;
-    const imageUrl = images[0];
+    let imageUrl = images[0];
 
-    // if (files.length > 0) {
-    //   const uploadedImages = await startUpload(files);
+    if (uploadMethod === "file") {
+      const { startUpload } = useUploadThing("imageUploader");
 
-    //   if (!uploadedImages || !uploadedImages.length) {
-    //     toast.error("Помилка завантаження зображень");
-    //     return;
-    //   }
+      const files = images.filter(
+        (image): image is File => image instanceof File
+      );
 
-    //   imageUrl = uploadedImages[0].url;
-    // }
+      if (images.length > 0) {
+        const uploadedImages = await startUpload(files);
+
+        if (!uploadedImages || !uploadedImages.length) {
+          toast.error("Помилка завантаження зображень");
+          return;
+        }
+
+        imageUrl = uploadedImages[0].url;
+      }
+    }
 
     const category = {
       ...values,
@@ -122,17 +128,43 @@ const NewCategoryForm = ({
             schema={categorySchema}
           />
 
-          <ImageInputField
-            schema={categorySchema}
-            name="image"
-            label="Посилання на зображення"
-            placeholder="https://example.com/image.jpg"
-            description="Посилання на зображення категорії, яке буде відображатися на сторінці категорії"
-            showDescription
-            maxLength={1}
-            files={images}
-            setFiles={setImages}
-          />
+          <Separator />
+          <div className="flex flex-col space-y-4">
+            <div className="flex items-center border rounded-full w-fit border-primary/40">
+              <Button
+                type="button"
+                onClick={() => setUploadMethod("url")}
+                variant={uploadMethod === "file" ? "ghost" : "default"}
+                className="rounded-full min-w-20"
+                // TODO: Remove disabled attribute
+                disabled
+              >
+                Url
+              </Button>
+              <Button
+                type="button"
+                onClick={() => setUploadMethod("file")}
+                variant={uploadMethod === "file" ? "default" : "ghost"}
+                className="rounded-full min-w-20"
+                // TODO: Remove disabled attribute
+                disabled
+              >
+                File
+              </Button>
+            </div>
+            <ImageInputField
+              schema={categorySchema}
+              name="image"
+              label="Посилання на зображення"
+              placeholder="https://example.com/image.jpg"
+              description="Посилання на зображення категорії, яке буде відображатися на сторінці категорії"
+              showDescription
+              maxLength={1}
+              files={images}
+              setFiles={setImages}
+              type={uploadMethod}
+            />
+          </div>
 
           <Button type="submit" form="newCategoryForm">
             Submit
