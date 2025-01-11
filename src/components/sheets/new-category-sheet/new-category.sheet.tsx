@@ -9,6 +9,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import ScrollArea from "@/components/scroll-area";
 import HoverTooltip from "@/components/hover-tooltip";
 import { Separator } from "@/components/ui/separator";
 
@@ -38,7 +39,7 @@ const NewCategorySheet = ({
       </SheetTrigger>
       <SheetContent
         side={side}
-        className="w-[400px] sm:w-[540px] sm:max-w-full"
+        className="w-[400px] sm:w-[540px] sm:max-w-full h-screen flex flex-col"
       >
         <SheetHeader>
           <SheetTitle>Створити нову категорію</SheetTitle>
@@ -47,7 +48,8 @@ const NewCategorySheet = ({
           </SheetDescription>
         </SheetHeader>
         <Separator className="my-4" />
-        <>{children}</>
+
+        <ScrollArea>{children}</ScrollArea>
       </SheetContent>
     </Sheet>
   );

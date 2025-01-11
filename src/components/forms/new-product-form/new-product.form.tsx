@@ -11,15 +11,16 @@ import {
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
-import UniversalField from "@/components/fields/universal.field";
 import InputField from "@/components/fields/input.field";
-import TextareaField from "@/components/fields/textarea.field";
 import NumberField from "@/components/fields/number.field";
 import SwitchField from "@/components/fields/switch.field";
+import SelectField from "@/components/fields/select.field";
+import { CategoryType } from "@/lib/schemas/category.schema";
+import TextareaField from "@/components/fields/textarea.field";
 
 const NewProductForm = () => {
   const memoizedDefaultValues = useMemo(() => defaultProductValues, []);
-  const [categoryOptions, setCategoryOptions] = useState([]);
+  const [categoryOptions, setCategoryOptions] = useState<CategoryType[]>([]);
 
   const formProduct = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
@@ -114,7 +115,7 @@ const NewProductForm = () => {
           />
           <NumberField
             name="stock"
-            label="Кількість на складі zdkfcjbv "
+            label="Кількість на складі товару"
             placeholder="На складі"
             schema={productSchema}
           />
@@ -133,14 +134,10 @@ const NewProductForm = () => {
             showDescription
           />
 
-          <UniversalField
+          <SelectField
             name="category"
-            label="Категорія"
             placeholder="Оберіть категорію товару"
-            form={formProduct}
-            type="select"
-            options={categoryOptions}
-            schema={productSchema}
+            initialOptions={categoryOptions}
           />
         </div>
       </form>

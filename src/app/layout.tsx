@@ -47,7 +47,8 @@ export default function RootLayout({
       <html lang="en">
         <body className={`${jost.className} ${mclaren.className} antialiased`}>
           <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
-          <Toaster position="bottom-right"/> <TooltipProvider>{children}</TooltipProvider>
+          <Toaster position="bottom-right" containerStyle={{ zIndex: 99999 }} />
+          <TooltipProvider>{children}</TooltipProvider>
         </body>
       </html>
     </Providers>
