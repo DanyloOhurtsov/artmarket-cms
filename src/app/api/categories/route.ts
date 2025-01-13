@@ -4,8 +4,8 @@ export async function GET() {
   try {
     const categories = await prisma.category.findMany({
       include: {
-        children: true, // Включити підкатегорії
-        products: true, // Включити продукти (за потреби)
+        children: true,
+        products: true,
       },
     });
 

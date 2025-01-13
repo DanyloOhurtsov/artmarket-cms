@@ -1,9 +1,17 @@
-import React from 'react'
+import { Button } from "@/components/ui/button";
+import PageTitle from "@/components/page-title";
+import CategoryList from "@/components/lists/category-list/category.list";
 
 const CategoriesPage = () => {
   return (
-    <div>CategoriesPage</div>
-  )
-}
+    <section className="w-full min-h-screen flex flex-col">
+      <PageTitle title="Категорії" description="Список категорій">
+        <Button>Створити категорію</Button>
+      </PageTitle>
 
-export default CategoriesPage
+      <CategoryList />
+    </section>
+  );
+};
+
+export default CategoriesPage;
