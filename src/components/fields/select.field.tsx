@@ -1,9 +1,11 @@
 "use client";
 
+import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
 
+import { cn } from "@/lib/utils";
 import * as FormComponent from "@/components/ui/form";
 import * as PopoverComponent from "@/components/ui/popover";
 import * as CommandComponent from "@/components/ui/command";
@@ -11,11 +13,8 @@ import { CategoryType } from "@/lib/schemas/category.schema";
 
 import { Button } from "../ui/button";
 import ErrorToolTip from "./error.tooltip";
-import NewCategorySheet from "../sheets/new-category-sheet/new-category.sheet";
 import NewCategoryForm from "../forms/new-category-form/new-category.form";
-import { cn } from "@/lib/utils";
-import ScrollArea from "../scroll-area";
-import toast from "react-hot-toast";
+import NewCategorySheet from "../sheets/new-category-sheet/new-category.sheet";
 
 interface SelectFieldProps {
   name: string;
