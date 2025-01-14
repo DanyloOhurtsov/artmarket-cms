@@ -11,6 +11,14 @@ const AsideNavigation = () => {
   const pathname = usePathname();
   console.log(pathname);
 
+  const isActive = (href: string) => {
+    if (href === "/dashboard") {
+      return href === pathname;
+    }
+
+    return pathname.startsWith(href) && pathname !== "/dashboard";
+  };
+
   return (
     <nav className="my-auto w-full">
       <ul className="flex flex-col space-y-4 mt-4">
@@ -21,7 +29,7 @@ const AsideNavigation = () => {
               <Link
                 className={cn(
                   "text-white flex items-center gap-x-2 px-1 py-1 rounded-md",
-                  pathname === link.href ? "bg-slate-300 text-black" : ""
+                  isActive(link.href) ? "bg-slate-300 text-black" : ""
                 )}
                 href={link.href}
               >

@@ -1,15 +1,21 @@
 "use client";
 
+import { z } from "zod";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { useForm, useFormContext } from "react-hook-form";
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
 
+import {
+  categorySchemaTest,
+  CategoryType,
+} from "@/lib/schemas/category.schema";
 import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
 import * as FormComponent from "@/components/ui/form";
 import * as PopoverComponent from "@/components/ui/popover";
 import * as CommandComponent from "@/components/ui/command";
-import { CategoryType } from "@/lib/schemas/category.schema";
+import { defaultCategoryValues } from "@/lib/schemas/default-values";
 
 import { Button } from "../ui/button";
 import ErrorToolTip from "./error.tooltip";
@@ -27,6 +33,11 @@ const SelectField = ({
   placeholder,
   initialOptions,
 }: SelectFieldProps) => {
+  const form = useForm<z.infer<typeof categorySchemaTest>>({
+    resolver: zodResolver(categorySchemaTest),
+    defaultValues: defaultCategoryValues,
+  });
+
   const { control, setValue } = useFormContext();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [options, setOptions] = useState<CategoryType[]>([]);
@@ -104,6 +115,7 @@ const SelectField = ({
                           <NewCategoryForm
                             onOpenChange={handleOpenClose}
                             onCategoryCreated={handleCategoryCreated}
+                            form={form}
                           />
                         </NewCategorySheet>
                       </div>

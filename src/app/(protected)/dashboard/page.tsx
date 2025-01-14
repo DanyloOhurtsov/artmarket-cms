@@ -1,4 +1,4 @@
-import PageTitle from "@/components/page-title";
+import PageTitle from "@/components/page-title/page-title";
 import React from "react";
 
 const DashboardPage = () => {

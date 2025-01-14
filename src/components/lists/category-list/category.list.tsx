@@ -16,8 +16,6 @@ const CategoryList = () => {
   if (isLoading) return <p>Loading categories...</p>;
   if (!data || error) return <p>Error: {error.message}</p>;
 
-  console.log(data);
-
   return (
     <div className="p-4 flex flex-col space-y-4">
       <div className="flex justify-between items-center">Фільтри</div>

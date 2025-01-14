@@ -1,15 +1,15 @@
-import PageTitle from "@/components/page-title";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import React from "react";
+
+import { Button } from "@/components/ui/button";
+import PageTitle from "@/components/page-title/page-title";
 
 const ProductsPage = () => {
   return (
     <section className="w-full min-h-screen">
       <PageTitle title="Продукти" description="Список продуктів">
-        <Button>
-          <Link href="/dashboard/products/new">Створити продукт</Link>
-        </Button>
+        <Link href="/dashboard/products/new" passHref>
+          <Button>Створити продукт</Button>
+        </Link>
       </PageTitle>
     </section>
   );
