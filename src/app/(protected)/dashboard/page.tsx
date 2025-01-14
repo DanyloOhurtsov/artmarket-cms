@@ -1,7 +1,12 @@
+import PageTitle from "@/components/page-title/page-title";
 import React from "react";
 
 const DashboardPage = () => {
-  return <div>DashboardPage</div>;
+  return (
+    <section>
+      <PageTitle title="Dashboard" />
+    </section>
+  );
 };
 
 export default DashboardPage;

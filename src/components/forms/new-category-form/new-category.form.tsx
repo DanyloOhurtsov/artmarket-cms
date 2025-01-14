@@ -3,43 +3,37 @@
 import { z } from "zod";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useForm } from "react-hook-form";
+import { UseFormReturn } from "react-hook-form";
 
 import {
-  categorySchema,
   CategoryType,
-  defaultCategoryValues,
+  categorySchemaTest,
 } from "@/lib/schemas/category.schema";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { useUploadThing } from "@/utils/uploadthing";
 import { Separator } from "@/components/ui/separator";
-import { zodResolver } from "@hookform/resolvers/zod";
 import InputField from "@/components/fields/input.field";
 import TextareaField from "@/components/fields/textarea.field";
 import ImageInputField from "@/components/fields/image-input.field";
 
 const NewCategoryForm = ({
+  form,
   onOpenChange,
   onCategoryCreated,
 }: {
-  onOpenChange: () => void;
+  form: UseFormReturn<z.infer<typeof categorySchemaTest>>;
+  onOpenChange?: () => void;
   onCategoryCreated: (newCategory: CategoryType) => void;
 }) => {
+  const { startUpload } = useUploadThing("imageUploader");
   const [images, setImages] = useState<(string | File)[]>([]);
   const [uploadMethod, setUploadMethod] = useState<"url" | "file">("url");
 
-  const form = useForm<z.infer<typeof categorySchema>>({
-    resolver: zodResolver(categorySchema),
-    defaultValues: defaultCategoryValues,
-  });
-
-  async function onSubmitCategory(values: z.infer<typeof categorySchema>) {
+  async function onSubmitCategory(values: z.infer<typeof categorySchemaTest>) {
     let imageUrl = images[0];
 
     if (uploadMethod === "file") {
-      const { startUpload } = useUploadThing("imageUploader");
-
       const files = images.filter(
         (image): image is File => image instanceof File
       );
@@ -75,7 +69,7 @@ const NewCategoryForm = ({
         toast.success("Категорія створена успішно");
         onCategoryCreated(newCategory);
 
-        onOpenChange();
+        if (onOpenChange) onOpenChange();
       } else {
         const error = await res.json();
         console.error("Помилка:", error);
@@ -90,7 +84,7 @@ const NewCategoryForm = ({
       <Form {...form}>
         <form
           id="newCategoryForm"
-          className="space-y-8"
+          className="space-y-6"
           onSubmit={form.handleSubmit(onSubmitCategory)}
         >
           <InputField
@@ -98,7 +92,7 @@ const NewCategoryForm = ({
             name="name"
             label="Назва категорії"
             placeholder="Наприклад: Офісні товари"
-            schema={categorySchema}
+            schema={categorySchemaTest}
             maxLength={100}
           />
           <InputField
@@ -107,7 +101,7 @@ const NewCategoryForm = ({
             label="Slug"
             placeholder="Наприклад: office-supplies"
             featuredField
-            schema={categorySchema}
+            schema={categorySchemaTest}
             showDescription
             description="Назва категорії у латинській транслітерації через дефіс (утворюється автоматично)"
           />
@@ -116,7 +110,7 @@ const NewCategoryForm = ({
             name="shortDesc"
             label="Короткий опис"
             placeholder="Наприклад: Все для офісу"
-            schema={categorySchema}
+            schema={categorySchemaTest}
             maxLength={250}
           />
           <TextareaField
@@ -125,7 +119,7 @@ const NewCategoryForm = ({
             placeholder="Наприклад: В асортименті є все для офісу"
             description="Повний опис категорії, який буде відображатися на сторінці категорії"
             showDescription
-            schema={categorySchema}
+            schema={categorySchemaTest}
           />
 
           <Separator />
@@ -153,7 +147,7 @@ const NewCategoryForm = ({
               </Button>
             </div>
             <ImageInputField
-              schema={categorySchema}
+              schema={categorySchemaTest}
               name="image"
               label="Посилання на зображення"
               placeholder="https://example.com/image.jpg"

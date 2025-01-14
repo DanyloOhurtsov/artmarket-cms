@@ -1,31 +1,20 @@
-import { Separator } from "@/components/ui/separator";
-import { SignOutButton } from "@clerk/nextjs";
-import Link from "next/link";
 import React from "react";
+import Link from "next/link";
 import { LogOutIcon } from "lucide-react";
+
+import { SignOutButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import AsideNavigation from "@/components/aside-navigation";
 
 const ProtectedRouteLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <div className="w-full relative pl-44">
         <aside className="w-44 h-full bg-gray-800 text-white fixed top-0 bottom-0 left-0 flex flex-col items-center justify-between py-4 px-1">
-          <p>ArtMarket admin</p>
+          <Link href={"/dashboard"}>ArtMarket admin</Link>
           <Separator className="bg-white/20 rounded-2xl" />
-          <nav className="my-auto w-full">
-            <ul className="flex flex-col space-y-4 mt-4">
-              <li>
-                <Link className="text-white" href="/dashboard">
-                  Dashboard
-                </Link>
-              </li>
-              <li>
-                <Link className="text-white" href="/dashboard/products">
-                  Products
-                </Link>
-              </li>
-            </ul>
-          </nav>
+          <AsideNavigation />
           <Separator className="bg-white/20 rounded-2xl" />
           <SignOutButton redirectUrl="/">
             <Button variant={"ghost"} className="size-8">

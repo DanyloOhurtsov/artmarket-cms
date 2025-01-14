@@ -1,9 +1,8 @@
 import { z } from "zod";
-import {
-  categorySchema,
-  CategoryType,
-  defaultCategoryValues,
-} from "./category.schema";
+import { v4 as uuid } from "uuid";
+
+import { defaultProductValues } from "./default-values";
+import { categorySchemaTest, CategoryType } from "./category.schema";
 
 // Product Type
 export type ProductType = {
@@ -31,7 +30,7 @@ export type ProductVariantType = {
 
 // Схема товарів
 export const productSchema = z.object({
-  id: z.string().default(""),
+  id: z.string().default(`prod-${uuid()}`),
   name: z
     .string()
     .min(3, { message: "Назва товару повинна містити мінімум 3 символи" })
@@ -49,16 +48,9 @@ export const productSchema = z.object({
   stock: z.number().int().positive().optional().default(1),
   price: z.number().positive().default(0),
   isActive: z.boolean().default(true),
-  category: categorySchema.default({
-    id: "",
-    name: "",
-    slug: "",
-    description: "",
-    shortDesc: "",
-    parentId: null,
-    images: [],
-    children: [],
-  }),
+  category: z
+    .lazy(() => categorySchemaTest)
+    .default(defaultProductValues.category),
   images: z
     .array(z.string())
     .min(1, "Додайте хоча б одне зображення")
@@ -92,19 +84,3 @@ export const productSchema = z.object({
     .optional()
     .default([]),
 });
-
-// Дефолтні значення для товарів
-export const defaultProductValues = {
-  name: "",
-  slug: "",
-  description: "",
-  shortDesc: "",
-  minOrder: 1,
-  maxOrder: 100,
-  stock: 1,
-  price: 0,
-  isActive: true,
-  category: defaultCategoryValues,
-  images: [],
-  variants: [],
-};

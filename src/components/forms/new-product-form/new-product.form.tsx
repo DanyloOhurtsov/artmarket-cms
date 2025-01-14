@@ -1,30 +1,25 @@
 "use client";
 
 import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { memo, useEffect, useMemo, useState } from "react";
+import { UseFormReturn } from "react-hook-form";
+import { memo, useEffect, useState } from "react";
 
-import {
-  productSchema,
-  defaultProductValues,
-} from "@/lib/schemas/product.schema";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import UniversalField from "@/components/fields/universal.field";
 import InputField from "@/components/fields/input.field";
-import TextareaField from "@/components/fields/textarea.field";
 import NumberField from "@/components/fields/number.field";
 import SwitchField from "@/components/fields/switch.field";
+import SelectField from "@/components/fields/select.field";
+import { productSchema } from "@/lib/schemas/product.schema";
+import { CategoryType } from "@/lib/schemas/category.schema";
+import TextareaField from "@/components/fields/textarea.field";
 
-const NewProductForm = () => {
-  const memoizedDefaultValues = useMemo(() => defaultProductValues, []);
-  const [categoryOptions, setCategoryOptions] = useState([]);
+interface NewProductFormProps {
+  form: UseFormReturn<z.infer<typeof productSchema>>;
+}
+const NewProductForm = ({ form }: NewProductFormProps) => {
+  const [categoryOptions, setCategoryOptions] = useState<CategoryType[]>([]);
 
-  const formProduct = useForm<z.infer<typeof productSchema>>({
-    resolver: zodResolver(productSchema),
-    defaultValues: memoizedDefaultValues,
-  });
   useEffect(() => {
     async function fetchCategories() {
       try {
@@ -48,22 +43,22 @@ const NewProductForm = () => {
   }
 
   return (
-    <Form {...formProduct}>
+    <Form {...form}>
       <form
         id="newProductForm"
-        onSubmit={formProduct.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(onSubmit)}
         className="flex gap-x-6 w-full"
       >
         <div className="flex flex-col space-y-4 w-2/3">
           <InputField
-            form={formProduct}
+            form={form}
             name="name"
             label="Назва товару"
             placeholder="Наприклад: Чорні олівці з коробкою"
             schema={productSchema}
           />
           <InputField
-            form={formProduct}
+            form={form}
             name="slug"
             label="Slug"
             placeholder="Наприклад: black-pencils-with-case"
@@ -99,10 +94,6 @@ const NewProductForm = () => {
             description="Ціна товару в гривнях"
             showDescription
           />
-
-          <Button type="submit" form="newProductForm">
-            Створити продукт
-          </Button>
         </div>
 
         {/* Aside */}
@@ -114,7 +105,7 @@ const NewProductForm = () => {
           />
           <NumberField
             name="stock"
-            label="Кількість на складі zdkfcjbv "
+            label="Кількість на складі товару"
             placeholder="На складі"
             schema={productSchema}
           />
@@ -133,15 +124,15 @@ const NewProductForm = () => {
             showDescription
           />
 
-          <UniversalField
+          <SelectField
             name="category"
-            label="Категорія"
             placeholder="Оберіть категорію товару"
-            form={formProduct}
-            type="select"
-            options={categoryOptions}
-            schema={productSchema}
+            initialOptions={categoryOptions}
           />
+
+          <Button type="submit" form="newProductForm">
+            Створити продукт
+          </Button>
         </div>
       </form>
     </Form>
