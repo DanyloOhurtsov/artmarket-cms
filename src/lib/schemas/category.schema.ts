@@ -14,8 +14,8 @@ export type CategoryType = {
 };
 // Схема категорій
 
-export const categorySchema: z.ZodSchema = z.object({
-  id: z.string().default(() => uuid()),
+export const categorySchema = z.object({
+  id: z.string().default(() => `cat-${uuid()}`),
   name: z
     .string()
     .min(3, { message: "Назва категорії повинна містити мінімум 3 символи" })
@@ -31,7 +31,7 @@ export const categorySchema: z.ZodSchema = z.object({
     })
     .default(""),
   description: z.string().max(1000).optional().default(""),
-  shortDesc: z.string().max(100).optional().default(""),
+  shortDesc: z.string().max(250).optional().default(""),
   image: z.string().optional().default(""),
-  products: z.array(productSchema).default([]),
+  products: z.array(z.any()).default([]), // Використовується, щоб уникнути циклічної залежності
 });
