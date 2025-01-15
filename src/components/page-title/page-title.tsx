@@ -27,7 +27,6 @@ const PageTitle = ({
 
   const handleBack = () => {
     if (isFormDirty) {
-      console.log("Форма була змінена");
       setShowConfirm(true); // Відкрити модальне вікно
     } else {
       router.back();
@@ -40,16 +39,16 @@ const PageTitle = ({
   };
 
   return (
-    <div className="flex w-full border-b justify-between items-center border-gray-300 p-4">
-      <div className="flex items-center">
+    <div className="flex w-full border-b justify-between items-center border-gray-300 p-4 gap-x-4">
+      <div className="flex items-center gap-x-2">
         {isPrevios && (
           <Button onClick={handleBack} variant={"ghost"} size={"icon"}>
             <ChevronLeftIcon />
           </Button>
         )}
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-y-2">
           <h1 className="text-2xl font-bold">{title}</h1>
-          <p className="text-sm text-slate-600">{description}</p>
+          <p className="text-sm text-slate-600 max-w-[500px]">{description}</p>
         </div>
       </div>
       <div>{children}</div>

@@ -4,6 +4,7 @@ import {
   TagIcon,
   ShoppingCartIcon,
   Users2Icon,
+  SquareMenuIcon,
 } from "lucide-react";
 
 export const asideLinks = [
@@ -21,6 +22,11 @@ export const asideLinks = [
     title: "Продукти",
     href: "/dashboard/products",
     icon: TagIcon,
+  },
+  {
+    title: "Меню",
+    href: "/dashboard/menu",
+    icon: SquareMenuIcon,
   },
   {
     title: "Замовлення",

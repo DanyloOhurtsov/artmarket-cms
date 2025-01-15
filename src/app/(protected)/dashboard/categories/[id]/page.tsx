@@ -1,11 +1,10 @@
 "use client";
 
 import useSWR from "swr";
-import Link from "next/link";
 import { useParams } from "next/navigation";
 
-import { Button } from "@/components/ui/button";
 import { fetcher } from "@/lib/functions/fetcher";
+import LinkButton from "@/components/buttons/link.button";
 import PageTitle from "@/components/page-title/page-title";
 import { CategoryType } from "@/lib/schemas/category.schema";
 
@@ -24,11 +23,11 @@ const CategoryPage = () => {
   return (
     <section className="w-full min-h-screen flex flex-col">
       <PageTitle title={`${data.name}`} isPrevios>
-        <Button variant={"secondary"}>
-          <Link href={`/dashboard/categories/edit/${categoryId}`}>
-            Редагувати
-          </Link>
-        </Button>
+        <LinkButton
+          label="Редагувати"
+          href={`/dashboard/categories/edit/${categoryId}`}
+          variant={"secondary"}
+        />
       </PageTitle>
 
       <div>

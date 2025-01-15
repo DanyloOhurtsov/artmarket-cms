@@ -6,16 +6,14 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useParams, useRouter } from "next/navigation";
 
-import {
-  categorySchema,
-  CategoryType,
-} from "@/lib/schemas/category.schema";
 import { Button } from "@/components/ui/button";
 import { fetcher } from "@/lib/functions/fetcher";
 import { zodResolver } from "@hookform/resolvers/zod";
 import PageTitle from "@/components/page-title/page-title";
 import CategoryForm from "@/components/forms/category.form";
+import GoBackButton from "@/components/buttons/goback.button";
 import { defaultCategoryValues } from "@/lib/schemas/default-values";
+import { categorySchema, CategoryType } from "@/lib/schemas/category.schema";
 
 const CategoryEditPage = () => {
   const params = useParams();
@@ -51,9 +49,7 @@ const CategoryEditPage = () => {
           isFormDirty={form.formState.isDirty}
         >
           <div className="flex gap-x-2">
-            <Button variant="secondary" onClick={() => router.back()}>
-              Скинути
-            </Button>
+            <GoBackButton label="Скасувати" />
             <Button>Зберегти</Button>
           </div>
         </PageTitle>
