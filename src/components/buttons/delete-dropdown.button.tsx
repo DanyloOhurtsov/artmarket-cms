@@ -1,7 +1,10 @@
 import React from "react";
-import * as PopoverComponent from "@/components/ui/popover";
-import { Button } from "../ui/button";
 import { EllipsisVerticalIcon, Trash2Icon } from "lucide-react";
+
+import * as PopoverComponent from "@/components/ui/popover";
+import * as AlertDialogComponent from "@/components/ui/alert-dialog";
+
+import { Button } from "../ui/button";
 
 interface DeleteDropdownButtonProps {
   isDisabled: boolean;
@@ -26,23 +29,46 @@ const DeleteDropdownButton = ({
         </Button>
       </PopoverComponent.PopoverTrigger>
       <PopoverComponent.PopoverContent className="mr-2">
-        <Button
-          variant="destructive"
-          disabled={isDisabled}
-          onClick={onClick}
-          className="flex items-center gap-x-2 w-full"
-        >
-          {icon ? (
-            typeof icon === "function" ? (
-              React.createElement(icon)
-            ) : (
-              icon
-            )
-          ) : (
-            <DefaultIcon />
-          )}
-          <p>{label}</p>
-        </Button>
+        <AlertDialogComponent.AlertDialog>
+          <AlertDialogComponent.AlertDialogTrigger asChild>
+            <Button
+              variant="destructive"
+              disabled={isDisabled}
+              className="flex items-center gap-x-2 w-full"
+            >
+              {icon ? (
+                typeof icon === "function" ? (
+                  React.createElement(icon)
+                ) : (
+                  icon
+                )
+              ) : (
+                <DefaultIcon />
+              )}
+              <p>{label}</p>
+            </Button>
+          </AlertDialogComponent.AlertDialogTrigger>
+          <AlertDialogComponent.AlertDialogContent>
+            <AlertDialogComponent.AlertDialogHeader>
+              <AlertDialogComponent.AlertDialogTitle>
+                Ви впевнені, що хочете видалити ці категорії
+              </AlertDialogComponent.AlertDialogTitle>
+            </AlertDialogComponent.AlertDialogHeader>
+            <AlertDialogComponent.AlertDialogFooter>
+              <AlertDialogComponent.AlertDialogCancel>
+                Скасувати
+              </AlertDialogComponent.AlertDialogCancel>
+              <AlertDialogComponent.AlertDialogAction
+                asChild
+                className="bg-destructive"
+              >
+                <Button variant={"destructive"} onClick={onClick}>
+                  Видалити
+                </Button>
+              </AlertDialogComponent.AlertDialogAction>
+            </AlertDialogComponent.AlertDialogFooter>
+          </AlertDialogComponent.AlertDialogContent>
+        </AlertDialogComponent.AlertDialog>
       </PopoverComponent.PopoverContent>
     </PopoverComponent.Popover>
   );

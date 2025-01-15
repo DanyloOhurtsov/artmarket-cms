@@ -20,6 +20,7 @@ const NewCategoryPage = () => {
   const handleCategoryCreated = () => {
     router.push("/dashboard/categories");
   };
+
   return (
     <section>
       <PageTitle
