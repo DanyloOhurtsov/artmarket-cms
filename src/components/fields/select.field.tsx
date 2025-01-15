@@ -1,26 +1,23 @@
 "use client";
 
-import { z } from "zod";
-import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
-import { useForm, useFormContext } from "react-hook-form";
-import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
-
+import { useFormContext } from "react-hook-form";
 import {
-  categorySchemaTest,
-  CategoryType,
-} from "@/lib/schemas/category.schema";
+  AlertTriangleIcon,
+  CheckIcon,
+  ChevronsUpDownIcon,
+  SearchIcon,
+} from "lucide-react";
+
 import { cn } from "@/lib/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
 import * as FormComponent from "@/components/ui/form";
 import * as PopoverComponent from "@/components/ui/popover";
 import * as CommandComponent from "@/components/ui/command";
-import { defaultCategoryValues } from "@/lib/schemas/default-values";
+import { CategoryType } from "@/lib/schemas/category.schema";
 
 import { Button } from "../ui/button";
 import ErrorToolTip from "./error.tooltip";
-import NewCategoryForm from "../forms/new-category-form/new-category.form";
-import NewCategorySheet from "../sheets/new-category-sheet/new-category.sheet";
+import { Input } from "../ui/input";
 
 interface SelectFieldProps {
   name: string;
@@ -33,48 +30,27 @@ const SelectField = ({
   placeholder,
   initialOptions,
 }: SelectFieldProps) => {
-  const form = useForm<z.infer<typeof categorySchemaTest>>({
-    resolver: zodResolver(categorySchemaTest),
-    defaultValues: defaultCategoryValues,
-  });
-
-  const { control, setValue } = useFormContext();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { control } = useFormContext();
   const [options, setOptions] = useState<CategoryType[]>([]);
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredOptions, setFilteredOptions] = useState<CategoryType[]>([]);
 
   useEffect(() => {
     if (initialOptions) {
       setOptions(initialOptions);
+      setFilteredOptions(initialOptions);
     }
   }, [initialOptions]);
 
-  const handleOpenClose = () => {
-    setIsOpen((prev) => !prev);
-  };
-
-  const handleCategoryCreated = (newCategory: CategoryType) => {
-    const isDuplicateName = options.some(
-      (option) =>
-        option.id === newCategory.id || option.name === newCategory.name
+  useEffect(() => {
+    const results = options.filter((option) =>
+      option.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    const isDuplicateSlug = options.some(
-      (option) =>
-        option.slug === newCategory.slug && option.id !== newCategory.id
-    );
+    setFilteredOptions(results);
+  }, [searchTerm, options]);
 
-    if (isDuplicateName) {
-      toast.error("Категорія з таким іменем вже існує.");
-      return;
-    }
-    if (isDuplicateSlug) {
-      toast.error("Категорія з таким slug вже існує.");
-      return;
-    }
-
-    setOptions((prevOptions) => [...prevOptions, newCategory]);
-
-    setValue(name, newCategory);
-  };
+  const hasCategories = options.length > 0;
 
   return (
     <FormComponent.FormField
@@ -102,28 +78,28 @@ const SelectField = ({
                   </PopoverComponent.PopoverTrigger>
                   <PopoverComponent.PopoverContent>
                     <CommandComponent.Command>
-                      <div className="flex gap-x-2">
-                        <CommandComponent.CommandInput
+                      <div className="flex items-center gap-x-2">
+                        <Input
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
                           placeholder="Знайти..."
-                          className="flex-1"
                         />
-                        <NewCategorySheet
-                          isOpen={isOpen}
-                          onOpenChange={handleOpenClose}
-                          asChild
-                        >
-                          <NewCategoryForm
-                            onOpenChange={handleOpenClose}
-                            onCategoryCreated={handleCategoryCreated}
-                            form={form}
-                          />
-                        </NewCategorySheet>
+                        <SearchIcon
+                          className="h-4 w-4 shrink-0 opacity-50"
+                          size={24}
+                        />
                       </div>
+                      {/* <CommandComponent.CommandInput
+                        placeholder="Знайти..."
+                        className="flex-1"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                      /> */}
 
-                      {options.length ? (
+                      {filteredOptions.length ? (
                         <>
                           <CommandComponent.CommandGroup>
-                            {options.map((option, index) => (
+                            {filteredOptions.map((option, index) => (
                               <Button
                                 key={index}
                                 onClick={() => field.onChange(option)}
@@ -147,9 +123,18 @@ const SelectField = ({
                         </>
                       ) : (
                         <>
-                          <CommandComponent.CommandEmpty>
-                            Немає результатів
-                          </CommandComponent.CommandEmpty>
+                          {hasCategories ? (
+                            <CommandComponent.CommandEmpty>
+                              Немає результатів
+                            </CommandComponent.CommandEmpty>
+                          ) : (
+                            <CommandComponent.CommandEmpty>
+                              <AlertTriangleIcon className="h-5 w-5" />
+                              <p>
+                                Спочатку створіть категорію, щоб її вибрати.
+                              </p>
+                            </CommandComponent.CommandEmpty>
+                          )}
                         </>
                       )}
                     </CommandComponent.Command>
