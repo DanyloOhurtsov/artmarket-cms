@@ -73,38 +73,3 @@ export async function PUT(
     );
   }
 }
-
-// Видалення категорії
-export async function DELETE(
-  req: Request,
-  context: { params: Promise<{ id: string }> }
-) {
-  const { id } = await context.params;
-
-  try {
-    // Перевірка існування категорії
-    const existingCategory = await prisma.category.findUnique({
-      where: { id },
-    });
-
-    if (!existingCategory) {
-      return NextResponse.json(
-        { error: "Категорія не знайдена" },
-        { status: 404 }
-      );
-    }
-
-    // Видалення категорії
-    await prisma.category.delete({
-      where: { id },
-    });
-
-    return NextResponse.json({ message: "Категорія успішно видалена" });
-  } catch (error) {
-    console.error("Помилка видалення категорії:", error);
-    return NextResponse.json(
-      { error: "Щось пішло не так під час видалення" },
-      { status: 500 }
-    );
-  }
-}
