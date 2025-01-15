@@ -11,11 +11,11 @@ import { defaultProductValues } from "@/lib/schemas/default-values";
 import NewProductForm from "@/components/forms/new-product-form/new-product.form";
 
 const NewProductPage = () => {
-  const memoizedDefaultValues = useMemo(() => defaultProductValues, []);
+  // const memoizedDefaultValues = useMemo(() => defaultProductValues, []);
 
   const formProduct = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
-    defaultValues: memoizedDefaultValues,
+    defaultValues: defaultProductValues,
   });
 
   return (
