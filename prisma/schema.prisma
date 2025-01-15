@@ -19,14 +19,15 @@ model Category {
 
   description String?
   shortDesc   String?
-  image      String?
+  image       String?
+
+  metaTitle   String?
+  metaDesc    String?
 
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
-  parentId    String?
-  parent      Category?   @relation("CategoryHierarchy", fields: [parentId], references: [id])
-  children    Category[]  @relation("CategoryHierarchy")
+  menuItems   MenuItem[]
   products    Product[] 
 }
 
@@ -35,8 +36,8 @@ model Product {
   name        String
   slug        String      @unique
 
-  description String?
-  shortDesc   String?
+  description String? @default("")
+  shortDesc   String? @default("")
 
   minOrder    Int?        @default(1)
   maxOrder    Int?
@@ -75,4 +76,31 @@ model Variant {
 
   productId   String
   product     Product     @relation(fields: [productId], references: [id])
+}
+
+model Menu {
+  id        String     @id @default(uuid())
+  name      String     @unique 
+  items     MenuItem[] 
+
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model MenuItem {
+  id        String     @id @default(uuid())
+  name      String 
+  order     Int      
+  menuId    String
+  menu      Menu       @relation(fields: [menuId], references: [id])
+
+  parentId  String?
+  parent    MenuItem?  @relation("MenuItemHierarchy", fields: [parentId], references: [id])
+  children  MenuItem[] @relation("MenuItemHierarchy")
+
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }

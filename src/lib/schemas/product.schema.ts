@@ -2,7 +2,7 @@ import { z } from "zod";
 import { v4 as uuid } from "uuid";
 
 import { defaultProductValues } from "./default-values";
-import { categorySchemaTest, CategoryType } from "./category.schema";
+import { categorySchema, CategoryType } from "./category.schema";
 
 // Product Type
 export type ProductType = {
@@ -49,7 +49,7 @@ export const productSchema = z.object({
   price: z.number().positive().default(0),
   isActive: z.boolean().default(true),
   category: z
-    .lazy(() => categorySchemaTest)
+    .lazy(() => categorySchema)
     .default(defaultProductValues.category),
   images: z
     .array(z.string())

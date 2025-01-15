@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { useParams, useRouter } from "next/navigation";
 
 import {
-  categorySchemaTest,
+  categorySchema,
   CategoryType,
 } from "@/lib/schemas/category.schema";
 import { Button } from "@/components/ui/button";
@@ -27,8 +27,8 @@ const CategoryEditPage = () => {
     fetcher
   );
 
-  const form = useForm<z.infer<typeof categorySchemaTest>>({
-    resolver: zodResolver(categorySchemaTest),
+  const form = useForm<z.infer<typeof categorySchema>>({
+    resolver: zodResolver(categorySchema),
     defaultValues: defaultCategoryValues,
   });
 

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 
 import {
-  categorySchemaTest,
+  categorySchema,
   CategoryType,
 } from "@/lib/schemas/category.schema";
 import { useUploadThing } from "@/utils/uploadthing";
@@ -19,7 +19,7 @@ import TextareaField from "../fields/textarea.field";
 import ImageInputField from "../fields/image-input.field";
 
 interface CategoryFormProps {
-  form: UseFormReturn<z.infer<typeof categorySchemaTest>>;
+  form: UseFormReturn<z.infer<typeof categorySchema>>;
   onOpenChange?: () => void;
   onCategorySaved: (newCategory: CategoryType) => void;
   initialData?: CategoryType;
@@ -48,7 +48,7 @@ const CategoryForm = ({
     }
   }, [initialData, form]);
 
-  async function handleSubmit(values: z.infer<typeof categorySchemaTest>) {
+  async function handleSubmit(values: z.infer<typeof categorySchema>) {
     let imageUrl = images[0];
 
     if (images.some((image) => image instanceof File)) {
@@ -111,7 +111,7 @@ const CategoryForm = ({
             name="name"
             label="Назва категорії"
             placeholder="Наприклад: Офісні товари"
-            schema={categorySchemaTest}
+            schema={categorySchema}
             maxLength={100}
           />
           <InputField
@@ -120,7 +120,7 @@ const CategoryForm = ({
             label="Slug"
             placeholder="Наприклад: office-supplies"
             featuredField
-            schema={categorySchemaTest}
+            schema={categorySchema}
             showDescription
             description="Назва категорії у латинській транслітерації через дефіс (утворюється автоматично)"
           />
@@ -129,7 +129,7 @@ const CategoryForm = ({
             name="shortDesc"
             label="Короткий опис"
             placeholder="Наприклад: Все для офісу"
-            schema={categorySchemaTest}
+            schema={categorySchema}
             maxLength={250}
           />
           <TextareaField
@@ -138,13 +138,13 @@ const CategoryForm = ({
             placeholder="Наприклад: В асортименті є все для офісу"
             description="Повний опис категорії, який буде відображатися на сторінці категорії"
             showDescription
-            schema={categorySchemaTest}
+            schema={categorySchema}
           />
 
           <Separator />
 
           <ImageInputField
-            schema={categorySchemaTest}
+            schema={categorySchema}
             name="image"
             label="Посилання на зображення"
             placeholder="https://example.com/image.jpg"

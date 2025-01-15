@@ -1,16 +1,27 @@
 // defaultValues.ts
+
+// Category
 export const defaultCategoryValues = {
   id: "",
   name: "",
   slug: "",
   shortDesc: "",
   description: "",
-  parentId: null,
   image: "",
-  children: [],
   products: [],
 };
 
+// Menu
+export const defaultMenuItemValues = {
+  id: "",
+  name: "",
+  order: 1,
+  parentId: null,
+  categoryId: null,
+  children: [],
+};
+
+// Product
 export const defaultProductValues = {
   id: "",
   name: "",
