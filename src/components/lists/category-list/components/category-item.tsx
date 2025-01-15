@@ -1,38 +1,36 @@
-import Link from "next/link";
-import Image from "next/image";
-import { BoxIcon } from "lucide-react";
-
+import { flexRender, Row } from "@tanstack/react-table";
+import * as TableComponent from "@/components/ui/table";
 import { CategoryType } from "@/lib/schemas/category.schema";
 
 interface CategoryItemProps {
-  category: CategoryType;
+  row: Row<CategoryType>;
 }
 
-const CategoryItem = ({ category }: CategoryItemProps) => {
-  const categoryUrl = `/dashboard/categories/${category.id}`;
+const CategoryItem = ({ row }: CategoryItemProps) => {
+  const categoryUrl = `/dashboard/categories/${row.original.id}`;
 
   return (
-    <Link
-      className="flex justify-between w-full p-2 border rounded-md"
-      href={categoryUrl}
+    <TableComponent.TableRow
+      key={row.id}
+      data-state={row.getIsSelected() && "selected"}
+      className="cursor-pointer"
+      onClick={() => (window.location.href = categoryUrl)}
     >
-      <div className="flex w-full bg-red-50">
-        <div className="flex items-center gap-x-2">
-          <div className="size-8 relative rounded-md overflow-hidden">
-            {category.image && category.image !== "" ? (
-              <>
-                <Image alt={category.name} src={category.image.trim()} fill />
-              </>
-            ) : (
-              <div className="size-full bg-primary/20 rounded-md flex items-center justify-center">
-                <BoxIcon size={24} className="text-primary/30 size-4" />
-              </div>
-            )}
-          </div>
-          <p>{category.name}</p>
-        </div>
-      </div>
-    </Link>
+      {row.getVisibleCells().map((cell) => (
+        <TableComponent.TableCell key={cell.id}>
+          {cell.column.id === "select" ? (
+            // Зупиняємо подію для чекбокса
+            <div
+              onClick={(e) => e.stopPropagation()} // Зупиняємо спливання події
+            >
+              {flexRender(cell.column.columnDef.cell, cell.getContext())}
+            </div>
+          ) : (
+            flexRender(cell.column.columnDef.cell, cell.getContext())
+          )}
+        </TableComponent.TableCell>
+      ))}
+    </TableComponent.TableRow>
   );
 };
 

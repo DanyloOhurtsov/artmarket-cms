@@ -9,7 +9,6 @@ import { asideLinks } from "@/lib/constants/aside-links";
 
 const AsideNavigation = () => {
   const pathname = usePathname();
-  console.log(pathname);
 
   const isActive = (href: string) => {
     if (href === "/dashboard") {

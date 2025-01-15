@@ -1,9 +1,11 @@
-import prisma from "@/utils/prisma";
 import { NextRequest, NextResponse } from "next/server";
+
+import prisma from "@/utils/prisma";
+import { CategoryType } from "@/lib/schemas/category.schema";
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    const body: CategoryType = await req.json();
 
     // Перевіряємо, чи передано обов'язкові поля
     const { name, slug, shortDesc, description, parentId, image } = body;
@@ -22,7 +24,7 @@ export async function POST(req: NextRequest) {
         slug,
         shortDesc,
         description,
-        parentId: parentId || null,
+        parentId,
         image,
       },
     });
