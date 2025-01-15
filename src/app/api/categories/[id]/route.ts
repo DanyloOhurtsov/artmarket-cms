@@ -4,9 +4,9 @@ import { NextResponse } from "next/server";
 // Отримання категорії
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params;
+  const { id } = await context.params; // Отримуємо id з context.params
 
   try {
     const category = await prisma.category.findUnique({
@@ -37,9 +37,9 @@ export async function GET(
 // Оновлення категорії
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params;
+  const { id } = await context.params;
 
   try {
     const body = await req.json();
@@ -77,9 +77,9 @@ export async function PUT(
 // Видалення категорії
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
-  const { id } = params;
+  const { id } = await context.params;
 
   try {
     // Перевірка існування категорії
