@@ -14,8 +14,8 @@ import { Button } from "@/components/ui/button";
 import { fetcher } from "@/lib/functions/fetcher";
 import { zodResolver } from "@hookform/resolvers/zod";
 import PageTitle from "@/components/page-title/page-title";
+import CategoryForm from "@/components/forms/category.form";
 import { defaultCategoryValues } from "@/lib/schemas/default-values";
-import NewCategoryForm from "@/components/forms/new-category-form/new-category.form";
 
 const CategoryEditPage = () => {
   const params = useParams();
@@ -61,9 +61,10 @@ const CategoryEditPage = () => {
 
       <div className="p-6">
         {/*  */}
-        <NewCategoryForm
+        <CategoryForm
           form={form}
-          onCategoryCreated={() =>
+          initialData={data}
+          onCategorySaved={() =>
             router.push(`/dashboard/categories/${categoryId}`)
           }
         />
