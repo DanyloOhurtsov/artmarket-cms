@@ -1,18 +1,15 @@
 "use client";
 
 import { z } from "zod";
-import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 
-import PageTitle from "@/components/page-title/page-title";
 import { zodResolver } from "@hookform/resolvers/zod";
+import PageTitle from "@/components/page-title/page-title";
 import { productSchema } from "@/lib/schemas/product.schema";
 import { defaultProductValues } from "@/lib/schemas/default-values";
 import NewProductForm from "@/components/forms/new-product-form/new-product.form";
 
 const NewProductPage = () => {
-  // const memoizedDefaultValues = useMemo(() => defaultProductValues, []);
-
   const formProduct = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
     defaultValues: defaultProductValues,
