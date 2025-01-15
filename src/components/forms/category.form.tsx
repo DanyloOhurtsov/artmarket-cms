@@ -1,6 +1,8 @@
 "use client";
 
 import { z } from "zod";
+import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 
 import {
@@ -8,13 +10,12 @@ import {
   CategoryType,
 } from "@/lib/schemas/category.schema";
 import { useUploadThing } from "@/utils/uploadthing";
-import { useEffect, useState } from "react";
+
 import { Form } from "../ui/form";
-import toast from "react-hot-toast";
-import InputField from "../fields/input.field";
-import TextareaField from "../fields/textarea.field";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
+import InputField from "../fields/input.field";
+import TextareaField from "../fields/textarea.field";
 import ImageInputField from "../fields/image-input.field";
 
 interface CategoryFormProps {

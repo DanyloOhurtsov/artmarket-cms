@@ -15,9 +15,9 @@ import * as PopoverComponent from "@/components/ui/popover";
 import * as CommandComponent from "@/components/ui/command";
 import { CategoryType } from "@/lib/schemas/category.schema";
 
+import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import ErrorToolTip from "./error.tooltip";
-import { Input } from "../ui/input";
 
 interface SelectFieldProps {
   name: string;
