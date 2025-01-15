@@ -12,7 +12,6 @@ export async function GET(
     const category = await prisma.category.findUnique({
       where: { id },
       include: {
-        children: true,
         products: true,
       },
     });

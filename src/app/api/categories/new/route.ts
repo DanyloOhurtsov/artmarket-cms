@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
     const body: CategoryType = await req.json();
 
     // Перевіряємо, чи передано обов'язкові поля
-    const { name, slug, shortDesc, description, parentId, image } = body;
+    const { name, slug, shortDesc, description, image } = body;
 
     if (!name || !slug) {
       return NextResponse.json(
@@ -24,7 +24,6 @@ export async function POST(req: NextRequest) {
         slug,
         shortDesc,
         description,
-        parentId,
         image,
       },
     });
