@@ -15,6 +15,7 @@ import { generateRandomSlug } from "@/lib/functions/generate-random-slug";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import ErrorToolTip from "./error.tooltip";
+import { cn } from "@/lib/utils";
 
 interface InputFieldProps<T extends z.ZodTypeAny> {
   schema: T;
@@ -27,6 +28,7 @@ interface InputFieldProps<T extends z.ZodTypeAny> {
   featuredField?: boolean;
   showDescription?: boolean;
   form: UseFormReturn<z.infer<T>>;
+  className?: string;
 }
 
 const InputField = <T extends z.ZodTypeAny>({
@@ -39,6 +41,7 @@ const InputField = <T extends z.ZodTypeAny>({
   maxLength = 120,
   featuredField = false,
   showDescription = false,
+  className,
 }: InputFieldProps<T>) => {
   const { control } = useFormContext();
 
@@ -63,7 +66,7 @@ const InputField = <T extends z.ZodTypeAny>({
       control={control}
       name={name}
       render={({ field, fieldState }) => (
-        <FormComponent.FormItem>
+        <FormComponent.FormItem className={cn(className)}>
           <div className="flex justify-between items-center">
             <FormComponent.FormLabel>{label}</FormComponent.FormLabel>
             {featuredField && (
@@ -81,6 +84,7 @@ const InputField = <T extends z.ZodTypeAny>({
             <FormComponent.FormControl className="flex-1">
               <Input
                 {...field}
+                value={field.value || ""}
                 maxLength={maxLength}
                 minLength={minLength}
                 placeholder={placeholder}

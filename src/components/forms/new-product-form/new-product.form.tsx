@@ -13,10 +13,13 @@ import SelectField from "@/components/fields/select.field";
 import { productSchema } from "@/lib/schemas/product.schema";
 import { CategoryType } from "@/lib/schemas/category.schema";
 import TextareaField from "@/components/fields/textarea.field";
+import VarientsField from "@/components/fields/variant.field";
+import VariantsOptionsField from "@/components/fields/variants-filed/variants-options.field";
 
 interface NewProductFormProps {
   form: UseFormReturn<z.infer<typeof productSchema>>;
 }
+
 const NewProductForm = ({ form }: NewProductFormProps) => {
   const [categoryOptions, setCategoryOptions] = useState<CategoryType[]>([]);
 
@@ -94,6 +97,9 @@ const NewProductForm = ({ form }: NewProductFormProps) => {
             description="Ціна товару в гривнях"
             showDescription
           />
+
+          {/* <VarientsField form={form} name="variants" /> */}
+          <VariantsOptionsField form={form} />
         </div>
 
         {/* Aside */}
@@ -123,7 +129,6 @@ const NewProductForm = ({ form }: NewProductFormProps) => {
             description="Максимальна кількість одиниць товару, яку можна замовиnти за один раз"
             showDescription
           />
-
           <SelectField
             name="category"
             placeholder="Оберіть категорію товару"

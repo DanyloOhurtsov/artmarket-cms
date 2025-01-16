@@ -7,6 +7,7 @@ const MenusPage = async () => {
       <PageTitle
         title="Меню"
         description="Ця сторінка дозволяє переглядати список усіх меню (навігаційних елементів) з їх ієрархією. Ви можете створювати, редагувати та видаляти меню або їх дочірні пункти для організації навігації на сайті."
+        isSticky={false}
       >
         <LinkButton label="Створити меню" href="/dashboard/menu/new" />
       </PageTitle>

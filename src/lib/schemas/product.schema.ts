@@ -22,10 +22,10 @@ export type ProductType = {
 };
 
 export type ProductVariantType = {
+  id: string;
   name: string;
   slug: string;
-  description: string;
-  shortDesc: string;
+  value: string;
 };
 
 // Схема товарів
@@ -48,9 +48,7 @@ export const productSchema = z.object({
   stock: z.number().int().positive().optional().default(1),
   price: z.number().positive().default(0),
   isActive: z.boolean().default(true),
-  category: z
-    .lazy(() => categorySchema)
-    .default(defaultProductValues.category),
+  category: z.lazy(() => categorySchema).default(defaultProductValues.category),
   images: z
     .array(z.string())
     .min(1, "Додайте хоча б одне зображення")
@@ -59,28 +57,16 @@ export const productSchema = z.object({
   variants: z
     .array(
       z.object({
-        name: z
-          .string()
-          .min(3, {
-            message: "Назва варіанта повинна містити мінімум 3 символи",
+        name: z.string().min(1, { message: "Назва варіанту обов'язкова" }),
+        values: z.array(
+          z.object({
+            id: z.string().default(uuid),
+            name: z.string().min(1, { message: "Назва значення обов'язкова" }),
+            value: z.string().min(1, { message: "Значення обов'язкове" }),
+            slug: z.string().min(1, { message: "Slug обов'язковий" }),
           })
-          .max(100, {
-            message: "Назва варіанта повинна містити максимум 100 символів",
-          })
-          .default(""),
-        slug: z
-          .string()
-          .min(3, {
-            message: "Slug варіанта повинен містити мінімум 3 символи",
-          })
-          .max(120, {
-            message: "Slug варіанта повинен містити максимум 120 символів",
-          })
-          .default(""),
-        description: z.string().max(1000).optional().default(""),
-        shortDesc: z.string().max(100).optional().default(""),
+        ),
       })
     )
-    .optional()
     .default([]),
 });

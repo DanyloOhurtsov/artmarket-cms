@@ -4,7 +4,7 @@ import CategoryList from "@/components/lists/category-list/category.list";
 
 const CategoriesPage = () => {
   return (
-    <section className="w-full min-h-screen flex flex-col">
+    <section className="w-full min-h-screen flex flex-col relative">
       <PageTitle title="Категорії" description="Список категорій">
         <LinkButton
           label="Створити категорію"

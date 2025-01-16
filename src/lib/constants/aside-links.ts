@@ -24,7 +24,7 @@ export const asideLinks = [
     icon: TagIcon,
   },
   {
-    title: "Меню",
+    title: "Навігація",
     href: "/dashboard/menu",
     icon: SquareMenuIcon,
   },

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { ChevronLeftIcon } from "lucide-react";
 import ModalBack from "./components/modal-back";
+import { cn } from "@/lib/utils";
 
 interface PageTitleProps {
   title: string;
@@ -13,6 +14,8 @@ interface PageTitleProps {
   children?: ReactNode;
   isPrevios?: boolean;
   isFormDirty?: boolean;
+  className?: string;
+  isSticky?: boolean;
 }
 
 const PageTitle = ({
@@ -21,6 +24,8 @@ const PageTitle = ({
   children,
   isPrevios = false,
   isFormDirty = false,
+  className,
+  isSticky = true,
 }: PageTitleProps) => {
   const router = useRouter();
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
@@ -39,7 +44,13 @@ const PageTitle = ({
   };
 
   return (
-    <div className="flex w-full border-b justify-between items-center border-gray-300 p-4 gap-x-4">
+    <div
+      className={cn(
+        "flex w-full border-b justify-between items-center border-gray-300 p-4 gap-x-4",
+        isSticky && "sticky top-0 bg-white z-10",
+        className
+      )}
+    >
       <div className="flex items-center gap-x-2">
         {isPrevios && (
           <Button onClick={handleBack} variant={"ghost"} size={"icon"}>

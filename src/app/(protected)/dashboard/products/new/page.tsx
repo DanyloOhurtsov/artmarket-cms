@@ -17,7 +17,7 @@ const NewProductPage = () => {
 
   return (
     <>
-      <section className="w-full min-h-screen">
+      <section className="w-full min-h-screen relative">
         <PageTitle
           title="Додати новий товар"
           description="Сторінка створення товару дозволяє додавати нові продукти до вашого каталогу. Заповніть основну інформацію, додайте зображення, встановіть ціну та налаштуйте категорії для організації товарів."
