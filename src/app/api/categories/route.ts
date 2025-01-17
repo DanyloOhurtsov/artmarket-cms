@@ -13,7 +13,7 @@ export async function GET() {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    console.error("Помилка при отриманні категорій:", error);
+    console.error(`Помилка при отриманні категорій: ${error}`);
     return new Response(
       JSON.stringify({ error: "Не вдалося отримати категорії" }),
       { status: 500, headers: { "Content-Type": "application/json" } }
