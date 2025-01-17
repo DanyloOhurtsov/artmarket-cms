@@ -1,20 +1,23 @@
 import {
-  productSchema,
-  ProductVariantType,
-} from "@/lib/schemas/product.schema";
-import React, { useEffect, useState } from "react";
-import { useFieldArray, UseFormReturn, useWatch } from "react-hook-form";
-import { z } from "zod";
-import { v4 as uuid } from "uuid";
-import {
   CirclePlusIcon,
   ChevronDownIcon,
   ChevronUpIcon,
   Trash2Icon,
 } from "lucide-react";
+import { z } from "zod";
+import { v4 as uuid } from "uuid";
 import toast from "react-hot-toast";
-import AlertDialog from "@/components/alert-dialog";
 import { motion } from "framer-motion";
+import{ useEffect, useState } from "react";
+import { useFieldArray, UseFormReturn, useWatch } from "react-hook-form";
+
+
+import {
+  productSchema,
+  ProductVariantType,
+} from "@/lib/schemas/product.schema";
+import AlertDialog from "@/components/alert-dialog";
+ 
 import InputField from "./fields/input.field";
 import { Button } from "./ui/button";
 import OptionsTag from "./fields/variants-filed/components/options.tag";
@@ -75,6 +78,8 @@ const VariantsOptionsField = ({ form }: VariantsOptionsFieldProps) => {
     const filteredValues = values.filter(
       (value: ProductVariantType) => value.name.trim() !== ""
     );
+
+    console.log(filteredValues);
 
     if (filteredValues.length === 0) {
       toast.error("Варіант має мати щонайменше одну опцію");
@@ -142,54 +147,67 @@ const VariantsOptionsField = ({ form }: VariantsOptionsFieldProps) => {
                 <div className="flex flex-col gap-y-2 pl-6">
                   <h4 className="text-sm">Опції варіанту</h4>
                   <div className="flex flex-col gap-y-1">
-                    {field.values.map((value, valueIndex) => (
-                      <motion.div
-                        key={value.id}
-                        className="relative group flex items-center w-full"
-                        layout
-                      >
-                        <InputField
-                          name={`variants.${index}.values.${valueIndex}.name`}
-                          schema={productSchema}
-                          form={form}
-                          label=""
-                          placeholder="Опція"
-                          className="space-y-0 w-full"
-                        />
-                        <div className="absolute right-0 top-1/2 transform -translate-y-1/2 flex items-center gap-x-1">
-                          <Button
-                            type="button"
-                            onClick={() => moveUp(index, valueIndex)}
-                            disabled={valueIndex === 0}
-                            variant="icon"
-                            size={"noSpace"}
-                            className="p-1"
-                          >
-                            <ChevronUpIcon size={24} />
-                          </Button>
-                          <Button
-                            type="button"
-                            onClick={() => moveDown(index, valueIndex)}
-                            disabled={valueIndex === field.values.length - 1}
-                            variant="icon"
-                            size={"noSpace"}
-                            className="p-1"
-                          >
-                            <ChevronDownIcon size={24} />
-                          </Button>
-                          <Button
-                            type="button"
-                            onClick={() =>
-                              handleRemoveOption(index, valueIndex)
-                            }
-                            variant="icon"
-                            size="icon"
-                          >
-                            <Trash2Icon size={24} />
-                          </Button>
-                        </div>
-                      </motion.div>
-                    ))}
+                    {field.values.map((value, valueIndex) => {
+                      const isLast = valueIndex === field.values.length - 1;
+                      const isAvaibleDown =
+                        valueIndex < field.values.length - 2;
+
+                      return (
+                        <motion.div
+                          key={value.id}
+                          className="relative group flex items-center w-full"
+                          layout
+                        >
+                          <InputField
+                            name={`variants.${index}.values.${valueIndex}.name`}
+                            schema={productSchema}
+                            form={form}
+                            label=""
+                            placeholder="Додати нову опцію"
+                            className="space-y-0 w-full"
+                            enableEmptyFieldCheck
+                            minLength={1}
+                          />
+                          {!isLast && (
+                            <div className="absolute right-0 top-1/2 transform -translate-y-1/2 flex items-center gap-x-1">
+                              <Button
+                                type="button"
+                                onClick={() => moveUp(index, valueIndex)}
+                                disabled={valueIndex === 0}
+                                variant="icon"
+                                size={"noSpace"}
+                                className="p-1"
+                              >
+                                <ChevronUpIcon size={24} />
+                              </Button>
+                              <Button
+                                type="button"
+                                onClick={() => moveDown(index, valueIndex)}
+                                disabled={
+                                  valueIndex === field.values.length - 1 ||
+                                  !isAvaibleDown
+                                }
+                                variant="icon"
+                                size={"noSpace"}
+                                className="p-1"
+                              >
+                                <ChevronDownIcon size={24} />
+                              </Button>
+                              <Button
+                                type="button"
+                                onClick={() =>
+                                  handleRemoveOption(index, valueIndex)
+                                }
+                                variant="icon"
+                                size="icon"
+                              >
+                                <Trash2Icon size={24} />
+                              </Button>
+                            </div>
+                          )}
+                        </motion.div>
+                      );
+                    })}
                   </div>
                 </div>
 

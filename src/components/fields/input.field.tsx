@@ -7,15 +7,16 @@ import {
   Path,
   PathValue,
 } from "react-hook-form";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
+import { cn } from "@/lib/utils";
 import * as FormComponent from "@/components/ui/form";
 import { generateRandomSlug } from "@/lib/functions/generate-random-slug";
 
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import ErrorToolTip from "./error.tooltip";
-import { cn } from "@/lib/utils";
 
 interface InputFieldProps<T extends z.ZodTypeAny> {
   schema: T;
@@ -28,6 +29,7 @@ interface InputFieldProps<T extends z.ZodTypeAny> {
   featuredField?: boolean;
   showDescription?: boolean;
   form: UseFormReturn<z.infer<T>>;
+  enableEmptyFieldCheck?: boolean;
   className?: string;
 }
 
@@ -41,9 +43,11 @@ const InputField = <T extends z.ZodTypeAny>({
   maxLength = 120,
   featuredField = false,
   showDescription = false,
+  enableEmptyFieldCheck = false,
   className,
 }: InputFieldProps<T>) => {
   const { control } = useFormContext();
+  const [previousValue, setPreviousValue] = useState<string>("");
 
   const handleGenerateSlug = (stringToGenerate: string) => {
     if (!stringToGenerate) {
@@ -88,6 +92,18 @@ const InputField = <T extends z.ZodTypeAny>({
                 maxLength={maxLength}
                 minLength={minLength}
                 placeholder={placeholder}
+                onFocus={() => {
+                  setPreviousValue(field.value || "");
+                }}
+                onBlur={() => {
+                  if (enableEmptyFieldCheck) {
+                    // Якщо режим увімкнено, перевіряємо, чи поле пусте
+                    if (!field.value?.trim()) {
+                      toast.error("Поле не може бути порожнім!");
+                      field.onChange(previousValue); // Відновлюємо попереднє значення
+                    }
+                  }
+                }}
                 onChange={(e) => {
                   field.onChange(e);
                   if (name === "name") {
