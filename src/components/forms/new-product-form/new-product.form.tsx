@@ -13,8 +13,7 @@ import SelectField from "@/components/fields/select.field";
 import { productSchema } from "@/lib/schemas/product.schema";
 import { CategoryType } from "@/lib/schemas/category.schema";
 import TextareaField from "@/components/fields/textarea.field";
-import VarientsField from "@/components/fields/variant.field";
-import VariantsOptionsField from "@/components/fields/variants-filed/variants-options.field";
+import VariantOptionsField from "@/components/variants.field";
 
 interface NewProductFormProps {
   form: UseFormReturn<z.infer<typeof productSchema>>;
@@ -98,8 +97,7 @@ const NewProductForm = ({ form }: NewProductFormProps) => {
             showDescription
           />
 
-          {/* <VarientsField form={form} name="variants" /> */}
-          <VariantsOptionsField form={form} />
+          <VariantOptionsField form={form} />
         </div>
 
         {/* Aside */}

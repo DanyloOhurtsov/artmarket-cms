@@ -8,6 +8,7 @@ interface HoverTooltipProps {
   asChild?: boolean;
   className?: string;
   side?: "top" | "right" | "bottom" | "left";
+  delayDuration?: number;
 }
 
 const HoverTooltip = ({
@@ -16,9 +17,10 @@ const HoverTooltip = ({
   asChild = false,
   className,
   side = "top",
+  delayDuration = 200,
 }: HoverTooltipProps) => {
   return (
-    <Tooltip>
+    <Tooltip delayDuration={delayDuration}>
       <TooltipTrigger asChild={asChild} className={className}>
         {children}
       </TooltipTrigger>
