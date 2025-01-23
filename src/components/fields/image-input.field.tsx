@@ -109,7 +109,7 @@
 
                         {type === "file" && (
                           <Input
-                            {...field}
+                            // {...field}
                             type="file"
                             accept="image/*"
                             className="size-full opacity-0 absolute top-0 left-0 cursor-pointer"
@@ -124,6 +124,7 @@
                                 return;
                               }
                               handleAddImage(file);
+                              e.target.value = "";
                             }}
                           />
                         )}

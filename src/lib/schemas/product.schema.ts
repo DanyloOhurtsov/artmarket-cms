@@ -22,10 +22,14 @@ export type ProductType = {
 };
 
 export type ProductVariantType = {
-  id: string;
   name: string;
-  slug: string;
-  value: string;
+  id: string;
+  values: {
+    id: string;
+    name: string;
+    slug: string;
+    value: string;
+  }[];
 };
 
 // Схема товарів
@@ -68,5 +72,5 @@ export const productSchema = z.object({
         ),
       })
     )
-    .default([])
+    .default([]),
 });

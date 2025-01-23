@@ -14,13 +14,18 @@ import { productSchema } from "@/lib/schemas/product.schema";
 import { CategoryType } from "@/lib/schemas/category.schema";
 import TextareaField from "@/components/fields/textarea.field";
 import VariantOptionsField from "@/components/variants.field";
+import toast from "react-hot-toast";
+import ImageInputField from "@/components/fields/image-input.field";
+import { useUploadThing } from "@/utils/uploadthing";
 
 interface NewProductFormProps {
   form: UseFormReturn<z.infer<typeof productSchema>>;
 }
 
 const NewProductForm = ({ form }: NewProductFormProps) => {
+  const { startUpload } = useUploadThing("imageUploader");
   const [categoryOptions, setCategoryOptions] = useState<CategoryType[]>([]);
+  const [images, setImages] = useState<(string | File)[]>([]);
 
   useEffect(() => {
     async function fetchCategories() {
@@ -40,7 +45,27 @@ const NewProductForm = ({ form }: NewProductFormProps) => {
     fetchCategories();
   }, []);
 
-  function onSubmit(values: z.infer<typeof productSchema>) {
+  useEffect(() => {
+    console.log(images);
+  }, [images]);
+
+  async function onSubmit(values: z.infer<typeof productSchema>) {
+    console.log(values);
+
+    const endpoint = "/api/products/new";
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+
+      const data = await res.json();
+      console.log(data);
+    } catch (error) {
+      toast.error("Помилка при створенні продукту");
+      console.error("Помилка при створенні продукту:", error);
+    }
     console.log("Форма успішно пройшла перевірку!", values);
   }
 
@@ -48,7 +73,37 @@ const NewProductForm = ({ form }: NewProductFormProps) => {
     <Form {...form}>
       <form
         id="newProductForm"
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={async (e) => {
+          e.preventDefault();
+
+          if (images.some((image) => image instanceof File)) {
+            const files = images.filter(
+              (image): image is File => image instanceof File
+            );
+
+            try {
+              const uploadedFiles = await startUpload(files);
+              if (!uploadedFiles || !uploadedFiles.length) {
+                toast.error("Помилка завантаження зображень");
+                return;
+              }
+
+              const uploadedImages = uploadedFiles.map((file) => file.url);
+              const stringUrls = images.filter(
+                (image) => typeof image === "string"
+              );
+
+              const newImages = [...stringUrls, ...uploadedImages];
+              console.log(newImages);
+              form.setValue("images", [...newImages]);
+            } catch (error) {}
+          }
+          console.log(form.getValues());
+
+          // console.log("Form submitted");
+          // form.handleSubmit(onSubmit);
+          onSubmit(form.getValues());
+        }}
         className="flex gap-x-6 w-full"
       >
         <div className="flex flex-col space-y-4 w-2/3">
@@ -88,6 +143,18 @@ const NewProductForm = ({ form }: NewProductFormProps) => {
             showDescription
           />
 
+          <ImageInputField
+            schema={productSchema}
+            name="images"
+            label="Зображення товару"
+            placeholder="Додайте зображення"
+            description="Додайте хоча б одне зображення товару"
+            showDescription
+            type="file"
+            maxLength={10}
+            files={images}
+            setFiles={setImages}
+          />
           <NumberField
             name="price"
             label="Ціна"
