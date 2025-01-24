@@ -66,19 +66,8 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json(newCollection, { status: 201 });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Помилка при створенні колекції:", error);
-
-    // Перевірка, чи це помилка валідації Zod
-    if (error.name === "ZodError") {
-      return NextResponse.json(
-        {
-          error: "Помилка валідації",
-          details: error.issues, // Передаємо деталі помилки валідації
-        },
-        { status: 400 }
-      );
-    }
 
     return NextResponse.json(
       { error: "Не вдалося створити колекцію", details: error },
