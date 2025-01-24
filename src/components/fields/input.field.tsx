@@ -40,7 +40,7 @@ const InputField = <T extends z.ZodTypeAny>({
   featuredField = false,
   showDescription = false,
 }: InputFieldProps<T>) => {
-  const { control } = useFormContext();
+  const { control, getValues } = useFormContext();
 
   const handleGenerateSlug = (stringToGenerate: string) => {
     if (!stringToGenerate) {
@@ -53,7 +53,7 @@ const InputField = <T extends z.ZodTypeAny>({
       isRandowSuffix: featuredField,
     });
     form.setValue(
-      "slug" as Path<z.infer<T>>,
+      "handle" as Path<z.infer<T>>,
       slug as PathValue<z.infer<T>, Path<z.infer<T>>>
     );
   };
@@ -62,43 +62,45 @@ const InputField = <T extends z.ZodTypeAny>({
     <FormComponent.FormField
       control={control}
       name={name}
-      render={({ field, fieldState }) => (
-        <FormComponent.FormItem>
-          <div className="flex justify-between items-center">
-            <FormComponent.FormLabel>{label}</FormComponent.FormLabel>
-            {featuredField && (
-              <Button
-                type="button"
-                size="link"
-                variant="link"
-                onClick={() => handleGenerateSlug(field.value)}
-              >
-                Створити Slug
-              </Button>
-            )}
-          </div>
-          <div className="flex items-center">
-            <FormComponent.FormControl className="flex-1">
-              <Input
-                {...field}
-                maxLength={maxLength}
-                minLength={minLength}
-                placeholder={placeholder}
-                onChange={(e) => {
-                  field.onChange(e);
-                  if (name === "name") {
-                    handleGenerateSlug(e.target.value);
-                  }
-                }}
-              />
-            </FormComponent.FormControl>
-            <ErrorToolTip fieldState={fieldState} />
-          </div>
-          <FormComponent.FormDescription hidden={!showDescription}>
-            {description}
-          </FormComponent.FormDescription>
-        </FormComponent.FormItem>
-      )}
+      render={({ field, fieldState }) => {
+        return (
+          <FormComponent.FormItem>
+            <div className="flex justify-between items-center">
+              <FormComponent.FormLabel>{label}</FormComponent.FormLabel>
+              {featuredField && (
+                <Button
+                  type="button"
+                  size="link"
+                  variant="link"
+                  onClick={() => handleGenerateSlug(getValues("title"))}
+                >
+                  Створити Slug
+                </Button>
+              )}
+            </div>
+            <div className="flex items-center">
+              <FormComponent.FormControl className="flex-1">
+                <Input
+                  {...field}
+                  maxLength={maxLength}
+                  minLength={minLength}
+                  placeholder={placeholder}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    if (name === "title") {
+                      handleGenerateSlug(e.target.value);
+                    }
+                  }}
+                />
+              </FormComponent.FormControl>
+              <ErrorToolTip fieldState={fieldState} />
+            </div>
+            <FormComponent.FormDescription hidden={!showDescription}>
+              {description}
+            </FormComponent.FormDescription>
+          </FormComponent.FormItem>
+        );
+      }}
     />
   );
 };
