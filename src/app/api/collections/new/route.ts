@@ -1,11 +1,8 @@
-import {
-  collectionSchema,
-  CollectionType,
-} from "@/lib/schemas/new/collection.schema";
-import prisma from "@/utils/prisma";
 import { v4 as uuid } from "uuid";
 import { NextRequest, NextResponse } from "next/server";
-import Error from "next/error";
+
+import prisma from "@/utils/prisma";
+import { collectionSchema } from "@/lib/schemas/new/collection.schema";
 
 export async function POST(req: NextRequest) {
   try {
