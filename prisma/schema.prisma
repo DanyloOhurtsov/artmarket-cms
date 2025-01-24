@@ -11,68 +11,160 @@ datasource db {
   directUrl = env("DIRECT_URL")  
 }
 
-// Models
-model Category {
-  id          String      @id @default(uuid())
-  name        String
-  slug        String      @unique
 
-  description String?
-  shortDesc   String?
-  image      String?
-
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-
-  parentId    String?
-  parent      Category?   @relation("CategoryHierarchy", fields: [parentId], references: [id])
-  children    Category[]  @relation("CategoryHierarchy")
-  products    Product[] 
+// General models
+model ImageModel {
+  id                  String              @id @default(uuid())
+  url                 String
+  productId           String?
+  product             ProductModel?       @relation("ProductImages", fields: [productId], references: [id])
+  featuredInProduct   ProductModel?       @relation("FeaturedImage")
+  collection          CollectionModel?    @relation("CollectionImage")
+  variant             VariantModel?       @relation("VariantImage")
 }
 
-model Product {
-  id          String      @id @default(cuid())
-  name        String
-  slug        String      @unique
-
-  description String?
-  shortDesc   String?
-
-  minOrder    Int?        @default(1)
-  maxOrder    Int?
-  stock       Int?        @default(0)
-
-  isActive    Boolean     @default(true)
-  price       Float
-
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-
-  images      String[]
-
-  categoryId  String
-  category    Category    @relation(fields: [categoryId], references: [id])
-  variants    Variant[]
+model SeoModel {
+  id            String            @id @default(uuid())
+  title         String
+  description   String
+  product       ProductModel?     @relation("ProductSeo")
+  collection    CollectionModel?  @relation("CollectionSeo")
 }
 
-model Variant {
-  id          String      @id @default(cuid())
-  name        String
-  slug        String      @unique
+// Product Model
+model ProductModel {
+  id               String             @id @default(uuid())
+  title            String
+  handle           String             @unique
 
+  description      String
+  shortDescription String
+
+  availableForSale Boolean            @default(true)
+
+  totalInventory   Int                @default(0)
+  minPrice         Float
+  maxPrice         Float
+
+  featuredImageId  String?            @unique // Optional featured image
+  featuredImage    ImageModel?        @relation("FeaturedImage", fields: [featuredImageId], references: [id])
+  images           ImageModel[]       @relation("ProductImages")
+
+  variants         VariantModel[]
+
+  seoId            String             @unique
+  seo              SeoModel           @relation("ProductSeo", fields: [seoId], references: [id])
+
+  collections      CollectionModel[]  @relation("ProductCollections")
+
+  orderItems       OrderItemModel[]   @relation("ProductOrderItems")
+
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+}
+
+model VariantModel {
+  id                String                @id @default(uuid())
+  title             String      // "Black / HB"
+  weight            Float?
+  price             Float
+  imageId           String?               @unique
+  image             ImageModel?           @relation("VariantImage",fields: [imageId], references: [id])
+  availableForSale  Boolean               @default(true)
+
+  productId         String
+  product           ProductModel          @relation(fields: [productId], references: [id])
+  quantityAvailable Int                   @default(0)
+  quantityRule      QuantityRuleModel?    @relation("VariantQuantityRule", fields: [quantityRuleId], references: [id])
+  quantityRuleId    String?               @unique
+  orderItem         OrderItemModel?       @relation("VariantOrderItem")
+}
+
+
+model QuantityRuleModel {
+  id       String         @id @default(uuid())
+  minimum  Int            @default(1)
+  maximum  Int
+  variant  VariantModel?  @relation("VariantQuantityRule")
+}
+
+// Collection Model
+model CollectionModel {
+  id          String              @id @default(uuid())
+  title       String
+  handle      String              @unique
   description String?
-  shortDesc   String?
 
-  minOrder    Int?        @default(1)
-  maxOrder    Int?
-  stock       Int?        @default(0)
+  imageId     String?             @unique
+  image       ImageModel?         @relation("CollectionImage",fields: [imageId], references: [id])
+  seoId       String?             @unique
+  seo         SeoModel?           @relation("CollectionSeo", fields: [seoId], references: [id])
+  products    ProductModel[]      @relation("ProductCollections")
+  menuItems   MenuItemModel[]     @relation("CollectionMenuItems")
 
-  isActive    Boolean     @default(true)
-  price       Float
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+}
 
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+// Menu Models
+model MenuModel {
+  id       String                 @id @default(uuid())
+  handle   String                 @unique
+  title    String
+  items    MenuItemModel[]
+}
 
-  productId   String
-  product     Product     @relation(fields: [productId], references: [id])
+model MenuItemModel {
+  id            String            @id @default(uuid())
+  handle        String
+  title         String
+
+  menuId        String
+  menu          MenuModel         @relation(fields: [menuId], references: [id])
+  
+  collectionId  String?    
+  collection    CollectionModel?  @relation("CollectionMenuItems", fields: [collectionId], references: [id])
+  
+  parentId      String?
+  parent        MenuItemModel?    @relation("ParentItem", fields: [parentId], references: [id])
+  children      MenuItemModel[]   @relation("ParentItem")
+}
+
+// Order Models
+model OrderModel {
+  id                String            @id @default(uuid())
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  status            String
+  paymentMethod     String       // "COD" for Cash on Delivery or "Online"
+  shippingAddress   String
+  totalAmount       Float
+  items             OrderItemModel[]  @relation("OrderItems")
+  customerId        String
+  customer          CustomerModel     @relation(fields: [customerId], references: [id])
+}
+
+model OrderItemModel {
+  id                  String           @id @default(uuid())
+  quantity            Int
+  price               Float
+
+  orderId             String
+  order               OrderModel      @relation("OrderItems", fields: [orderId], references: [id])
+  productId           String
+  product             ProductModel    @relation("ProductOrderItems", fields: [productId], references: [id])
+
+  selectedVariantId   String          @unique    // Reference to the selected variant
+  selectedVariant     VariantModel    @relation("VariantOrderItem", fields: [selectedVariantId], references: [id])
+}
+
+// Customer Model
+model CustomerModel {
+  id            String      @id @default(uuid())
+  firstName          String
+  lastName           String
+  email         String      @unique
+  phone         String
+  patronymic    String?     // Optional middle name
+  orders        OrderModel[]
 }
