@@ -13,8 +13,8 @@ export const asideLinks = [
     icon: LayoutDashboardIcon,
   },
   {
-    title: "Категорії",
-    href: "/dashboard/categories",
+    title: "Колекції",
+    href: "/dashboard/collections",
     icon: BoxesIcon,
   },
   {
