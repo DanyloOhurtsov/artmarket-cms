@@ -9,10 +9,9 @@ export async function GET(
   const { id } = await context.params; // Отримуємо id з context.params
 
   try {
-    const category = await prisma.category.findUnique({
+    const category = await prisma.collectionModel.findUnique({
       where: { id },
       include: {
-        children: true,
         products: true,
       },
     });
@@ -53,12 +52,12 @@ export async function PUT(
     }
 
     // Оновлення категорії в базі даних
-    const updatedCategory = await prisma.category.update({
+    const updatedCategory = await prisma.collectionModel.update({
       where: { id },
       data: {
-        name,
-        slug,
-        shortDesc,
+        title: name,
+        handle: slug,
+        shortDescription: shortDesc,
         description,
         image,
       },

@@ -2,9 +2,9 @@ import prisma from "@/utils/prisma";
 
 export async function GET() {
   try {
-    const products = await prisma.product.findMany({
+    const products = await prisma.productModel.findMany({
       include: {
-        category: true,
+        collections: true,
       },
     });
 

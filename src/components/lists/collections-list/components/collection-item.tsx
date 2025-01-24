@@ -1,0 +1,34 @@
+import * as TableComponent from "@/components/ui/table";
+import { flexRender, Row } from "@tanstack/react-table";
+import { CollectionType } from "@/lib/schemas/new/collection.schema";
+
+interface CollectionItemProps {
+  row: Row<CollectionType>;
+}
+
+const CollectionItem = ({ row }: CollectionItemProps) => {
+  const url = `/dashboard/collections/${row.original.handle}`;
+
+  return (
+    <TableComponent.TableRow
+      key={row.id}
+      data-state={row.getIsSelected() && "selected"}
+      className="cursor-pointer"
+      onClick={() => (window.location.href = url)}
+    >
+      {row.getVisibleCells().map((cell) => (
+        <TableComponent.TableCell key={cell.id}>
+          {cell.column.id === "select" ? (
+            <div onClick={(e) => e.stopPropagation()}>
+              {flexRender(cell.column.columnDef.cell, cell.getContext())}
+            </div>
+          ) : (
+            flexRender(cell.column.columnDef.cell, cell.getContext())
+          )}
+        </TableComponent.TableCell>
+      ))}
+    </TableComponent.TableRow>
+  );
+};
+
+export default CollectionItem;

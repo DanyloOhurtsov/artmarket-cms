@@ -1,31 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import prisma from "@/utils/prisma";
-import { CategoryType } from "@/lib/schemas/category.schema";
+import { v4 as uuid } from "uuid";
+import { ImageType } from "@/lib/schemas/new/image.schema";
 
 export async function POST(req: NextRequest) {
   try {
-    const body: CategoryType = await req.json();
+    const body = await req.json();
 
     // Перевіряємо, чи передано обов'язкові поля
-    const { name, slug, shortDesc, description, parentId, image } = body;
+    const { title, handle, shortDescription, description, image } = body;
 
-    if (!name || !slug) {
+    if (!title || !handle) {
       return NextResponse.json(
         { error: "Назва та slug є обов'язковими полями" },
         { status: 400 }
       );
     }
+    const newImage: ImageType = {
+      id: `image-${uuid()}`,
+      url: image,
+    };
 
     // Створюємо категорію у базі даних
-    const newCategory = await prisma.category.create({
+    const newCategory = await prisma.collectionModel.create({
       data: {
-        name,
-        slug,
-        shortDesc,
+        id: `collection-${uuid()}`,
+        title,
+        handle,
         description,
-        parentId,
-        image,
+        image: newImage,
       },
     });
 

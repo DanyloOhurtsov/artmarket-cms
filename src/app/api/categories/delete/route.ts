@@ -10,7 +10,7 @@ export async function DELETE(req: Request) {
   }
 
   try {
-    await prisma.category.deleteMany({
+    await prisma.collectionModel.deleteMany({
       where: {
         id: { in: ids },
       },
