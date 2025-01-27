@@ -50,10 +50,12 @@ const CollectionEditPage = () => {
         </div>
       </PageTitle>
 
-      <CollectionForm
-        initialValues={initialData}
-        setIsFormDirty={setIsFormDirty}
-      />
+      <div className="p-2">
+        <CollectionForm
+          initialValues={initialData}
+          setIsFormDirty={setIsFormDirty}
+        />
+      </div>
     </section>
   );
 };

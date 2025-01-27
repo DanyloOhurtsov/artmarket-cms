@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     // Перевіряємо, чи передано обов'язкові поля
-    const { title, handle, shortDescription, description, image } = body;
+    const { title, handle, description, image } = body;
 
     if (!title || !handle) {
       return NextResponse.json(

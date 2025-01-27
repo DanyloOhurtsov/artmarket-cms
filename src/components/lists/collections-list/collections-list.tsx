@@ -59,6 +59,7 @@ const CollectionsList = () => {
       mutate();
       setRowSelection({});
     } catch (error) {
+      console.error("Error:", error);
       toast.error("Не вдалося видалити колекції");
     }
   };
