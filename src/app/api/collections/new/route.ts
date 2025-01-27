@@ -26,7 +26,10 @@ export async function POST(req: NextRequest) {
 
     if (existingCollection) {
       return NextResponse.json(
-        { error: "Колекція з таким slug вже існує" },
+        {
+          error:
+            "Колекція з такою назвою вже існує. Будь ласка замініть на іншу",
+        },
         { status: 400 }
       );
     }

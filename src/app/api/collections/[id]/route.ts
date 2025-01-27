@@ -8,9 +8,11 @@ export async function GET(
 ) {
   const { id } = await context.params; // Отримуємо id з context.params
 
+  console.log("id", id);
+
   try {
     const collection = await prisma.collectionModel.findUnique({
-      where: { id },
+      where: { handle: id },
       include: {
         products: true,
       },

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
@@ -13,22 +13,26 @@ import {
 import { useUploadThing } from "@/utils/uploadthing";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ImageType } from "@/lib/schemas/new/image.schema";
+import { MAX_FILE_SIZE_2 } from "@/lib/constants/max-file-size";
 import { collectionDefaultValues } from "@/lib/schemas/default-values/collection.default-values";
+
 import { Form } from "../ui/form";
+import { Button } from "../ui/button";
+import { Separator } from "../ui/separator";
 import InputField from "../fields/input.field";
 import TextareaField from "../fields/textarea.field";
-import { Separator } from "../ui/separator";
 import ImageInputField from "../fields/image-input.field";
-import { Button } from "../ui/button";
 
 interface CollectionFormProps {
   initialValues?: CollectionType;
   redirectPathAfterCreate?: string;
+  setIsFormDirty?: (isDirty: boolean) => void;
 }
 
 const CollectionForm = ({
   initialValues,
   redirectPathAfterCreate = "/dashboard",
+  setIsFormDirty,
 }: CollectionFormProps) => {
   const router = useRouter();
   const { startUpload } = useUploadThing("imageUploader");
@@ -37,15 +41,19 @@ const CollectionForm = ({
     defaultValues: initialValues ? initialValues : collectionDefaultValues,
   });
 
+  useEffect(() => {
+    if (initialValues) {
+      form.reset(initialValues);
+    }
+  }, [initialValues, form]);
+
   const [image, setImage] = useState<(string | File)[]>(
     initialValues?.image ? [initialValues.image.url] : []
   );
 
-  // useEffect(() => {
-  //   if(initialValues) {
-  //     form.reset
-  //   }
-  // }, [initialValues])
+  useEffect(() => {
+    if (setIsFormDirty) setIsFormDirty(form.formState.isDirty);
+  }, [form.formState.isDirty, setIsFormDirty]);
 
   async function handleSubmit(values: CollectionType) {
     let imageUrl: string | undefined;
@@ -56,11 +64,14 @@ const CollectionForm = ({
         (image): image is File => image instanceof File
       );
 
-      console.log("Files",files);
+      files.some((file) => {
+        if (file.size > MAX_FILE_SIZE_2) {
+          toast.error("Розмір файлу перевищує 2MB");
+          return;
+        }
+      });
 
       const uploadedImages = await startUpload(files);
-
-      console.log("Upl",uploadedImages);
 
       if (!uploadedImages || !uploadedImages.length) {
         toast.error("Помилка завантаження зображень");
@@ -95,7 +106,7 @@ const CollectionForm = ({
 
       if (!res.ok) {
         const error = await res.json();
-        toast.error("Помилка збереження категорії");
+        toast.error(`Помилка збереження категорії, ${error.error}`);
         console.error("Помилка:", error);
         return;
       }
