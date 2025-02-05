@@ -33,7 +33,7 @@ const PageTitle = ({
 
   const handleBack = () => {
     if (isFormDirty) {
-      setShowConfirm(true); // Відкрити модальне вікно
+      setShowConfirm(true);
     } else {
       router.back();
     }
@@ -41,7 +41,7 @@ const PageTitle = ({
 
   const confirmLeave = () => {
     setShowConfirm(false);
-    router.back(); // Повернутися назад
+    router.back();
   };
 
   return (

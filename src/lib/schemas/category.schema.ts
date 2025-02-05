@@ -33,10 +33,10 @@ export const categorySchemaTest: z.ZodType = z.lazy(() =>
         message: "Slug категорії повинен містити максимум 120 символів",
       })
       .default(""),
-    description: z.string().max(1000).optional().default(""),
-    shortDesc: z.string().max(100).optional().default(""),
+    description: z.string().max(1000).default(""),
+    shortDesc: z.string().max(100).default(""),
     parentId: z.string().nullable().default(null),
-    image: z.string().optional().default(""),
+    image: z.string().default(""),
     products: z.array(productSchema).default([]),
     children: z.array(z.lazy(() => categorySchemaTest)).default([]),
   })

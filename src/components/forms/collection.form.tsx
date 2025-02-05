@@ -14,6 +14,7 @@ import { useUploadThing } from "@/utils/uploadthing";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ImageType } from "@/lib/schemas/new/image.schema";
 import { MAX_FILE_SIZE_2 } from "@/lib/constants/max-file-size";
+import { ImageDefaultValues } from "@/lib/schemas/default-values/image.default-values";
 import { collectionDefaultValues } from "@/lib/schemas/default-values/collection.default-values";
 
 import { Form } from "../ui/form";
@@ -89,9 +90,9 @@ const CollectionForm = ({
     }
 
     const imageToCollection: ImageType = {
+      ...ImageDefaultValues,
       id: `image-${uuid()}`,
       url: imageUrl,
-      productId: null,
       collection: values,
     };
 
