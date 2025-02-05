@@ -3,7 +3,7 @@ import { ImageType } from "../new/image.schema";
 export const ImageDefaultValues: ImageType = {
   id: "",
   url: "",
-  productId: undefined,
+  productId: null,
   product: undefined,
   featuredInProduct: undefined,
   collection: undefined,
