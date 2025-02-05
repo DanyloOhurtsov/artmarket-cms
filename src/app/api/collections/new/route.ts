@@ -15,6 +15,7 @@ export async function POST(req: NextRequest) {
         ? {
             id: body.image.id || `image-${uuid()}`,
             url: body.image.url || "", // Забезпечуємо, що url ніколи не буде undefined
+            productId: body.image.productId || null,
           }
         : undefined,
     });

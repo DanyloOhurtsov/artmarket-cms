@@ -6,7 +6,11 @@ export const collectionDefaultValues: CollectionType = {
   handle: "",
   description: "",
   imageId: undefined,
-  image: undefined,
+  image: {
+    id: "",
+    url: "",
+    productId: null,
+  },
   seoId: undefined,
   seo: undefined,
   products: [],

@@ -8,7 +8,7 @@ export type ImageType = {
   id: string;
   url: string;
 
-  productId?: string;
+  productId: string | null;
   product?: ProductType;
   featuredInProduct?: ProductType;
 
@@ -21,7 +21,7 @@ export const imageSchema: z.ZodType<ImageType> = z.object({
   id: z.string() || `image-${uuid()}`,
   url: z.string(),
 
-  productId: z.string().optional(),
+  productId: z.string().nullable(),
   product: z.lazy(() => productSchema).optional(),
   featuredInProduct: z.lazy(() => productSchema).optional(),
 

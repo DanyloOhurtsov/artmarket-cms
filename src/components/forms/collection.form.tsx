@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import {
   collectionSchema,
@@ -17,7 +17,6 @@ import { MAX_FILE_SIZE_2 } from "@/lib/constants/max-file-size";
 import { collectionDefaultValues } from "@/lib/schemas/default-values/collection.default-values";
 
 import { Form } from "../ui/form";
-import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import InputField from "../fields/input.field";
 import TextareaField from "../fields/textarea.field";
@@ -45,7 +44,7 @@ const CollectionForm = ({
     if (initialValues) {
       form.reset(initialValues);
     }
-  }, [initialValues, form]);
+  }, [initialValues]);
 
   const [image, setImage] = useState<(string | File)[]>(
     initialValues?.image ? [initialValues.image.url] : []
@@ -54,6 +53,12 @@ const CollectionForm = ({
   useEffect(() => {
     if (setIsFormDirty) setIsFormDirty(form.formState.isDirty);
   }, [form.formState.isDirty, setIsFormDirty]);
+
+  useEffect(() => {
+    if (initialValues?.image?.url) {
+      setImage([initialValues.image.url]);
+    }
+  }, [initialValues?.image?.url]);
 
   async function handleSubmit(values: CollectionType) {
     let imageUrl: string | undefined;
@@ -86,6 +91,7 @@ const CollectionForm = ({
     const imageToCollection: ImageType = {
       id: `image-${uuid()}`,
       url: imageUrl,
+      productId: null,
       collection: values,
     };
 
@@ -93,7 +99,7 @@ const CollectionForm = ({
     const collection = { ...values, image: imageToCollection };
 
     const endpoint = initialValues
-      ? `/api/collections/${initialValues.id}`
+      ? `/api/collections/${initialValues.handle}`
       : "/api/collections/new";
     const method = initialValues ? "PUT" : "POST";
 
@@ -125,7 +131,9 @@ const CollectionForm = ({
         <form
           id="collectionForm"
           className="space-y-6"
-          onSubmit={form.handleSubmit(handleSubmit)}
+          onSubmit={(e) => {
+            form.handleSubmit(handleSubmit)(e);
+          }}
         >
           <InputField
             form={form}
@@ -170,10 +178,6 @@ const CollectionForm = ({
             files={image}
             setFiles={setImage}
           />
-
-          <Button type="submit" form="collectionForm">
-            {initialValues ? "Оновити колекцію" : "Створити колекцію"}
-          </Button>
         </form>
       </Form>
     </>

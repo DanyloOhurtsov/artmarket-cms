@@ -1,13 +1,13 @@
 "use client";
 
-import { ReactNode, useState } from "react";
 import { useRouter } from "next/navigation";
+import { ReactNode, useState } from "react";
+import { ChevronLeftIcon } from "lucide-react";
 
 import { Button } from "../ui/button";
-import { ChevronLeftIcon } from "lucide-react";
 import ModalBack from "./components/modal-back";
 
-interface PageTitleProps {
+interface BaseProps {
   title: string;
   description?: string;
   children?: ReactNode;
@@ -15,19 +15,24 @@ interface PageTitleProps {
   isFormDirty?: boolean;
 }
 
+type PageTitleProps =
+  | (BaseProps & { isSaveCancelSection?: false; formId?: never }) // Якщо isSaveCancelSection false, formId не потрібен
+  | (BaseProps & { isSaveCancelSection: true; formId: string });
+
 const PageTitle = ({
   title,
   description,
   children,
   isPrevios = false,
   isFormDirty = false,
+  isSaveCancelSection = false,
+  formId,
 }: PageTitleProps) => {
   const router = useRouter();
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
 
   const handleBack = () => {
     if (isFormDirty) {
-      console.log("Форма була змінена");
       setShowConfirm(true); // Відкрити модальне вікно
     } else {
       router.back();
@@ -52,7 +57,19 @@ const PageTitle = ({
           <p className="text-sm text-slate-600">{description}</p>
         </div>
       </div>
-      <div>{children}</div>
+      <div className="flex gap-x-2">
+        {children}
+        {isSaveCancelSection && (
+          <div className="flex gap-x-2">
+            <Button variant="secondary" onClick={handleBack}>
+              Скинути
+            </Button>
+            <Button type="submit" form={formId}>
+              Зберегти
+            </Button>
+          </div>
+        )}
+      </div>
 
       <ModalBack
         title="Ви впевнені, що хочете вийти?"

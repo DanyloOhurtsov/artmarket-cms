@@ -33,25 +33,27 @@ export const columns: ColumnDef<CollectionType>[] = [
   {
     accessorKey: "title",
     header: "Назва",
-    cell: ({ row }) => (
-      <div className="flex items-center space-x-2">
-        <div className="size-8 relative rounded-md overflow-hidden">
-          {row.original.image && row.original.image.url !== "" ? (
-            <Image
-              src={row.original.image.url}
-              width={50}
-              height={50}
-              alt="Category image"
-            />
-          ) : (
-            <div className="size-full bg-primary/20 rounded-md flex items-center justify-center">
-              <BoxIcon size={24} className="text-primary/30 size-4" />
-            </div>
-          )}
+    cell: ({ row }) => {
+      return (
+        <div className="flex items-center space-x-2">
+          <div className="size-8 relative rounded-md overflow-hidden">
+            {row.original.image && row.original.image.url !== "" ? (
+              <Image
+                src={row.original.image.url}
+                width={50}
+                height={50}
+                alt="Category image"
+              />
+            ) : (
+              <div className="size-full bg-primary/20 rounded-md flex items-center justify-center">
+                <BoxIcon size={24} className="text-primary/30 size-4" />
+              </div>
+            )}
+          </div>
+          <div>{row.original.title}</div>
         </div>
-        <div>{row.original.title}</div>
-      </div>
-    ),
+      );
+    },
   },
   {
     accessorKey: "products",

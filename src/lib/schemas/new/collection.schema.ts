@@ -15,7 +15,7 @@ export type CollectionType = {
   imageId?: string;
   image?: ImageType;
 
-  seoId?: string;
+  seoId?: string | null;
   seo?: SeoType;
 
   products?: ProductType[];
@@ -33,7 +33,7 @@ export const collectionSchema: z.ZodType<CollectionType> = z.object({
   imageId: z.string().optional(),
   image: z.lazy(() => imageSchema.optional()),
 
-  seoId: z.string().optional(),
+  seoId: z.string().optional().nullable(),
   seo: z.lazy(() => seoSchema.optional()),
 
   products: z.array(z.lazy(() => productSchema)).default([]),

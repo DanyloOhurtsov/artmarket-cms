@@ -2,7 +2,9 @@ import prisma from "@/utils/prisma";
 
 export async function GET() {
   try {
-    const categories = await prisma.collectionModel.findMany();
+    const categories = await prisma.collectionModel.findMany({
+      include: { image: true },
+    });
 
     return new Response(JSON.stringify(categories), {
       status: 200,

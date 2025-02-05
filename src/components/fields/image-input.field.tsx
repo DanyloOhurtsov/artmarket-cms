@@ -118,7 +118,6 @@ const ImageInputField = <T extends z.ZodTypeAny>({
 
                       {type === "file" && (
                         <Input
-                          {...field}
                           type="file"
                           accept="image/*"
                           className="size-full opacity-0 absolute top-0 left-0 cursor-pointer"
@@ -132,6 +131,7 @@ const ImageInputField = <T extends z.ZodTypeAny>({
                               toast.error("Будь ласка, оберіть зображення");
                               return;
                             }
+                            
                             handleAddImage(file);
                           }}
                         />
