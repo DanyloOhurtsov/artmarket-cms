@@ -13,7 +13,8 @@ import { cn } from "@/lib/utils";
 import * as FormComponent from "@/components/ui/form";
 import * as PopoverComponent from "@/components/ui/popover";
 import * as CommandComponent from "@/components/ui/command";
-import { CategoryType } from "@/lib/schemas/category.schema";
+
+import { CollectionType } from "@/lib/schemas/new/collection.schema";
 
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -22,7 +23,7 @@ import ErrorToolTip from "./error.tooltip";
 interface SelectFieldProps {
   name: string;
   placeholder: string;
-  initialOptions: CategoryType[];
+  initialOptions: CollectionType[];
 }
 
 const SelectField = ({
@@ -31,10 +32,10 @@ const SelectField = ({
   initialOptions,
 }: SelectFieldProps) => {
   const { control } = useFormContext();
-  const [options, setOptions] = useState<CategoryType[]>([]);
+  const [options, setOptions] = useState<CollectionType[]>([]);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredOptions, setFilteredOptions] = useState<CategoryType[]>([]);
+  const [filteredOptions, setFilteredOptions] = useState<CollectionType[]>([]);
 
   useEffect(() => {
     if (initialOptions) {
@@ -45,7 +46,7 @@ const SelectField = ({
 
   useEffect(() => {
     const results = options.filter((option) =>
-      option.name.toLowerCase().includes(searchTerm.toLowerCase())
+      option.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredOptions(results);
   }, [searchTerm, options]);
@@ -107,12 +108,12 @@ const SelectField = ({
                                 className="w-full flex justify-between"
                               >
                                 <p className="flex 1 text-left">
-                                  {option.name}
+                                  {option.title}
                                 </p>
                                 <CheckIcon
                                   className={cn(
                                     "mr-2 h-4 w-4",
-                                    field.value.name === option.name
+                                    field.value.name === option.title
                                       ? "opacity-100"
                                       : "opacity-0"
                                   )}
