@@ -129,8 +129,8 @@ const ProductForm = ({
             form.handleSubmit(handleSubmit)(e);
           }}
         >
-          <div className="flex w-full gap-x-2">
-            <div className="flex flex-col gap-y-6 w-3/4">
+          <div className="flex w-full gap-x-4">
+            <div className="flex flex-col gap-y-6 w-3/4 p-4 pr-0 h-[2000px]">
               <InputField
                 form={form}
                 name="title"
@@ -148,14 +148,6 @@ const ProductForm = ({
                 schema={productSchema}
                 showDescription
                 description="Назва товару у латинській транслітерації через дефіс (утворюється автоматично)"
-              />
-              <InputField
-                form={form}
-                name="vendor"
-                label="Виробник"
-                placeholder="Наприклад: Faber-Castell"
-                schema={productSchema}
-                maxLength={200}
               />
 
               <Separator />
@@ -178,7 +170,18 @@ const ProductForm = ({
               />
             </div>
 
-            <div className="flex flex-col gap-y-6 w-1/4 bg-red-50 sticky top-28 h-[calc(100vh-10rem)]"></div>
+            <div className="w-1/4 sticky top-28 right-0 h-[calc(100vh-7rem)] p-4 pl-0">
+              <div className="border border-gray-200 rounded-lg p-4 h-full">
+                <InputField
+                  form={form}
+                  name="vendor"
+                  label="Виробник"
+                  placeholder="Наприклад: Faber-Castell"
+                  schema={productSchema}
+                  maxLength={200}
+                />
+              </div>
+            </div>
           </div>
         </form>
       </Form>
