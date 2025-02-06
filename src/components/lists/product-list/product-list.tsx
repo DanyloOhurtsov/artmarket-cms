@@ -5,7 +5,7 @@ interface ProductListProps {
   products: ProductType[];
 }
 const ProductList = ({ products }: ProductListProps) => {
-  return <div>ProductList</div>;
+  return <div>{products.length}</div>;
 };
 
 export default ProductList;
