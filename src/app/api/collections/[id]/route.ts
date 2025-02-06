@@ -71,8 +71,6 @@ export async function PUT(
       },
     });
 
-    console.log(updatedCollection);
-
     return NextResponse.json(updatedCollection);
   } catch (error) {
     console.error("Error updating collection:", error);
