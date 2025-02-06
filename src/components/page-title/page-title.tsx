@@ -6,6 +6,7 @@ import { ChevronLeftIcon } from "lucide-react";
 
 import { Button } from "../ui/button";
 import ModalBack from "./components/modal-back";
+import { cn } from "@/lib/utils";
 
 interface BaseProps {
   title: string;
@@ -45,10 +46,19 @@ const PageTitle = ({
   };
 
   return (
-    <div className="flex w-full border-b justify-between items-center border-gray-300 p-4">
-      <div className="flex items-center">
+    <div
+      className={cn(
+        "flex w-full border-b justify-between items-center border-gray-300 p-4 gap-x-8 bg-white",
+        description ? "h-28" : "h-20"
+      )}
+    >
+      <div className="flex items-center gap-x-2">
         {isPrevios && (
-          <Button onClick={handleBack} variant={"ghost"} size={"icon"}>
+          <Button
+            onClick={handleBack}
+            variant={"ghost"}
+            className="size-10 flex-1"
+          >
             <ChevronLeftIcon />
           </Button>
         )}
