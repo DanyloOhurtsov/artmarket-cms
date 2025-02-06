@@ -11,17 +11,15 @@ const NewProductPage = () => {
   return (
     <>
       <section className="w-full min-h-screen">
-        <PageTitle
-          title="Додати новий товар"
-          description="Сторінка створення товару дозволяє додавати нові продукти до вашого каталогу. Заповніть основну інформацію, додайте зображення, встановіть ціну та налаштуйте категорії для організації товарів."
-          isPrevios
-          isFormDirty={isFormDirty}
-          isSaveCancelSection
-          formId="productForm"
-        />
-
-        <div className="p-4">
-          <ProductForm setisFormDirty={setIsFormDirty} />
+        <div className="sticky left-0 right-0 top-0 z-20">
+          <PageTitle
+            title="Додати новий товар"
+            description="Сторінка створення товару дозволяє додавати нові продукти до вашого каталогу. Заповніть основну інформацію, додайте зображення, встановіть ціну та налаштуйте категорії для організації товарів."
+            isPrevious
+            isFormDirty={isFormDirty}
+            isSaveCancelSection
+            formId="productForm"
+          />
         </div>
       </section>
     </>

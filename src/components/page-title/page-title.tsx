@@ -4,15 +4,16 @@ import { useRouter } from "next/navigation";
 import { ReactNode, useState } from "react";
 import { ChevronLeftIcon } from "lucide-react";
 
+import { cn } from "@/lib/utils";
+
 import { Button } from "../ui/button";
 import ModalBack from "./components/modal-back";
-import { cn } from "@/lib/utils";
 
 interface BaseProps {
   title: string;
   description?: string;
   children?: ReactNode;
-  isPrevios?: boolean;
+  isPrevious?: boolean;
   isFormDirty?: boolean;
 }
 
@@ -24,7 +25,7 @@ const PageTitle = ({
   title,
   description,
   children,
-  isPrevios = false,
+  isPrevious = false,
   isFormDirty = false,
   isSaveCancelSection = false,
   formId,
@@ -53,7 +54,7 @@ const PageTitle = ({
       )}
     >
       <div className="flex items-center gap-x-2">
-        {isPrevios && (
+        {isPrevious && (
           <Button
             onClick={handleBack}
             variant={"ghost"}
