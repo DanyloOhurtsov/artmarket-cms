@@ -4,6 +4,7 @@ export const ProductDefaultValues: ProductType = {
   id: "",
   title: "",
   handle: "",
+  vendor: "",
   description: "",
   shortDescription: "",
   availableForSale: true,

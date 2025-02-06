@@ -1,17 +1,22 @@
 "use client";
 
-import { MAX_FILE_SIZE_2 } from "@/lib/constants/max-file-size";
-import { ProductDefaultValues } from "@/lib/schemas/default-values/product.default-values";
-import { ImageType } from "@/lib/schemas/new/image.schema";
-import { productSchema, ProductType } from "@/lib/schemas/new/product.schema";
-import { useUploadThing } from "@/utils/uploadthing";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { v4 as uuid } from "uuid";
+import toast from "react-hot-toast";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import { v4 as uuid } from "uuid";
+
+import { useUploadThing } from "@/utils/uploadthing";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ImageType } from "@/lib/schemas/new/image.schema";
+import { MAX_FILE_SIZE_2 } from "@/lib/constants/max-file-size";
+import { ProductDefaultValues } from "@/lib/schemas/default-values/product.default-values";
+import { productSchema, ProductType } from "@/lib/schemas/new/product.schema";
+
 import { Form } from "../ui/form";
+import { Separator } from "../ui/separator";
+import InputField from "../fields/input.field";
+import TextareaField from "../fields/textarea.field";
 
 interface ProductFormProps {
   initialValues?: ProductType;
@@ -120,12 +125,64 @@ const ProductForm = ({
       <Form {...form}>
         <form
           id="productForm"
-          className="space-y-6"
           onSubmit={(e) => {
             form.handleSubmit(handleSubmit)(e);
           }}
         >
+          <div className="flex w-full gap-x-4">
+            <div className="flex flex-col gap-y-6 w-3/4 p-4 pr-0 h-[2000px]">
+              <InputField
+                form={form}
+                name="title"
+                label="Назва"
+                placeholder="Наприклад: Олівці Faber-Castell"
+                schema={productSchema}
+                maxLength={200}
+              />
+              <InputField
+                form={form}
+                name="handle"
+                label="Handle"
+                placeholder="Наприклад: olivtsi-faber-castell"
+                featuredField
+                schema={productSchema}
+                showDescription
+                description="Назва товару у латинській транслітерації через дефіс (утворюється автоматично)"
+              />
 
+              <Separator />
+
+              <TextareaField
+                name="shortDescription"
+                label="Короткий опис"
+                placeholder="Наприклад: Високоякісні кольорові олівці Faber-Castell"
+                showDescription
+                description="Короткий опис товару, який буде відображатися на сторінці товару"
+                schema={productSchema}
+              />
+              <TextareaField
+                name="description"
+                label="Повний опис"
+                placeholder="Наприклад: Олівці Faber-Castell – якість, перевірена часом. Високоякісні кольорові олівці Faber-Castell забезпечують яскраві, насичені відтінки та плавне нанесення кольору. Міцний грифель стійкий до зламу, а деревина з екологічно чистих лісів гарантує безпечне використання. Ідеальні для навчання, творчості та професійних ілюстрацій."
+                showDescription
+                description="Повний опис товару, який буде відображатися на сторінці товару"
+                schema={productSchema}
+              />
+            </div>
+
+            <div className="w-1/4 sticky top-28 right-0 h-[calc(100vh-7rem)] p-4 pl-0">
+              <div className="border border-gray-200 rounded-lg p-4 h-full">
+                <InputField
+                  form={form}
+                  name="vendor"
+                  label="Виробник"
+                  placeholder="Наприклад: Faber-Castell"
+                  schema={productSchema}
+                  maxLength={200}
+                />
+              </div>
+            </div>
+          </div>
         </form>
       </Form>
     </>

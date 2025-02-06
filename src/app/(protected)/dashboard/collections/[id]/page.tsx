@@ -9,8 +9,8 @@ import { fetcher } from "@/lib/functions/fetcher";
 import CopyButton from "@/components/buttons/copy.button";
 import PageTitle from "@/components/page-title/page-title";
 import { CollectionType } from "@/lib/schemas/new/collection.schema";
-import PageTitleActionButton from "@/components/buttons/page-title-action.button";
 import ProductList from "@/components/lists/product-list/product-list";
+import PageTitleActionButton from "@/components/buttons/page-title-action.button";
 
 const CollectionPage = () => {
   const params = useParams<{ id: string }>();
@@ -27,7 +27,7 @@ const CollectionPage = () => {
   return (
     <section className="w-full min-h-screen flex flex-col relative">
       <div className="sticky left-0 right-0 top-0 z-20">
-        <PageTitle title="Сторінка колекції" isPrevios>
+        <PageTitle title="Сторінка колекції" isPrevious>
           <PageTitleActionButton
             label="Редагувати"
             path={`/dashboard/collections/edit/${collectionId}`}

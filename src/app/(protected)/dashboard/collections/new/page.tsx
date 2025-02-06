@@ -13,7 +13,7 @@ const NewCollectionPage = () => {
       <PageTitle
         title="Створити категорію"
         description="Сторінка створення категорій дозволяє додавати нові категорії для впорядкування товарів. Вкажіть назву, опис та за потреби додайте зображення для зручної навігації."
-        isPrevios
+        isPrevious
         isSaveCancelSection
         isFormDirty={isFormDirty}
         formId="collectionForm"
