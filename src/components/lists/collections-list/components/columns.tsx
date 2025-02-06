@@ -31,11 +31,20 @@ export const columns: ColumnDef<CollectionType>[] = [
     enableHiding: false,
   },
   {
+    id: "separator",
+    header: () => <div className="w-px h-6 bg-primary/20 mx-auto" />,
+    cell: () => <div className="w-px h-6 bg-primary/20 mx-auto" />,
+  },
+  {
     accessorKey: "title",
-    header: "Назва",
+    header: () => (
+      <div className="pl-10">
+        <p>Назва</p>
+      </div>
+    ),
     cell: ({ row }) => {
       return (
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center gap-x-2">
           <div className="size-8 relative rounded-md overflow-hidden">
             {row.original.image && row.original.image.url !== "" ? (
               <Image
@@ -45,8 +54,8 @@ export const columns: ColumnDef<CollectionType>[] = [
                 alt="Category image"
               />
             ) : (
-              <div className="size-full bg-primary/20 rounded-md flex items-center justify-center">
-                <BoxIcon size={24} className="text-primary/30 size-4" />
+              <div className="size-full bg-primary/20  flex items-center justify-center">
+                <BoxIcon size={24} className="opacity-30 size-4" />
               </div>
             )}
           </div>

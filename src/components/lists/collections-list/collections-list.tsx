@@ -10,6 +10,7 @@ import {
   RowSelectionState,
   useReactTable,
 } from "@tanstack/react-table";
+import { cn } from "@/lib/utils";
 import { fetcher } from "@/lib/functions/fetcher";
 import * as TableComponent from "@/components/ui/table";
 import DeleteDropdownButton from "@/components/buttons/delete-dropdown.button";
@@ -94,13 +95,29 @@ const CollectionsList = () => {
             <TableComponent.TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableComponent.TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
+                  <TableComponent.TableHead
+                    key={header.id}
+                    className={cn(
+                      header.column.id === "separator" && "w-2",
+                      header.column.id === "title" && "pl-0"
+                    )}
+                  >
+                    {header.column.id === "select" ? (
+                      <div
+                        onClick={(e) => e.stopPropagation()}
+                        className="h-full flex items-center"
+                      >
+                        {flexRender(
                           header.column.columnDef.header,
                           header.getContext()
                         )}
+                      </div>
+                    ) : (
+                      flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )
+                    )}
                   </TableComponent.TableHead>
                 );
               })}
@@ -113,7 +130,9 @@ const CollectionsList = () => {
           {table.getRowModel().rows?.length ? (
             table
               .getRowModel()
-              .rows.map((row) => <CollectionItem key={row.id} row={row} />)
+              .rows.map((row) => (
+                <CollectionItem key={row.id} row={row} />
+              ))
           ) : (
             <TableComponent.TableRow>
               <TableComponent.TableCell
