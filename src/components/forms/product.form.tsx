@@ -1,19 +1,21 @@
 "use client";
 
-import { MAX_FILE_SIZE_2 } from "@/lib/constants/max-file-size";
-import { ProductDefaultValues } from "@/lib/schemas/default-values/product.default-values";
-import { ImageType } from "@/lib/schemas/new/image.schema";
-import { productSchema, ProductType } from "@/lib/schemas/new/product.schema";
-import { useUploadThing } from "@/utils/uploadthing";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { v4 as uuid } from "uuid";
+import toast from "react-hot-toast";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import { v4 as uuid } from "uuid";
+
+import { useUploadThing } from "@/utils/uploadthing";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ImageType } from "@/lib/schemas/new/image.schema";
+import { MAX_FILE_SIZE_2 } from "@/lib/constants/max-file-size";
+import { ProductDefaultValues } from "@/lib/schemas/default-values/product.default-values";
+import { productSchema, ProductType } from "@/lib/schemas/new/product.schema";
+
 import { Form } from "../ui/form";
-import InputField from "../fields/input.field";
 import { Separator } from "../ui/separator";
+import InputField from "../fields/input.field";
 import TextareaField from "../fields/textarea.field";
 
 interface ProductFormProps {
