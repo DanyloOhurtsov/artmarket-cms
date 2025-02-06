@@ -9,8 +9,8 @@ import { fetcher } from "@/lib/functions/fetcher";
 import CopyButton from "@/components/buttons/copy.button";
 import PageTitle from "@/components/page-title/page-title";
 import { CollectionType } from "@/lib/schemas/new/collection.schema";
-import PageTitleActionButton from "@/components/buttons/page-title-action.button";
 import ProductList from "@/components/lists/product-list/product-list";
+import PageTitleActionButton from "@/components/buttons/page-title-action.button";
 
 const CollectionPage = () => {
   const params = useParams<{ id: string }>();

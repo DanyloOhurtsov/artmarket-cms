@@ -12,6 +12,9 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { v4 as uuid } from "uuid";
 import { Form } from "../ui/form";
+import InputField from "../fields/input.field";
+import { Separator } from "../ui/separator";
+import TextareaField from "../fields/textarea.field";
 
 interface ProductFormProps {
   initialValues?: ProductType;
@@ -120,12 +123,61 @@ const ProductForm = ({
       <Form {...form}>
         <form
           id="productForm"
-          className="space-y-6"
           onSubmit={(e) => {
             form.handleSubmit(handleSubmit)(e);
           }}
         >
+          <div className="flex w-full gap-x-2">
+            <div className="flex flex-col gap-y-6 w-3/4">
+              <InputField
+                form={form}
+                name="title"
+                label="Назва"
+                placeholder="Наприклад: Олівці Faber-Castell"
+                schema={productSchema}
+                maxLength={200}
+              />
+              <InputField
+                form={form}
+                name="handle"
+                label="Handle"
+                placeholder="Наприклад: olivtsi-faber-castell"
+                featuredField
+                schema={productSchema}
+                showDescription
+                description="Назва товару у латинській транслітерації через дефіс (утворюється автоматично)"
+              />
+              <InputField
+                form={form}
+                name="vendor"
+                label="Виробник"
+                placeholder="Наприклад: Faber-Castell"
+                schema={productSchema}
+                maxLength={200}
+              />
 
+              <Separator />
+
+              <TextareaField
+                name="shortDescription"
+                label="Короткий опис"
+                placeholder="Наприклад: Високоякісні кольорові олівці Faber-Castell"
+                showDescription
+                description="Короткий опис товару, який буде відображатися на сторінці товару"
+                schema={productSchema}
+              />
+              <TextareaField
+                name="description"
+                label="Повний опис"
+                placeholder="Наприклад: Олівці Faber-Castell – якість, перевірена часом. Високоякісні кольорові олівці Faber-Castell забезпечують яскраві, насичені відтінки та плавне нанесення кольору. Міцний грифель стійкий до зламу, а деревина з екологічно чистих лісів гарантує безпечне використання. Ідеальні для навчання, творчості та професійних ілюстрацій."
+                showDescription
+                description="Повний опис товару, який буде відображатися на сторінці товару"
+                schema={productSchema}
+              />
+            </div>
+
+            <div className="flex flex-col gap-y-6 w-1/4 bg-red-50 sticky top-28 h-[calc(100vh-10rem)]"></div>
+          </div>
         </form>
       </Form>
     </>

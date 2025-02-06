@@ -16,6 +16,8 @@ const NewProductPage = () => {
           description="Сторінка створення товару дозволяє додавати нові продукти до вашого каталогу. Заповніть основну інформацію, додайте зображення, встановіть ціну та налаштуйте категорії для організації товарів."
           isPrevios
           isFormDirty={isFormDirty}
+          isSaveCancelSection
+          formId="productForm"
         />
 
         <div className="p-4">
