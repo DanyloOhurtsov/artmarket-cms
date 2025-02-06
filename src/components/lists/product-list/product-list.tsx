@@ -1,9 +1,11 @@
-import React from 'react'
+import { ProductType } from "@/lib/schemas/new/product.schema";
+import React from "react";
 
-const ProductList = () => {
-  return (
-    <div>ProductList</div>
-  )
+interface ProductListProps {
+  products: ProductType[];
 }
+const ProductList = ({ products }: ProductListProps) => {
+  return <div>ProductList</div>;
+};
 
-export default ProductList
+export default ProductList;
