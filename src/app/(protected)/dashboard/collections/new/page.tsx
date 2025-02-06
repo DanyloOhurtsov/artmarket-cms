@@ -19,10 +19,12 @@ const NewCollectionPage = () => {
         formId="collectionForm"
       />
 
-      <CollectionForm
-        redirectPathAfterCreate="/dashboard/collections"
-        setIsFormDirty={setIsFormDirty}
-      />
+      <div className="p-4">
+        <CollectionForm
+          redirectPathAfterCreate="/dashboard/collections"
+          setIsFormDirty={setIsFormDirty}
+        />
+      </div>
     </section>
   );
 };

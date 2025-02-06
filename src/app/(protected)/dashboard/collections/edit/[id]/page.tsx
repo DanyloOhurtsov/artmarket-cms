@@ -39,7 +39,7 @@ const CollectionEditPage = () => {
         formId="collectionForm"
       />
 
-      <div className="p-2">
+      <div className="p-4">
         <CollectionForm
           initialValues={initialData}
           setIsFormDirty={setIsFormDirty}

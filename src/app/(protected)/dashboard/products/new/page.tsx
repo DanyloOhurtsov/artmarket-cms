@@ -17,7 +17,8 @@ const NewProductPage = () => {
           isPrevios
           isFormDirty={isFormDirty}
         />
-        <div className="p-8">
+
+        <div className="p-4">
           <ProductForm setisFormDirty={setIsFormDirty} />
         </div>
       </section>
