@@ -10,6 +10,7 @@ export type ProductType = {
   id: string;
   title: string;
   handle: string;
+  vendor: string;
 
   description?: string;
   shortDescription?: string;
@@ -39,6 +40,7 @@ export const productSchema: z.ZodType<ProductType> = z.object({
   id: z.string() || `product-${uuid()}`,
   title: z.string().min(3).max(200),
   handle: z.string().min(3).max(250),
+  vendor: z.string().min(3).max(200),
 
   description: z.string().max(2000).default(""),
   shortDescription: z.string().max(500).default(""),
