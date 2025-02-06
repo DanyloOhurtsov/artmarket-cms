@@ -21,6 +21,8 @@ const NewProductPage = () => {
             formId="productForm"
           />
         </div>
+
+        <ProductForm setisFormDirty={setIsFormDirty} />
       </section>
     </>
   );
