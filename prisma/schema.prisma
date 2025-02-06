@@ -36,6 +36,7 @@ model ProductModel {
   id               String             @id @default(uuid())
   title            String
   handle           String             @unique
+  vendor           String
 
   description      String
   shortDescription String
