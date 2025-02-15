@@ -49,7 +49,7 @@ model ProductModel {
 
   featuredImageId  String?            @unique // Optional featured image
   featuredImage    ImageModel?        @relation("FeaturedImage", fields: [featuredImageId], references: [id])
-  images           ImageModel[]       @relation("ProductImages")
+  images           ImageModel[]      @relation("ProductImages")
 
   variants         VariantModel[]
 
