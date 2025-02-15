@@ -52,13 +52,13 @@ export const productSchema: z.ZodType<ProductType> = z.object({
   maxPrice: z.number(),
 
   featuredImageId: z.string().optional(),
-  featuredImage: z.lazy(() => imageSchema.optional()),
+  featuredImage: z.lazy(() => imageSchema).optional(),
   images: z.array(z.lazy(() => imageSchema)).optional(),
 
   variants: z.array(z.lazy(() => variantSchema)).default([]),
 
   seoId: z.string().optional(),
-  seo: z.lazy(() => seoSchema.optional()),
+  seo: z.lazy(() => seoSchema).optional(),
 
-  collection: z.lazy(() => collectionSchema.optional()),
+  collection: z.lazy(() => collectionSchema).optional(),
 });
