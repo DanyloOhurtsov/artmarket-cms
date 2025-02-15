@@ -7,13 +7,13 @@ import { CollectionType } from "@/lib/schemas/new/collection.schema";
 // Отримання категорії
 export async function GET(
   req: Request,
-  context: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ handle: string }> }
 ) {
-  const { id } = await context.params;
+  const { handle } = await context.params;
 
   try {
     const collection = await prisma.collectionModel.findUnique({
-      where: { handle: id },
+      where: { handle },
       include: {
         products: true,
         image: true,
