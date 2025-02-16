@@ -106,7 +106,7 @@ const SelectField = ({
                       {filteredOptions.length ? (
                         <>
                           <CommandComponent.CommandGroup>
-                            {filteredOptions.map((option, _index) => {
+                            {filteredOptions.map((option) => {
                               const isSelected = selectedOptions.some(
                                 (opt) => opt.id === option.id
                               );
