@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { v4 as uuid } from "uuid";
 
 import { seoSchema, SeoType } from "./seo.schema";
 import { imageSchema, ImageType } from "./image.schema";
@@ -30,35 +29,37 @@ export type ProductType = {
   seoId?: string;
   seo?: SeoType;
 
-  collection?: CollectionType;
+  collections?: CollectionType[];
 
   createdAt?: Date;
   updatedAt?: Date;
 };
 
-export const productSchema: z.ZodType<ProductType> = z.object({
-  id: z.string() || `product-${uuid()}`,
-  title: z.string().min(3).max(200),
-  handle: z.string().min(3).max(250),
-  vendor: z.string().min(3).max(200),
+export const productSchema: z.ZodType<ProductType> = z
+  .object({
+    id: z.string(),
+    title: z.string().min(3).max(200),
+    handle: z.string().min(3).max(250),
+    vendor: z.string().min(3).max(200),
 
-  description: z.string().max(2000).default(""),
-  shortDescription: z.string().max(500).default(""),
+    description: z.string().max(2000).default(""),
+    shortDescription: z.string().max(500).default(""),
 
-  availableForSale: z.boolean().default(true),
-  totalInventory: z.number().default(0),
+    availableForSale: z.boolean().default(true),
+    totalInventory: z.number().default(0),
 
-  minPrice: z.number(),
-  maxPrice: z.number(),
+    minPrice: z.number(),
+    maxPrice: z.number(),
 
-  featuredImageId: z.string().optional(),
-  featuredImage: z.lazy(() => imageSchema).optional(),
-  images: z.array(z.lazy(() => imageSchema)).optional(),
+    featuredImageId: z.string().optional(),
+    featuredImage: z.lazy(() => imageSchema).optional(),
+    images: z.array(z.lazy(() => imageSchema)).optional(),
 
-  variants: z.array(z.lazy(() => variantSchema)).default([]),
+    variants: z.array(z.lazy(() => variantSchema)).default([]),
 
-  seoId: z.string().optional(),
-  seo: z.lazy(() => seoSchema).optional(),
+    seoId: z.string().optional(),
+    seo: z.lazy(() => seoSchema).optional(),
 
-  collection: z.lazy(() => collectionSchema).optional(),
-});
+    collections: z.array(z.lazy(() => collectionSchema)).optional(),
+  })
+  
