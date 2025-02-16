@@ -91,7 +91,6 @@ const CollectionForm = ({
 
     const imageToCollection: ImageType = {
       ...ImageDefaultValues,
-      id: `image-${uuid()}`,
       url: imageUrl,
       collection: values,
     };
@@ -133,6 +132,7 @@ const CollectionForm = ({
           id="collectionForm"
           className="space-y-6"
           onSubmit={(e) => {
+            console.log(form.formState.errors);
             form.handleSubmit(handleSubmit)(e);
           }}
         >
