@@ -44,7 +44,7 @@ const ProductForm = ({
     if (initialValues) {
       form.reset(initialValues);
     }
-  }, [initialValues]);
+  }, [initialValues, form]);
 
   const [images, setImages] = useState<(string | File)[]>(
     initialValues?.images ? initialValues.images.map((image) => image.url) : []
