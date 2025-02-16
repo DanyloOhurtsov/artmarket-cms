@@ -142,7 +142,6 @@ const ProductForm = ({
         <form
           id="productForm"
           onSubmit={(e) => {
-            console.log("form", form.formState.errors);
             form.handleSubmit(handleSubmit)(e);
           }}
         >

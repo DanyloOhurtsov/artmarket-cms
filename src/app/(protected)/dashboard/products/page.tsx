@@ -16,7 +16,6 @@ const ProductsPage = () => {
   if (error || !data) {
     return <div>Error</div>;
   }
-  console.log(data);
   return (
     <section className="w-full min-h-screen">
       <PageTitle title="Продукти">
