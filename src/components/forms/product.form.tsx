@@ -1,6 +1,5 @@
 "use client";
 
-import { v4 as uuid } from "uuid";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -17,6 +16,11 @@ import { Form } from "../ui/form";
 import { Separator } from "../ui/separator";
 import InputField from "../fields/input.field";
 import TextareaField from "../fields/textarea.field";
+import { ImageDefaultValues } from "@/lib/schemas/default-values/image.default-values";
+import SelectField from "../fields/select.field";
+import SwitchField from "../fields/switch.field";
+import useSWR from "swr";
+import { fetcher } from "@/lib/functions/fetcher";
 
 interface ProductFormProps {
   initialValues?: ProductType;
@@ -34,6 +38,7 @@ const ProductForm = ({
     resolver: zodResolver(productSchema),
     defaultValues: initialValues ? initialValues : ProductDefaultValues,
   });
+  const { data: collectionsData } = useSWR("/api/collections", fetcher);
 
   useEffect(() => {
     if (initialValues) {
@@ -83,13 +88,24 @@ const ProductForm = ({
     }
 
     const imagesToProduct: ImageType[] = imagesUrl.map((url) => ({
-      id: `image-${uuid()}`,
+      ...ImageDefaultValues,
       url,
       productId: values.id,
     }));
 
+    const computedPrices = values?.variants?.map((variant) => variant.price);
+    const computedMinPrice = computedPrices?.length
+      ? Math.min(...computedPrices)
+      : 0;
+    const computedMaxPrice = computedPrices?.length
+      ? Math.max(...computedPrices)
+      : 0;
+
     const productData: ProductType = {
+      ...ProductDefaultValues,
       ...values,
+      minPrice: computedMinPrice,
+      maxPrice: computedMaxPrice,
       images: imagesToProduct,
     };
 
@@ -126,6 +142,7 @@ const ProductForm = ({
         <form
           id="productForm"
           onSubmit={(e) => {
+            console.log("form", form.formState.errors);
             form.handleSubmit(handleSubmit)(e);
           }}
         >
@@ -171,7 +188,7 @@ const ProductForm = ({
             </div>
 
             <div className="w-1/4 sticky top-28 right-0 h-[calc(100vh-7rem)] p-4 pl-0">
-              <div className="border border-gray-200 rounded-lg p-4 h-full">
+              <div className="border border-gray-200 rounded-lg p-4 h-full flex flex-col gap-y-4">
                 <InputField
                   form={form}
                   name="vendor"
@@ -180,6 +197,22 @@ const ProductForm = ({
                   schema={productSchema}
                   maxLength={200}
                 />
+
+                <SwitchField
+                  name="availableForSale"
+                  label="Доступний для продажу"
+                  placeholder={
+                    form.watch("availableForSale") ? "Активний" : "Чернетка"
+                  }
+                />
+
+                {!collectionsData && (
+                  <SelectField
+                    name="collections"
+                    placeholder="Оберіть колекцію"
+                    initialOptions={collectionsData}
+                  />
+                )}
               </div>
             </div>
           </div>
