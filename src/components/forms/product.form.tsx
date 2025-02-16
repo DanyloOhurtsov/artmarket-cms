@@ -25,12 +25,12 @@ import { fetcher } from "@/lib/functions/fetcher";
 interface ProductFormProps {
   initialValues?: ProductType;
   redirectPathAfterCreate?: string;
-  setisFormDirty?: (isDirty: boolean) => void;
+  setIsFormDirty?: (isDirty: boolean) => void;
 }
 const ProductForm = ({
   initialValues,
   redirectPathAfterCreate = "/dashboard/products",
-  setisFormDirty,
+  setIsFormDirty,
 }: ProductFormProps) => {
   const router = useRouter();
   const { startUpload } = useUploadThing("imageUploader");
@@ -51,8 +51,8 @@ const ProductForm = ({
   );
 
   useEffect(() => {
-    if (setisFormDirty) setisFormDirty(form.formState.isDirty);
-  }, [form.formState.isDirty, setisFormDirty]);
+    if (setIsFormDirty) setIsFormDirty(form.formState.isDirty);
+  }, [form.formState.isDirty, setIsFormDirty]);
 
   useEffect(() => {
     if (initialValues?.images) {
