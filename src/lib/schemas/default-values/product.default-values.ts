@@ -1,7 +1,10 @@
+import { v4 as uuid } from "uuid";
+
 import { ProductType } from "../new/product.schema";
+import { VariantDefaultValues } from "./variant.default-values";
 
 export const ProductDefaultValues: ProductType = {
-  id: "",
+  id: `product-${uuid()}`,
   title: "",
   handle: "",
   vendor: "",
@@ -14,10 +17,10 @@ export const ProductDefaultValues: ProductType = {
   featuredImageId: undefined,
   featuredImage: undefined,
   images: [],
-  variants: [],
+  variants: [VariantDefaultValues],
   seoId: undefined,
   seo: undefined,
-  collection: undefined,
+  collections: undefined,
   createdAt: new Date(),
   updatedAt: new Date(),
 };

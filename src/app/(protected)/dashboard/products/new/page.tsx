@@ -22,7 +22,7 @@ const NewProductPage = () => {
           />
         </div>
 
-        <ProductForm setisFormDirty={setIsFormDirty} />
+        <ProductForm setIsFormDirty={setIsFormDirty} />
       </section>
     </>
   );

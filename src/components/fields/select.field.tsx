@@ -58,8 +58,14 @@ const SelectField = ({
       control={control}
       name={name}
       render={({ field, fieldState }) => {
+        const selectedOptions: CollectionType[] = Array.isArray(field.value)
+          ? field.value
+          : [];
+
         const label =
-          field.value && field.value.name ? field.value.name : placeholder;
+          selectedOptions.length > 0
+            ? selectedOptions.map((opt) => opt.title).join(", ")
+            : placeholder;
 
         return (
           <FormComponent.FormItem>
@@ -100,26 +106,44 @@ const SelectField = ({
                       {filteredOptions.length ? (
                         <>
                           <CommandComponent.CommandGroup>
-                            {filteredOptions.map((option, index) => (
-                              <Button
-                                key={index}
-                                onClick={() => field.onChange(option)}
-                                variant={"ghost"}
-                                className="w-full flex justify-between"
-                              >
-                                <p className="flex 1 text-left">
-                                  {option.title}
-                                </p>
-                                <CheckIcon
-                                  className={cn(
-                                    "mr-2 h-4 w-4",
-                                    field.value.name === option.title
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
-                                />
-                              </Button>
-                            ))}
+                            {filteredOptions.map((option) => {
+                              const isSelected = selectedOptions.some(
+                                (opt) => opt.id === option.id
+                              );
+
+                              return (
+                                <Button
+                                  key={option.id}
+                                  onClick={() => {
+                                    // Якщо option вже обраний, видаляємо його, інакше — додаємо
+                                    if (isSelected) {
+                                      field.onChange(
+                                        selectedOptions.filter(
+                                          (opt) => opt.id !== option.id
+                                        )
+                                      );
+                                    } else {
+                                      field.onChange([
+                                        ...selectedOptions,
+                                        option,
+                                      ]);
+                                    }
+                                  }}
+                                  variant={"ghost"}
+                                  className="w-full flex justify-between"
+                                >
+                                  <p className="flex-1 text-left">
+                                    {option.title}
+                                  </p>
+                                  <CheckIcon
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      isSelected ? "opacity-100" : "opacity-0"
+                                    )}
+                                  />
+                                </Button>
+                              );
+                            })}
                           </CommandComponent.CommandGroup>
                         </>
                       ) : (

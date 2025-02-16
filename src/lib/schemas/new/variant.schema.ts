@@ -39,13 +39,13 @@ export const variantSchema: z.ZodType<VariantType> = z.object({
   quantityAvailable: z.number().default(0),
 
   imageId: z.string().optional(),
-  image: z.lazy(() => imageSchema.optional()),
+  image: z.lazy(() => imageSchema).optional(),
 
   productId: z.string().optional(),
-  product: z.lazy(() => productSchema.optional()),
+  product: z.lazy(() => productSchema).optional(),
 
   quantityRuleId: z.string().optional(),
-  quantityRule: z.lazy(() => quantityRuleSchema.optional()),
+  quantityRule: z.lazy(() => quantityRuleSchema).optional(),
 
-  orderItem: z.lazy(() => orderItemSchema.optional()),
+  orderItem: z.lazy(() => orderItemSchema).optional(),
 });

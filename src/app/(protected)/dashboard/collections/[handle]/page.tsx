@@ -13,8 +13,8 @@ import ProductList from "@/components/lists/product-list/product-list";
 import PageTitleActionButton from "@/components/buttons/page-title-action.button";
 
 const CollectionPage = () => {
-  const params = useParams<{ id: string }>();
-  const collectionId = params.id;
+  const params = useParams<{ handle: string }>();
+  const collectionId = params.handle;
 
   const { data, isLoading, error } = useSWR<CollectionType>(
     `/api/collections/${collectionId}`,

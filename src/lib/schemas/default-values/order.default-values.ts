@@ -1,8 +1,10 @@
+import { v4 as uuid } from "uuid";
+
 import { OrderType } from "../new/order/order.schema";
 import { CustomerDefaultValues } from "./customer.default-values";
 
 export const OrderDefaultValues: OrderType = {
-  id: "",
+  id: `order-${uuid()}`,
   status: "",
   paymentMethod: "",
   shippingAddress: "",

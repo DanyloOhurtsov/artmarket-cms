@@ -1,7 +1,9 @@
+import { v4 as uuid } from "uuid";
+
 import { SeoType } from "../new/seo.schema";
 
 export const SeoDefaultValues: SeoType = {
-  id: "",
+  id: `seo-${uuid()}`,
   title: "",
   description: "",
   product: undefined,

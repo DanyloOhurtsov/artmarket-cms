@@ -1,6 +1,5 @@
 "use client";
 
-import { v4 as uuid } from "uuid";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -91,7 +90,6 @@ const CollectionForm = ({
 
     const imageToCollection: ImageType = {
       ...ImageDefaultValues,
-      id: `image-${uuid()}`,
       url: imageUrl,
       collection: values,
     };
