@@ -23,6 +23,7 @@ import InputField from "../fields/input.field";
 import SelectField from "../fields/select.field";
 import SwitchField from "../fields/switch.field";
 import TextareaField from "../fields/textarea.field";
+import { VariantType } from "@/lib/schemas/new/variant.schema";
 
 interface ProductFormProps {
   initialValues?: ProductType;
@@ -48,7 +49,7 @@ const ProductForm = ({
     defaultValue: [VariantDefaultValues],
   });
 
-  const computedPrices = variants?.map((variant: any) => variant.price || 0);
+  const computedPrices = variants?.map((variant: VariantType) => variant.price || 0);
   const computedMinPrice = computedPrices?.length
     ? Math.min(...computedPrices)
     : 0;
