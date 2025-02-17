@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-import PageTitle from "@/components/page-title/page-title";
 import ProductForm from "@/components/forms/product.form";
+import PageTitle from "@/components/page-title/page-title";
 
 const NewProductPage = () => {
   const [isFormDirty, setIsFormDirty] = useState<boolean>(false);
