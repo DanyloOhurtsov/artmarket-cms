@@ -117,6 +117,7 @@ const CollectionForm = ({
       }
 
       toast.success("Колекція успішно збережена");
+      router.refresh();
       router.push(redirectPathAfterCreate);
     } catch (error) {
       toast.error("Щось пішло не так");
