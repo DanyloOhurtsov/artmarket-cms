@@ -158,7 +158,7 @@ const ProductForm = ({
           }}
         >
           <div className="flex w-full gap-x-4">
-            <div className="flex flex-col gap-y-6 w-3/4 p-4 pr-0 h-[2000px]">
+            <div className="flex flex-col gap-y-6 w-3/4 p-4 pr-0">
               <InputField
                 form={form}
                 name="title"
