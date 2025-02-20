@@ -1,10 +1,8 @@
-import { v4 as uuid } from "uuid";
-
 import { CollectionType } from "../new/collection.schema";
 import { ImageDefaultValues } from "./image.default-values";
 
 export const collectionDefaultValues: CollectionType = {
-  id: `collection-${uuid()}`,
+  id: '',
   title: "",
   handle: "",
   description: "",

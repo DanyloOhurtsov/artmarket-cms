@@ -109,6 +109,8 @@ const CollectionForm = ({
         body: JSON.stringify(collection),
       });
 
+      const test = await res.json();
+      console.log("res", test);
       if (!res.ok) {
         const error = await res.json();
         toast.error(`Помилка збереження категорії, ${error.error}`);

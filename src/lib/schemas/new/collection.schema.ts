@@ -1,6 +1,7 @@
 import z from "zod";
-import { imageSchema, ImageType } from "./image.schema";
+
 import { seoSchema, SeoType } from "./seo.schema";
+import { imageSchema, ImageType } from "./image.schema";
 import { productSchema, ProductType } from "./product.schema";
 import { menuItemSchema, MenuItemType } from "./menu/menu-item.schema";
 

@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
       ...body,
       image: body.image
         ? {
-            id: body.image.id || `image-${uuid()}`,
+            id: `image-${uuid()}`,
             url: body.image.url || "", // Забезпечуємо, що url ніколи не буде undefined
             productId: body.image.productId || null,
           }
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     const seoData = validatedData.seo
       ? {
           create: {
-            id: validatedData.seo.id || `seo-${uuid()}`,
+            id: `seo-${uuid()}`,
             title: validatedData.seo.title,
             description: validatedData.seo.description || "", // Забезпечуємо значення за замовчуванням
           },
@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
     // Створення колекції
     const newCollection = await prisma.collectionModel.create({
       data: {
-        id: validatedData.id || `collection-${uuid()}`,
+        id: `collection-${uuid()}`,
         title: validatedData.title,
         handle: validatedData.handle,
         description: validatedData.description || "", // Забезпечуємо значення за замовчуванням
@@ -68,8 +68,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(newCollection, { status: 201 });
   } catch (error: unknown) {
-    console.error("Помилка при створенні колекції:", error);
-
+    console.error("Помилка у створенні колекції:", error);
     return NextResponse.json(
       { error: "Не вдалося створити колекцію", details: error },
       { status: 500 }
