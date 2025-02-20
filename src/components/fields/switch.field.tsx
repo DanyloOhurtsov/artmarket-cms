@@ -4,8 +4,8 @@ import { useFormContext } from "react-hook-form";
 
 import * as FormComponent from "@/components/ui/form";
 
-import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
+import { Switch } from "../ui/switch";
 import ErrorToolTip from "./error.tooltip";
 
 interface SwitchFieldProps {

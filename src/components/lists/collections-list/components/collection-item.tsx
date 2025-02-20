@@ -3,11 +3,7 @@ import * as TableComponent from "@/components/ui/table";
 import { flexRender, Row } from "@tanstack/react-table";
 import { CollectionType } from "@/lib/schemas/new/collection.schema";
 
-interface CollectionItemProps {
-  row: Row<CollectionType>;
-}
-
-const CollectionItem = ({ row }: CollectionItemProps) => {
+const CollectionItem = ({ row }: { row: Row<CollectionType> }) => {
   const url = `/dashboard/collections/${row.original.handle}`;
 
   return (

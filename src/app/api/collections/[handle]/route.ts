@@ -7,13 +7,13 @@ import { CollectionType } from "@/lib/schemas/new/collection.schema";
 // Отримання категорії
 export async function GET(
   req: Request,
-  context: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ handle: string }> }
 ) {
-  const { id } = await context.params;
+  const { handle } = await context.params;
 
   try {
     const collection = await prisma.collectionModel.findUnique({
-      where: { handle: id },
+      where: { handle },
       include: {
         products: true,
         image: true,
@@ -40,9 +40,9 @@ export async function GET(
 // Оновлення колекції
 export async function PUT(
   req: Request,
-  context: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ handle: string }> }
 ) {
-  const { id } = await context.params;
+  const { handle: id } = await context.params;
 
   try {
     const body: CollectionType = await req.json();
@@ -50,7 +50,7 @@ export async function PUT(
     const { title, handle, image } = body;
     if (!title || !handle) {
       return NextResponse.json(
-        { error: "Назва та slug є обов'язковими полями" },
+        { error: "Назва та Handle є обов'язковими полями" },
         { status: 400 }
       );
     }

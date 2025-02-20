@@ -74,7 +74,7 @@ const CollectionsList = () => {
   return (
     <div className="flex flex-col gap-y-4 p-4">
       <div className="flex justify-between items-center">
-        <span>Фільтри</span>
+        <span>TODO: Фільтри</span>
         <DeleteDropdownButton
           isDisabled={isDisabled}
           onClick={handleDelete}
@@ -130,9 +130,7 @@ const CollectionsList = () => {
           {table.getRowModel().rows?.length ? (
             table
               .getRowModel()
-              .rows.map((row) => (
-                <CollectionItem key={row.id} row={row} />
-              ))
+              .rows.map((row) => <CollectionItem key={row.id} row={row} />)
           ) : (
             <TableComponent.TableRow>
               <TableComponent.TableCell

@@ -1,6 +1,5 @@
 "use client";
 
-import { v4 as uuid } from "uuid";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -91,7 +90,6 @@ const CollectionForm = ({
 
     const imageToCollection: ImageType = {
       ...ImageDefaultValues,
-      id: `image-${uuid()}`,
       url: imageUrl,
       collection: values,
     };
@@ -111,6 +109,8 @@ const CollectionForm = ({
         body: JSON.stringify(collection),
       });
 
+      const test = await res.json();
+      console.log("res", test);
       if (!res.ok) {
         const error = await res.json();
         toast.error(`Помилка збереження категорії, ${error.error}`);
@@ -119,6 +119,7 @@ const CollectionForm = ({
       }
 
       toast.success("Колекція успішно збережена");
+      router.refresh();
       router.push(redirectPathAfterCreate);
     } catch (error) {
       toast.error("Щось пішло не так");

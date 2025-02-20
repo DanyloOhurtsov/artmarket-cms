@@ -10,6 +10,30 @@ export async function DELETE(req: Request) {
   }
 
   try {
+    const productsToUpdate = await prisma.productModel.findMany({
+      where: {
+        collections: {
+          some: {
+            id: { in: ids },
+          },
+        },
+      },
+    });
+
+    // Для кожного товару оновлюємо зв'язок: від'єднуємо колекції з переданими id
+    await Promise.all(
+      productsToUpdate.map((product) =>
+        prisma.productModel.update({
+          where: { id: product.id },
+          data: {
+            collections: {
+              disconnect: ids.map((id: string) => ({ id })),
+            },
+          },
+        })
+      )
+    );
+
     await prisma.collectionModel.deleteMany({
       where: {
         id: { in: ids },

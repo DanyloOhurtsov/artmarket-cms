@@ -10,11 +10,11 @@ import CollectionForm from "@/components/forms/collection.form";
 import { CollectionType } from "@/lib/schemas/new/collection.schema";
 
 const CollectionEditPage = () => {
-  const params = useParams<{ id: string }>();
+  const params = useParams<{ handle: string }>();
   const [isFormDirty, setIsFormDirty] = useState<boolean>(false);
   const [initialData, setInitialData] = useState<CollectionType>();
 
-  const collectionId = params.id;
+  const collectionId = params.handle;
 
   const { data, isLoading, error } = useSWR<CollectionType>(
     `/api/collections/${collectionId}`,

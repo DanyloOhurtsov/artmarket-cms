@@ -38,8 +38,8 @@ model ProductModel {
   handle           String             @unique
   vendor           String
 
-  description      String
-  shortDescription String
+  description      String?
+  shortDescription String?
 
   availableForSale Boolean            @default(true)
 
@@ -49,12 +49,12 @@ model ProductModel {
 
   featuredImageId  String?            @unique // Optional featured image
   featuredImage    ImageModel?        @relation("FeaturedImage", fields: [featuredImageId], references: [id])
-  images           ImageModel[]       @relation("ProductImages")
+  images           ImageModel[]      @relation("ProductImages")
 
   variants         VariantModel[]
 
-  seoId            String             @unique
-  seo              SeoModel           @relation("ProductSeo", fields: [seoId], references: [id])
+  seoId            String?             @unique
+  seo              SeoModel?           @relation("ProductSeo", fields: [seoId], references: [id])
 
   collections      CollectionModel[]  @relation("ProductCollections")
 
@@ -67,7 +67,7 @@ model ProductModel {
 model VariantModel {
   id                String                @id @default(uuid())
   title             String      // "Black / HB"
-  weight            Float?
+  weight            String?
   price             Float
   imageId           String?               @unique
   image             ImageModel?           @relation("VariantImage",fields: [imageId], references: [id])

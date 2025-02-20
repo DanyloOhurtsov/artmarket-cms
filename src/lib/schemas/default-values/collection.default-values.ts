@@ -1,16 +1,13 @@
 import { CollectionType } from "../new/collection.schema";
+import { ImageDefaultValues } from "./image.default-values";
 
 export const collectionDefaultValues: CollectionType = {
-  id: "",
+  id: '',
   title: "",
   handle: "",
   description: "",
   imageId: undefined,
-  image: {
-    id: "",
-    url: "",
-    productId: null,
-  },
+  image: ImageDefaultValues,
   seoId: undefined,
   seo: undefined,
   products: [],

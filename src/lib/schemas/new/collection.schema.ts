@@ -1,7 +1,7 @@
 import z from "zod";
-import { v4 as uuid } from "uuid";
-import { imageSchema, ImageType } from "./image.schema";
+
 import { seoSchema, SeoType } from "./seo.schema";
+import { imageSchema, ImageType } from "./image.schema";
 import { productSchema, ProductType } from "./product.schema";
 import { menuItemSchema, MenuItemType } from "./menu/menu-item.schema";
 
@@ -24,7 +24,7 @@ export type CollectionType = {
 };
 
 export const collectionSchema: z.ZodType<CollectionType> = z.object({
-  id: z.string() || `collection-${uuid()}`,
+  id: z.string(),
   title: z.string().min(3).max(200),
   handle: z.string().min(3).max(250),
 
