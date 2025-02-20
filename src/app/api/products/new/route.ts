@@ -1,6 +1,8 @@
-import { productSchema, ProductType } from "@/lib/schemas/new/product.schema";
-import prisma from "@/utils/prisma";
+import { v4 as uuid } from "uuid";
 import { NextRequest, NextResponse } from "next/server";
+
+import prisma from "@/utils/prisma";
+import { productSchema, ProductType } from "@/lib/schemas/new/product.schema";
 
 export async function POST(req: NextRequest) {
   try {
@@ -88,6 +90,7 @@ export async function POST(req: NextRequest) {
 
     const newProduct = await prisma.productModel.create({
       data: {
+        id: `product-${uuid()}`,
         title: validatedData.title,
         handle: validatedData.handle,
         vendor: validatedData.vendor,
