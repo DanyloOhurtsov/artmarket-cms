@@ -11,10 +11,14 @@ import PageTitleActionButton from "@/components/buttons/page-title-action.button
 import CollectionPageSkeleton from "./_components/collection-page.skelton";
 import AsideCollection from "./_components/aside-collection-panel/aside-collection";
 import ProductListCollection from "./_components/product-list/product-list-collection";
+import AddProductsModal from "./_components/add-products-modal/add-products.modal";
+import { useState } from "react";
 
 const CollectionPage = () => {
   const params = useParams<{ handle: string }>();
   const collectionId = params.handle;
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data, isLoading, error } = useSWR<CollectionType>(
     `/api/collections/${collectionId}`,
@@ -27,12 +31,23 @@ const CollectionPage = () => {
     <section className="w-full min-h-screen flex flex-col relative">
       <div className="sticky left-0 right-0 top-0 z-20">
         <PageTitle title="Сторінка колекції" isPrevious>
-          <PageTitleActionButton
-            label="Редагувати"
-            path={`/dashboard/collections/edit/${collectionId}`}
-            variand={"secondary"}
-            disabled={isLoading}
-          />
+          <div className="flex items-center gap-x-4">
+            {data && (
+              <AddProductsModal
+                collection={data}
+                initialProducts={data?.products || []}
+                isOpen={isModalOpen}
+                onOpenChange={setIsModalOpen}
+              />
+            )}
+
+            <PageTitleActionButton
+              label="Редагувати"
+              path={`/dashboard/collections/edit/${collectionId}`}
+              variand={"secondary"}
+              disabled={isLoading}
+            />
+          </div>
         </PageTitle>
       </div>
 

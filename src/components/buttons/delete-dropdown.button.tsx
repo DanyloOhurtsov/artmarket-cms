@@ -19,7 +19,7 @@ const DeleteDropdownButton = ({
   icon,
   label,
 }: DeleteDropdownButtonProps) => {
-  const DefaultIcon = Trash2Icon; // Використовуємо як стандартну іконку
+  const DefaultIcon = Trash2Icon;
 
   return (
     <PopoverComponent.Popover>
