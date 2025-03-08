@@ -8,8 +8,6 @@ import { useEffect, useState } from "react";
 
 import { useUploadThing } from "@/utils/uploadthing";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ImageType } from "@/lib/schemas/new/image.schema";
-import { MAX_FILE_SIZE_2 } from "@/lib/constants/max-file-size";
 import { ProductDefaultValues } from "@/lib/schemas/default-values/product.default-values";
 import { productSchema, ProductType } from "@/lib/schemas/new/product.schema";
 
@@ -17,6 +15,11 @@ import { Form } from "../ui/form";
 import { Separator } from "../ui/separator";
 import InputField from "../fields/input.field";
 import TextareaField from "../fields/textarea.field";
+import SelectField from "../fields/select.field";
+import { CollectionType } from "@/lib/schemas/new/collection.schema";
+import useSWR from "swr";
+import { fetcher } from "@/lib/functions/fetcher";
+import { VariantType } from "@/lib/schemas/new/variant.schema";
 
 interface ProductFormProps {
   initialValues?: ProductType;
@@ -29,95 +32,106 @@ const ProductForm = ({
   setisFormDirty,
 }: ProductFormProps) => {
   const router = useRouter();
+  const { data } = useSWR("/api/collections", fetcher);
+
   const { startUpload } = useUploadThing("imageUploader");
   const form = useForm<ProductType>({
     resolver: zodResolver(productSchema),
-    defaultValues: initialValues ? initialValues : ProductDefaultValues,
+    defaultValues: initialValues || ProductDefaultValues,
   });
+
+  const [images, setImages] = useState<(string | File)[]>(
+    initialValues?.images ? initialValues.images.map((image) => image.url) : []
+  );
+
+  const [selectedCollections, setSelectedCollections] = useState<
+    CollectionType[]
+  >(initialValues?.collections || []);
+
+  const [variants, setVariants] = useState<VariantType[]>(
+    initialValues?.variants || [
+      {
+        id: uuid(),
+        title: "Default Variant",
+        price: 0,
+        availableForSale: true,
+        quantityAvailable: 0,
+      },
+    ]
+  );
 
   useEffect(() => {
     if (initialValues) {
       form.reset(initialValues);
     }
-  }, [initialValues]);
 
-  const [images, setImages] = useState<(string | File)[]>(
-    initialValues?.images ? initialValues.images.map((image) => image.url) : []
-  );
+    if (initialValues?.images) {
+      setImages(initialValues.images.map((image) => image.url));
+    }
+  }, [initialValues]);
 
   useEffect(() => {
     if (setisFormDirty) setisFormDirty(form.formState.isDirty);
   }, [form.formState.isDirty, setisFormDirty]);
 
   useEffect(() => {
-    if (initialValues?.images) {
-      setImages(initialValues.images.map((image) => image.url));
+    if (variants.length > 0) {
+      const prices = variants.map((variant) => variant.price);
+      const minPrice = Math.min(...prices);
+      const maxPrice = Math.max(...prices);
+
+      form.setValue("minPrice", minPrice);
+      form.setValue("maxPrice", maxPrice);
     }
-  }, [initialValues]);
+  }, [variants, form]);
+
+  const handleImageUpload = async () => {
+    const files = images.filter((img): img is File => img instanceof File);
+    if (files.length === 0) return [];
+
+    const uploadResults = await startUpload(files);
+    return (
+      uploadResults?.map((result) => ({
+        id: uuid(),
+        url: result.url,
+        productId: "",
+      })) || []
+    );
+  };
 
   async function handleSubmit(values: ProductType) {
-    let imagesUrl: string[] | undefined;
-
-    if (images.some((image) => image instanceof File)) {
-      const files = images.filter(
-        (image): image is File => image instanceof File
-      );
-
-      files.some((file) => {
-        if (file.size > MAX_FILE_SIZE_2) {
-          toast.error("Файл занадто великий");
-          return;
-        }
-      });
-
-      const uploadedImages = await startUpload(files);
-
-      if (!uploadedImages || !uploadedImages.length) {
-        toast.error("Помилка завантаження зображень");
-        return;
-      }
-
-      imagesUrl = uploadedImages.map((image) => image.url);
-    } else {
-      imagesUrl = images as string[];
-    }
-
-    const imagesToProduct: ImageType[] = imagesUrl.map((url) => ({
-      id: `image-${uuid()}`,
-      url,
-      productId: values.id,
-    }));
-
-    const productData: ProductType = {
-      ...values,
-      images: imagesToProduct,
-    };
-
-    const endpoint = initialValues
-      ? `/api/products/${initialValues.id}`
-      : "/api/products/new";
-    const method = initialValues ? "PUT" : "POST";
-
     try {
-      const res = await fetch(endpoint, {
-        method,
+      // Завантаження зображень
+      const uploadedImages = await handleImageUpload();
+
+      // Підготовка даних для відправки
+      const productData = {
+        ...values,
+        id: values.id || `product-${uuid()}`,
+        images: uploadedImages,
+        variants,
+        featuredImageId: uploadedImages[0]?.id || null, // Приклад - перше зображення як featured
+        collections: selectedCollections,
+      };
+
+      console.log(productData);
+
+      // Відправка даних на сервер
+
+      const response = await fetch("/api/products/new", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(productData),
       });
 
-      if (!res.ok) {
-        const error = await res.json();
-        toast.error(`Помилка збереження товару, ${error.error}`);
-        return;
-      }
+      if (!response.ok) throw new Error("Помилка збереження");
 
-      toast.success("Товар успішно збережено");
-      router.replace(redirectPathAfterCreate);
+      toast.success("Товар успішно створено");
+      router.push(redirectPathAfterCreate);
     } catch (error) {
       toast.error("Помилка при збереженні товару");
-      console.error("Помилка при збереженні товару:", error);
     }
   }
   return (
@@ -126,6 +140,8 @@ const ProductForm = ({
         <form
           id="productForm"
           onSubmit={(e) => {
+            console.log("ksjdfbgv;");
+            console.log(form.formState);
             form.handleSubmit(handleSubmit)(e);
           }}
         >
@@ -179,6 +195,15 @@ const ProductForm = ({
                   placeholder="Наприклад: Faber-Castell"
                   schema={productSchema}
                   maxLength={200}
+                />
+
+                <SelectField
+                  name="collections"
+                  placeholder="Оберіть колекцію"
+                  initialOptions={data} // Ваші дані про колекції
+                  selectedOptions={selectedCollections}
+                  setSelectedOptions={setSelectedCollections}
+                  isMulti
                 />
               </div>
             </div>

@@ -21,7 +21,7 @@ export type ProductType = {
   minPrice: number;
   maxPrice: number;
 
-  featuredImageId?: string;
+  featuredImageId: string | null;
   featuredImage?: ImageType;
   images?: ImageType[];
 
@@ -30,7 +30,7 @@ export type ProductType = {
   seoId?: string;
   seo?: SeoType;
 
-  collection?: CollectionType;
+  collections?: CollectionType[];
 
   createdAt?: Date;
   updatedAt?: Date;
@@ -43,7 +43,7 @@ export const productSchema: z.ZodType<ProductType> = z.object({
   vendor: z.string().min(3).max(200),
 
   description: z.string().max(2000).default(""),
-  shortDescription: z.string().max(500).default(""),
+  shortDescription: z.string().max(500).optional().default(""),
 
   availableForSale: z.boolean().default(true),
   totalInventory: z.number().default(0),
@@ -51,7 +51,7 @@ export const productSchema: z.ZodType<ProductType> = z.object({
   minPrice: z.number(),
   maxPrice: z.number(),
 
-  featuredImageId: z.string().optional(),
+  featuredImageId: z.string().nullable(),
   featuredImage: z.lazy(() => imageSchema.optional()),
   images: z.array(z.lazy(() => imageSchema)).optional(),
 
@@ -60,5 +60,5 @@ export const productSchema: z.ZodType<ProductType> = z.object({
   seoId: z.string().optional(),
   seo: z.lazy(() => seoSchema.optional()),
 
-  collection: z.lazy(() => collectionSchema.optional()),
+  collections: z.lazy(() => z.array(collectionSchema).default([])),
 });

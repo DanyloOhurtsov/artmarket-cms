@@ -16,7 +16,7 @@ const CollectionPage = () => {
   const params = useParams<{ id: string }>();
   const collectionId = params.id;
 
-  const { data, isLoading, error } = useSWR<CollectionType>(
+  const { data, isLoading, error, mutate } = useSWR<CollectionType>(
     `/api/collections/${collectionId}`,
     fetcher
   );
@@ -39,7 +39,7 @@ const CollectionPage = () => {
       <div className="flex justify-between relative">
         <div className="w-3/4 h-[2000px] p-4 bg-red-50">
           {data.products && data.products.length > 0 ? (
-            <ProductList products={data.products} />
+            <ProductList products={data.products} mutate={mutate} />
           ) : (
             "Товарів не знайдено"
           )}

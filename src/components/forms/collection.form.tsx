@@ -133,6 +133,9 @@ const CollectionForm = ({
           id="collectionForm"
           className="space-y-6"
           onSubmit={(e) => {
+            console.log("Errors", form.formState.errors);
+            console.log("Values", form.getValues());
+
             form.handleSubmit(handleSubmit)(e);
           }}
         >

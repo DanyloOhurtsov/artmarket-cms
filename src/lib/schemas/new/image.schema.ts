@@ -9,12 +9,12 @@ export type ImageType = {
   url: string;
 
   productId: string | null;
-  product?: ProductType;
+  product?: ProductType | null;
   featuredInProduct?: ProductType;
 
-  collection?: CollectionType;
+  collection?: CollectionType | null;
 
-  variant?: VariantType;
+  variant?: VariantType | null;
 };
 
 export const imageSchema: z.ZodType<ImageType> = z.object({
@@ -22,9 +22,18 @@ export const imageSchema: z.ZodType<ImageType> = z.object({
   url: z.string(),
 
   productId: z.string().nullable(),
-  product: z.lazy(() => productSchema).optional(),
+  product: z
+    .lazy(() => productSchema)
+    .optional()
+    .nullable(),
   featuredInProduct: z.lazy(() => productSchema).optional(),
 
-  collection: z.lazy(() => collectionSchema).optional(),
-  variant: z.lazy(() => variantSchema).optional(),
+  collection: z
+    .lazy(() => collectionSchema)
+    .optional()
+    .nullable(),
+  variant: z
+    .lazy(() => variantSchema)
+    .optional()
+    .nullable(),
 });

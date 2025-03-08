@@ -67,6 +67,13 @@ export const columns: ColumnDef<CollectionType>[] = [
   {
     accessorKey: "products",
     header: "Товари",
-    cell: ({ row }) => row.original.products?.length || 0,
+    cell: ({ row }) => {
+      if (!row.original.products) {
+        return <div>0</div>;
+      }
+      console.log(row.original.products);
+
+      return <div>{row.original.products?.length}</div>;
+    },
   },
 ];

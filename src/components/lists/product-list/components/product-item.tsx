@@ -1,9 +1,45 @@
-import React from 'react'
+import { flexRender, Row } from "@tanstack/react-table";
+import * as TableComponent from "@/components/ui/table";
+import { ProductType } from "@/lib/schemas/new/product.schema";
+import { cn } from "@/lib/utils";
 
-const ProductItem = () => {
-  return (
-    <div>ProductItem</div>
-  )
+interface ProductItemProps {
+  row: Row<ProductType>;
 }
 
-export default ProductItem
+const ProductItem = ({ row }: ProductItemProps) => {
+  const url = `/dashboard/products/${row.original.handle}`;
+
+  return (
+    <TableComponent.TableRow
+      key={row.id}
+      data-state={row.getIsSelected() && "selected"}
+      className="cursor-pointer"
+      onClick={() => (window.location.href = url)}
+    >
+      {row.getVisibleCells().map((cell) => (
+        <TableComponent.TableCell
+          key={cell.id}
+          className={cn(
+            cell.column.id === "select" && "w-6",
+            cell.column.id === "separator" && "w-6",
+            cell.column.id === "title" && "pl-0"
+          )}
+        >
+          {cell.column.id === "select" ? (
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="h-full flex items-center"
+            >
+              {flexRender(cell.column.columnDef.cell, cell.getContext())}
+            </div>
+          ) : (
+            flexRender(cell.column.columnDef.cell, cell.getContext())
+          )}
+        </TableComponent.TableCell>
+      ))}
+    </TableComponent.TableRow>
+  );
+};
+
+export default ProductItem;

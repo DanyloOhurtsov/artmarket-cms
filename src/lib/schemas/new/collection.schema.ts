@@ -16,9 +16,9 @@ export type CollectionType = {
   image?: ImageType;
 
   seoId?: string | null;
-  seo?: SeoType;
+  seo?: SeoType | null;
 
-  products?: ProductType[];
+  products?: ProductType[] | null;
 
   menuItems?: MenuItemType[];
 };
@@ -34,9 +34,15 @@ export const collectionSchema: z.ZodType<CollectionType> = z.object({
   image: z.lazy(() => imageSchema.optional()),
 
   seoId: z.string().optional().nullable(),
-  seo: z.lazy(() => seoSchema.optional()),
+  seo: z
+    .lazy(() => seoSchema)
+    .optional()
+    .nullable(),
 
-  products: z.array(z.lazy(() => productSchema)).default([]),
+  products: z
+    .array(z.lazy(() => productSchema))
+    .default([])
+    .nullable(),
 
   menuItems: z.array(z.lazy(() => menuItemSchema)).default([]),
 });

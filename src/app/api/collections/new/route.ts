@@ -35,15 +35,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const seoData = validatedData.seo
-      ? {
-          create: {
-            id: validatedData.seo.id || `seo-${uuid()}`,
-            title: validatedData.seo.title,
-            description: validatedData.seo.description || "", // Забезпечуємо значення за замовчуванням
-          },
-        }
-      : undefined;
+    const seoData = {
+      create: {
+        id: validatedData?.seo?.id || `seo-${uuid()}`,
+        title: validatedData?.seo?.title || "",
+        description: validatedData?.seo?.description || "", // Забезпечуємо значення за замовчуванням
+      },
+    };
 
     const imageData = validatedData.image
       ? {
@@ -53,6 +51,8 @@ export async function POST(req: NextRequest) {
           },
         }
       : undefined;
+
+    console.dir(validatedData.image, { depth: 10 });
 
     // Створення колекції
     const newCollection = await prisma.collectionModel.create({
