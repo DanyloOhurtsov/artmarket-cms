@@ -16,7 +16,6 @@ const CardDashboard = ({
   value,
   previousValue,
 }: CardDashboardProps) => {
-  // Розрахунок відсоткової зміни
   const percentageChange = useMemo(() => {
     if (previousValue === 0) {
       return value === 0 ? 0 : 100;
@@ -24,7 +23,6 @@ const CardDashboard = ({
     return ((value - previousValue) / previousValue) * 100;
   }, [value, previousValue]);
 
-  // Формування тексту з відсотками та класу для кольору
   const formattedPercentage = useMemo(() => {
     const rounded = Math.round(percentageChange);
     const colorClass =
@@ -38,12 +36,6 @@ const CardDashboard = ({
     return { text: `${arrow} ${Math.abs(rounded)}%`, colorClass };
   }, [percentageChange]);
 
-  // Обчислення класів для ширини:
-  // Для мобільної: 2 колонки у гріді, для планшета: 3 колонки, для десктопа: 5 колонок.
-  // При цьому:
-  // - На мобільній: sm = col-span-1, md = col-span-2, lg = col-span-2.
-  // - На планшеті (md): sm = md:col-span-1, md = md:col-span-2, lg = md:col-span-3.
-  // - На десктопі (lg): sm = lg:col-span-1, md = lg:col-span-2, lg = lg:col-span-3.
   const gridWidthClass = useMemo(() => {
     const base =
       sizeWidth === "sm"
