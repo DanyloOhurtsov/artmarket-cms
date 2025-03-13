@@ -1,21 +1,14 @@
 "use client";
 
-import Container from "@/components/container";
-import PageTitle from "@/components/page-title/page-title";
-import { Button } from "@/components/ui/button";
-import { fetcher } from "@/lib/functions/fetcher";
-import { cn } from "@/lib/utils";
 import { useState } from "react";
-import useSWR from "swr";
+
+import { Button } from "@/components/ui/button";
+import PageTitle from "@/components/page-title/page-title";
+import GridLayout from "@/components/grid-layout/grid-layout";
+import { PeriodDashboardType } from "@/lib/constants/period-varinats";
 
 const DashboardPage = () => {
-  const [period, setPeriod] = useState<"7d" | "30d" | "1y">("7d");
-
-  const { data, isLoading, error } = useSWR(
-    `/api/metrics/sales_total?period=${period}`,
-    fetcher
-  );
-  console.log(data);
+  const [period, setPeriod] = useState<PeriodDashboardType>("7d");
 
   return (
     <section>
@@ -46,11 +39,8 @@ const DashboardPage = () => {
           </Button>
         </div>
       </div>
-      <Container isLoading={isLoading} isError={!!error} isData={!!data}>
-        <div className="p-4">
-          <p>Dashboard content</p>
-        </div>
-      </Container>
+
+      <GridLayout period={period} />
     </section>
   );
 };

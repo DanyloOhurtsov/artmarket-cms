@@ -9,7 +9,7 @@ interface ContainerProps {
   isData?: boolean;
 }
 
-const Container = ({
+const LoadingContainer = ({
   children,
   isLoading = false,
   isError = false,
@@ -26,4 +26,4 @@ const Container = ({
   return isData && <>{children}</>;
 };
 
-export default Container;
+export default LoadingContainer;
