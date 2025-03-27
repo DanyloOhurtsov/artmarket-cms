@@ -13,16 +13,21 @@ interface GridItemProps {
 }
 
 const GridItem = ({ period, metricType }: GridItemProps) => {
+  const fetchUrl =
+    metricType === "top_selling_product"
+      ? `/api/metrics/top-selling-product?period=${period}`
+      : `/api/metrics/general-metrics/${metricType}?period=${period}`;
+
   const { data, isLoading, error } = useSWR<MetricReturnType[]>(
-    `/api/metrics/${metricType}?period=${period}`,
+    fetchUrl,
     fetcher
   );
 
+  console.log(data);
+
   return (
     <LoadingContainer isData={!!data} isLoading={isLoading} isError={!!error}>
-      <div className="flex flex-col">
-
-      </div>
+      <div className="flex flex-col">Hello data</div>
     </LoadingContainer>
   );
 };
