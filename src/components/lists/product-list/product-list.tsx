@@ -16,7 +16,6 @@ import DeleteDropdownButton from "@/components/buttons/delete-dropdown.button";
 
 import { columns } from "./components/columns";
 import ProductItem from "./components/product-item";
-import { Button } from "@/components/ui/button";
 
 interface ProductListProps {
   products: ProductType[];
