@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import PageTitle from "@/components/page-title/page-title";
@@ -9,6 +9,17 @@ import { PeriodDashboardType } from "@/lib/constants/period-varinats";
 
 const DashboardPage = () => {
   const [period, setPeriod] = useState<PeriodDashboardType>("7d");
+
+  useEffect(() => {
+    const savedPeriod = localStorage.getItem("dashboardPeriod");
+    if (savedPeriod) {
+      setPeriod(savedPeriod as PeriodDashboardType);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("dashboardPeriod", period);
+  }, [period]);
 
   return (
     <section>
