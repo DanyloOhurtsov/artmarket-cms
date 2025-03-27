@@ -11,5 +11,5 @@ export type MetricType =
   | "average_items_per_order" // Середня кількість товарів у замовленні
   | "total_units_sold" // Загальна кількість проданих одиниць
   | "inventory_turnover" // Оборот товарів (швидкість продажу запасів)
-  | "top_selling_products" // Найпопулярніші товари (ID або перелік)
+  | "top_selling_product" // Найпопулярніші товари (ID або перелік)
   | "sales_growth"; // Зростання продажів (відсоток зростання)
