@@ -1,5 +1,3 @@
-import React from "react";
-
 interface ScrollAreaProps {
   children: React.ReactNode;
 }

@@ -1,23 +1,19 @@
 import {
+  Trash2Icon,
+  ChevronUpIcon,
   CirclePlusIcon,
   ChevronDownIcon,
-  ChevronUpIcon,
-  Trash2Icon,
 } from "lucide-react";
 import { z } from "zod";
 import { v4 as uuid } from "uuid";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
-import{ useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useFieldArray, UseFormReturn, useWatch } from "react-hook-form";
 
-
-import {
-  productSchema,
-  ProductVariantType,
-} from "@/lib/schemas/product.schema";
 import AlertDialog from "@/components/alert-dialog";
- 
+import { productSchema } from "@/lib/schemas/product.schema";
+
 import InputField from "./fields/input.field";
 import { Button } from "./ui/button";
 import OptionsTag from "./fields/variants-filed/components/options.tag";
@@ -40,7 +36,7 @@ const VariantsOptionsField = ({ form }: VariantsOptionsFieldProps) => {
   useEffect(() => {
     variants?.forEach((variant, index) => {
       const allFilled = variant?.values?.every(
-        (value: ProductVariantType) => value.name.trim() !== ""
+        (value) => value.name.trim() !== ""
       );
 
       if (allFilled) {
@@ -49,7 +45,7 @@ const VariantsOptionsField = ({ form }: VariantsOptionsFieldProps) => {
           values: [
             ...variant.values,
             {
-              id: uuid(),
+              id: `prod-${uuid()}`,
               name: "",
               value: "",
               slug: "",
@@ -75,9 +71,7 @@ const VariantsOptionsField = ({ form }: VariantsOptionsFieldProps) => {
       return;
     }
 
-    const filteredValues = values.filter(
-      (value: ProductVariantType) => value.name.trim() !== ""
-    );
+    const filteredValues = values.filter((value) => value.name.trim() !== "");
 
     console.log(filteredValues);
 

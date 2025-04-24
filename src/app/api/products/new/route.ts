@@ -5,7 +5,7 @@ export async function POST(req: Request) {
   try {
     const body: ProductType = await req.json();
 
-    console.log(body.variants[0].values);
+    // console.log(body.variants[0].values);
 
     const {
       id,
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
         isActive,
         categoryId: category.id,
         images,
-        // variants,
+        variants,
       },
     });
     //   const products = await prisma.product.findMany({
@@ -46,15 +46,31 @@ export async function POST(req: Request) {
     //     },
     //   });
 
-    //   return new Response(JSON.stringify(products), {
-    //     status: 200,
-    //     headers: { "Content-Type": "application/json" },
-    //   });
+    return new Response(JSON.stringify(product), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
   } catch (error) {
-    //   console.error("Помилка при отриманні продуктів:", error);
-    //   return new Response(
-    //     JSON.stringify({ error: "Не вдалося отримати продукти" }),
-    //     { status: 500, headers: { "Content-Type": "application/json" } }
-    //   );
+      console.error("Помилка при отриманні продуктів:", error);
+      return new Response(
+        JSON.stringify({ error: "Не вдалося отримати продукти" }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      );
   }
+}
+
+
+
+export type TEST = {
+  variants: [
+    {
+      // variant 1 
+      options: [
+        {
+          // option 1
+          name: 'XL'
+        }
+      ]
+    }
+  ]
 }

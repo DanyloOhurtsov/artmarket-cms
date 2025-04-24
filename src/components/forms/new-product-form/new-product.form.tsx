@@ -1,7 +1,7 @@
 "use client";
 
 import { z } from "zod";
-import { UseFormReturn } from "react-hook-form";
+import { useForm, UseFormReturn } from "react-hook-form";
 import { memo, useEffect, useState } from "react";
 
 import { Form } from "@/components/ui/form";
@@ -23,6 +23,7 @@ interface NewProductFormProps {
 }
 
 const NewProductForm = ({ form }: NewProductFormProps) => {
+  const { formState } = useForm();
   const { startUpload } = useUploadThing("imageUploader");
   const [categoryOptions, setCategoryOptions] = useState<CategoryType[]>([]);
   const [images, setImages] = useState<(string | File)[]>([]);
@@ -49,9 +50,11 @@ const NewProductForm = ({ form }: NewProductFormProps) => {
     console.log(images);
   }, [images]);
 
-  async function onSubmit(values: z.infer<typeof productSchema>) {
-    console.log(values);
+  useEffect(() => {
+    console.log("UseEffect", formState);
+  }, [formState]);
 
+  async function onSubmit(values: z.infer<typeof productSchema>) {
     const endpoint = "/api/products/new";
     try {
       const res = await fetch(endpoint, {
@@ -94,15 +97,14 @@ const NewProductForm = ({ form }: NewProductFormProps) => {
               );
 
               const newImages = [...stringUrls, ...uploadedImages];
-              console.log(newImages);
               form.setValue("images", [...newImages]);
             } catch (error) {}
           }
-          console.log(form.getValues());
+          // console.log(form.getValues());
 
           // console.log("Form submitted");
-          // form.handleSubmit(onSubmit);
-          onSubmit(form.getValues());
+          form.handleSubmit(onSubmit);
+          // onSubmit(form.getValues());
         }}
         className="flex gap-x-6 w-full"
       >

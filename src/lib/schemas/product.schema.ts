@@ -24,12 +24,14 @@ export type ProductType = {
 export type ProductVariantType = {
   name: string;
   id: string;
-  values: {
-    id: string;
-    name: string;
-    slug: string;
-    value: string;
-  }[];
+  values: ProductVariantValuesType[];
+};
+
+export type ProductVariantValuesType = {
+  id: string;
+  name: string;
+  value: string;
+  slug: string;
 };
 
 // Схема товарів
